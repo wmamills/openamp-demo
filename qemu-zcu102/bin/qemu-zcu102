@@ -70,7 +70,20 @@ do_check-sd-img() {
 }
 
 tmux-panel-title() {
-    printf '\033]2;%s\033\\' "$1"
+    # the escape sequence seems harmless on non-tmux terms but check anyway
+    if [ -n "$TMUX" ]; then
+        printf '\033]2;%s\033\\' "$1"
+    fi
+}
+
+# kill the current window if running in tmux
+# if we started tmux and the user did not add windows,
+# then this will kill the session also
+tmux-kill() {
+    if [ -n "$TMUX" ]; then
+        tmux kill-window
+        # should not really get here
+    fi
 }
 
 ssh-rekey() {
@@ -79,36 +92,65 @@ ssh-rekey() {
     ssh-keygen -R localhost:1114 >/dev/null 2>&1 || true
 }
 
-start-qemu() {
+do_start-qemu() {
+    tmux-panel-title "Main UART, Quad A53, Ctrl-A x to quit"
+    echo "PMU_ARGS=$PMU_ARGS"
+    echo "APU_ARGS=$APU_ARGS"
     $SYS_ROOT/usr/bin/qemu-system-aarch64-multiarch \
         $APU_ARGS \
         -pmu-args "$PMU_ARGS"
+    tmux-kill
 }
 
-teapot() {
+do_sub-shell() {
+    tmux-panel-title "Host shell, exit will close all"
+    echo "This is a host shell"
+    echo "After the QEMU board boots you can use ssh or scp from here"
+    echo "Like: $ ssh qemu-zcu102"
+    echo "or  : $ scp mine.elf qemu-zcu102:/lib/firmware"
+    bash
+    tmux-kill
+}
+
+do_my-socat() {
+    PORT=$1; shift
+    tmux-panel-title "$@"
     while true; do
-        echo "$@"
+        echo "fake connect on port $PORT"
         sleep 5
     done
 }
 
-do_pane0() {
-    tmux splitw -v -c "$ME subcmd 2nd-window"
-    bash
-    tmux kill-window
-}
+start-tmux() {
+    export SYSROOT
+    export APU_ARGS
+    export PMU_ARGS
 
-do_pane1() {
-    bash
-    tmux kill-window
-}
+    if [ -z "$TMUX" ]; then
+        tmux start-server
+        tmux new-session -d -s QEMU -n qemu-zcu102 -d "$ME subcmd start-qemu"
+        SESS="QEMU"
+        tmux set -s -t $SESS mouse on
+    else
+        SESS=""
+        tmux new-window -d -n qemu-zcu102 -d "$ME subcmd start-qemu"
+        tmux set -s mouse on
+    fi
 
-do_pane2() {
-    teapot "I am little teapot #1"
-}
+    tmux set -w -t $SESS:qemu-zcu102 pane-border-status top
 
-do_pane3() {
-    teapot "I am little teapot #2"
+    # create a session with four panes
+    tmux split-window -h -t $SESS:qemu-zcu102 "$ME subcmd sub-shell"
+    tmux split-window -v -t $SESS:qemu-zcu102 "$ME subcmd my-socat 1115 '2nd UART, R5_0'"
+    tmux split-window -v -t $SESS:qemu-zcu102 "$ME subcmd my-socat 1116 '3rd UART'"
+
+    tmux select-pane -t $SESS:qemu-zcu102.0
+
+    if [ -n "$SESS" ]; then
+        tmux attach -t$SESS:qemu-zcu102
+    else
+        tmux select-window -t:qemu-zcu102
+    fi
 }
 
 main() {
@@ -154,19 +196,13 @@ main() {
         -device loader,file=$FIRMWARE/system.dtb,addr=0x100000 \
         -boot mode=5"
 
+    cd $TESTBASE
 
-    if [ x"$QEMU_TMUX" = x"no" -o true ]; then
+    if [ x"$QEMU_TMUX" = x"no" ]; then
         # user does not want us to do anything with TMUX, just start
         start-qemu
     else
-        # are we already in a TMUX session
-        if [ -n "$TMUX" ]; then
-            # we will start a new window and create the panes there
-            tmux new-window -c "$ME subcmd pane0"
-        else
-            # we will start the server and create a new session
-            tmux -c "$ME subcmd pane0"
-        fi
+        start-tmux
     fi
 }
 
