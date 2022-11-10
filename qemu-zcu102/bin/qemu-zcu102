@@ -171,7 +171,8 @@ main() {
 }
 
 if [ x"$1" = x"subcmd" ]; then
-    shift; do_$1 "$@"
+    if [ -z "$2" ]; then error "subcmd needs a command"; fi
+    CMD=$2; shift; shift; do_$CMD "$@"
 else
     main "$@"
 fi
