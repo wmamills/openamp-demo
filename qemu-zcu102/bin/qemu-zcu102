@@ -83,7 +83,7 @@ main() {
         -boot mode=5"
 
 
-    if [ x"$QEMU_TMUX" = x"no" ]; then
+    if [ x"$QEMU_TMUX" = x"no" -o true ]; then
         # user does not want us to do anything with TMUX, just start
         start-qemu
     else
