@@ -4,6 +4,29 @@ ME=$(readlink -f $0)
 SYSBASE=$(cd $(dirname $ME)/..; pwd)
 SYS_ROOT=$SYSBASE/sysroot
 
+# Where to get PMU rom image if we need it
+PMU_ROM_URL=https://www.xilinx.com/bin/public/openDownload?filename=PMU_ROM.tar.gz
+
+error() {
+    echo "ERROR!: $@"
+    exit 2
+}
+
+# make this available as a subcmd also
+do_check-pmu-rom() {
+    if [ ! -r $SYSBASE/firmware/pmu-rom.elf ]; then
+        echo "Getting PMU ROM"
+        PMU_TMP=$(mktemp -d)
+        if ! wget -O $PMU_TMP/PMU_ROM.tar.gz $PMU_ROM_URL; then
+            error "Can't get PMU ROM, can't continue"
+        fi
+        (cd $PMU_TMP; tar xvf PMU_ROM.tar.gz)
+        cp $PMU_TMP/PMU_ROM/{pmu-rom.elf,PMU_ROM-LICENSE.txt} $SYSBASE/firmware/
+        rm -rf $PMU_TMP/PMU_ROM/
+        rmdir $PMU_TMP
+    fi
+}
+
 tmux-panel-title() {
     printf '\033]2;%s\033\\' "$1"
 }
@@ -55,6 +78,8 @@ main() {
 
     IMAGES=$TESTBASE
     TFTPDIR=$TESTBASE/tftp
+
+    do_check-pmu-rom
     FIRMWARE=$SYSBASE/firmware
     HW_DTBS=$SYSBASE/hw-dtbs/multiarch
 
