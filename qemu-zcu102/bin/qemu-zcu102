@@ -27,6 +27,48 @@ do_check-pmu-rom() {
     fi
 }
 
+any-cat() {
+    #echo "ANY_CAT $@"
+    if [ -z "$2" ]; then
+        error "any-cat: destination file not set"
+    fi
+
+    case $1 in
+    *.gz)
+        zcat $1 >$2
+        ;;
+    *.bz2)
+        bzcat $1 >$2
+        ;;
+    *.xz)
+        xzcat $1 >$2
+        ;;
+    *)
+        cat $1 >$2
+        ;;
+    esac
+}
+
+do_check-sd-img() {
+    CLEAN_SD_IMG=$HOME/does-not-exist
+
+    # we will only do this once, this is a preferece list
+    for f in $IMAGES/clean-sd.img{.xz,.bz2,.gz,}; do
+        CLEAN_SD_IMG="$f"
+        break;
+    done
+
+    if [ ! -e $IMAGES/sd.img -a -e $CLEAN_SD_IMG ]; then
+        echo "Creating sd.img from $(basename ${CLEAN_SD_IMG})"
+        any-cat $CLEAN_SD_IMG $IMAGES/sd.img
+    fi
+
+    if [ ! -e $IMAGES/sd.img ]; then
+        echo "Creating empty sd.img of size ${SD_DEFAULT_SIZE}MB"
+        dd if=/dev/zero of=$IMAGES/sd.img bs=1M count=${SD_DEFAULT_SIZE} >/dev/null 2>&1
+    fi
+}
+
 tmux-panel-title() {
     printf '\033]2;%s\033\\' "$1"
 }
@@ -70,16 +112,21 @@ do_pane3() {
 }
 
 main() {
+    SD_DEFAULT_SIZE=32
+
     if [ -n "$1" -a -d "$1" ]; then
         TESTBASE=$(readlink -f $1)
     else
         TESTBASE=$HOME/qemu-zcu102
+        mkdir -p $TESTBASE
     fi
 
     IMAGES=$TESTBASE
     TFTPDIR=$TESTBASE/tftp
 
     do_check-pmu-rom
+    do_check-sd-img
+
     FIRMWARE=$SYSBASE/firmware
     HW_DTBS=$SYSBASE/hw-dtbs/multiarch
 
