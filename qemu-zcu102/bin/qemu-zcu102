@@ -1,0 +1,105 @@
+#/bin/bash
+
+ME=$(readlink -f $0)
+SYSBASE=$(cd $(dirname $ME)/..; pwd)
+SYS_ROOT=$SYSBASE/sysroot
+
+tmux-panel-title() {
+    printf '\033]2;%s\033\\' "$1"
+}
+
+ssh-rekey() {
+    # Clear out any old known_key ssh value
+    ssh-keygen -R [localhost]:1114 >/dev/null 2>&1 || true
+    ssh-keygen -R localhost:1114 >/dev/null 2>&1 || true
+}
+
+start-qemu() {
+    $SYS_ROOT/usr/bin/qemu-system-aarch64-multiarch \
+        $APU_ARGS \
+        -pmu-args "$PMU_ARGS"
+}
+
+teapot() {
+    while true; do
+        echo "$@"
+        sleep 5
+    done
+}
+
+do_pane0() {
+    tmux splitw -v -c "$ME subcmd 2nd-window"
+    bash
+    tmux kill-window
+}
+
+do_pane1() {
+    bash
+    tmux kill-window
+}
+
+do_pane2() {
+    teapot "I am little teapot #1"
+}
+
+do_pane3() {
+    teapot "I am little teapot #2"
+}
+
+main() {
+    if [ -n "$1" -a -d "$1" ]; then
+        TESTBASE=$(readlink -f $1)
+    else
+        TESTBASE=$HOME/qemu-zcu102
+    fi
+
+    IMAGES=$TESTBASE
+    TFTPDIR=$TESTBASE/tftp
+    FIRMWARE=$SYSBASE/firmware
+    HW_DTBS=$SYSBASE/hw-dtbs/multiarch
+
+    PMU_ARGS="-M microblaze-fdt \
+        -display none \
+        -hw-dtb $HW_DTBS/zynqmp-pmu.dtb \
+        -kernel $FIRMWARE/pmu-rom.elf \
+        -device loader,file=$FIRMWARE/pmu-firmware-zcu102-zynqmp.elf \
+        -device loader,addr=0xfd1a0074,data=0x1011003,data-len=4 \
+        -device loader,addr=0xfd1a007C,data=0x1010f03,data-len=4"
+
+    APU_ARGS="-machine arm-generic-fdt \
+        -hw-dtb $HW_DTBS/zcu102-arm.dtb \
+        -m 4096 \
+        -net nic -net nic -net nic -net nic,netdev=eth0 \
+        -netdev user,id=eth0,hostfwd=tcp::1114-:22,tftp=$TFTPDIR \
+        -drive if=sd,index=1,file=$IMAGES/sd.img,format=raw \
+        -nographic \
+        -serial mon:stdio -serial null \
+        -serial mon:vc
+        -global xlnx,zynqmp-boot.cpu-num=0 \
+        -global xlnx,zynqmp-boot.use-pmufw=true \
+        -device loader,file=$FIRMWARE/arm-trusted-firmware.elf,cpu-num=0 \
+        -device loader,file=$FIRMWARE/u-boot.elf \
+        -device loader,file=$FIRMWARE/system.dtb,addr=0x100000 \
+        -boot mode=5"
+
+
+    if [ x"$QEMU_TMUX" = x"no" ]; then
+        # user does not want us to do anything with TMUX, just start
+        start-qemu
+    else
+        # are we already in a TMUX session
+        if [ -n "$TMUX" ]; then
+            # we will start a new window and create the panes there
+            tmux new-window -c "$ME subcmd pane0"
+        else
+            # we will start the server and create a new session
+            tmux -c "$ME subcmd pane0"
+        fi
+    fi
+}
+
+if [ x"$1" = x"subcmd" ]; then
+    shift; do_$1 "$@"
+else
+    main "$@"
+fi

@@ -1,0 +1,5 @@
+demo/*.tar.gz
+demo-lite/*.tar.gz
+user-dev/opt/*
+zephyr-sdk-*-installed.tar.gz
+user-dev/test-sw/openamp/hacked.cpio.gz

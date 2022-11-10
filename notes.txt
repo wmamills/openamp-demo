@@ -1,0 +1,5 @@
+Notes on using ZCU102 QEMU
+
+As run by Xilinx Yocto:
+    gets random mac addr each time
+    get same IP and TFTP server each time

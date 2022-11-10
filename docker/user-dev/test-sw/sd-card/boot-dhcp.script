@@ -1,0 +1,77 @@
+# Import and run the file specified by the DHCP server
+# file should be 
+# *.txt: in the uEnv.txt format
+# *.scr: a mkimage wrapped boot script
+# *.fit: a fit image
+# *.efi: not handled yet
+
+echo "Boot file specified by DHCP or defaults"
+
+# Xilinx zcu102 specific
+# the default vars are pretty useless
+# these came from 2021.1 boot.scr but ramdisk_r was doubled
+setenv fdt_addr_r       0x00100000
+setenv kernel_addr_r    0x00200000
+setenv ramdisk_r        0x08000000
+
+# this script runs at 0x2000_0000 and will be overwritten by large 
+# ramdisks > 448 MB, fit images > 256 MB
+# set a new low address for any new scripts. limit scripts to 32K each
+setenv scriptaddr       0x00080000
+setenv scriptaddr2      0x00088000
+
+# generic below here
+
+# setup defaults in case DHCP does not work
+setenv serverip 192.168.1.1
+setenv ipaddr   192.168.1.92
+setenv bootfile zcu102/uEnv.txt
+setenv autoload no
+dhcp
+
+# override settings even if we got something from DHCP
+#setenv serverip 192.168.1.1
+#setenv bootfile zcu102/uEnv.txt
+
+echo "ipaddr   = $ipaddr"
+echo "serverip = $serverip"
+echo "bootfile = $bootfile"
+
+if test x"${bootfile}" = x"None" -o x"${bootfile}" = x"" ; then 
+	echo "No DHCP filename"
+else
+    echo "PARSE ${bootfile}"
+    setexp prefix   sub "[/][^/]*$"   "/"  ${bootfile}
+    setexp filename sub "^${prefix}"  ""   ${bootfile}
+    setexp ext      sub ".*[.]"       "."  ${filename}
+    if test "${ext}" = ".txt"; then
+        if tftpboot $kernel_addr_r ${bootfile}; then
+            echo "Importing environment from ${bootfile}..."
+            env import -t $kernel_addr_r $filesize
+            if test -n $uenvcmd; then
+                echo "Running uenvcmd ..."
+                run uenvcmd
+            fi
+        else
+            echo "DHCP advertised filename ${bootfile} does not exist"
+        fi
+    elif test "${ext}" = ".scr"; then
+        if tftpboot ${scriptaddr2} ${bootfile}; then
+            echo "running script ${bootfile}..."
+            source ${scriptaddr2}
+        else
+            echo "DHCP advertised filename ${bootfile} does not exist"
+        fi
+    elif test "${ext}" = ".fit"; then
+        if tftpboot ${pxefile_addr_r} ${bootfile}; then
+            echo "Booting fit image ${bootfile}..."
+            bootm ${pxefile_addr_r}
+        else
+            echo "DHCP advertised filename ${bootfile} does not exist"
+        fi
+    else
+        echo "I do not know what to do with ${ext} file from DHCP ${bootfile}"
+    fi
+fi
+
+echo "All done with DHCP, nothing worked"

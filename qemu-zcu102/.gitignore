@@ -1,0 +1,5 @@
+firmware/pmu-rom.elf
+
+# These would be symlinks on the host system, use the ones in docker/user-dev
+sysroot/usr/bin/qemu-system-aarch64
+sysroot/usr/bin/qemu-system-microblazeel
