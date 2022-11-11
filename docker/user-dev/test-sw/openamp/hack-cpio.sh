@@ -4,15 +4,15 @@ ME=$0
 DIR=$PWD
 
 do_hack() {
-	rm -rf rootfs
-	mkdir -p rootfs
+	rm -rf xxx-temp-rootfs
+	mkdir -p xxx-temp-rootfs
 	echo "Extracting"
 	case $1 in
 	*.tar.gz)
-	    tar xvf $1 -C rootfs
+	    tar xvf $1 -C xxx-temp-rootfs
 	    ;;
 	*.cpio.gz)
-	    zcat $1 | (cd rootfs; cpio -iV)
+	    zcat $1 | (cd xxx-temp-rootfs; cpio -iV)
 	    ;;
 	*)
 	    echo "don't know how to handle $1"
@@ -22,18 +22,18 @@ do_hack() {
 
 	echo
 	echo "Hacking"
-	rm -rf rootfs/boot/*
-	rm -rf rootfs/lib/firmware/*
-	rm -rf rootfs/lib/modules/*/drivers/gpu
-	#rm -rf rootfs/etc/rc*/*avahi*
-	ln -sf sbin/init rootfs/init
-	echo "PS0:12345:respawn:/bin/start_getty 115200 ttyPS0 vt102" >>rootfs/etc/inittab
-	chmod u+w rootfs/etc/securetty
-	echo "ttyPS0" >>rootfs/etc/securetty
-	chmod -w rootfs/etc/securetty
+	rm -rf xxx-temp-rootfs/boot/*
+	rm -rf xxx-temp-rootfs/lib/firmware/*
+	rm -rf xxx-temp-rootfs/lib/modules/*/drivers/gpu
+	#rm -rf xxx-temp-rootfs/etc/rc*/*avahi*
+	ln -sf sbin/init xxx-temp-rootfs/init
+	echo "PS0:12345:respawn:/bin/start_getty 115200 ttyPS0 vt102" >>xxx-temp-rootfs/etc/inittab
+	chmod u+w xxx-temp-rootfs/etc/securetty
+	echo "ttyPS0" >>xxx-temp-rootfs/etc/securetty
+	chmod -w xxx-temp-rootfs/etc/securetty
 
 	echo "Re-archiving"
-	(cd rootfs; find . | cpio -V -H newc -o | gzip >../hacked.cpio.gz)
+	(cd xxx-temp-rootfs; find . | cpio -V -H newc -o | gzip >../hacked.cpio.gz)
 }
 
 case $1 in

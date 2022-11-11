@@ -37,7 +37,7 @@ cp -a $ORIG/user-dev/.[a-zA-Z]* .
 echo "run the cpio hack script"
 cd test-sw/openamp
 ./hack-cpio.sh openamp-image-minimal-generic-arm64.cpio.gz
-rm -rf ./rootfs
+rm -rf ./xxx-temp-rootfs
 cd $TOP
 
 echo "copy in the pre-installed image of the zephyr-sdk"
