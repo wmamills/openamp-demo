@@ -47,8 +47,8 @@ if (mbtype == 'PMU' and os.path.exists(PMU_rom)) or mbtype == 'PLM':
     apu_cmd =  binpath + '/qemu-system-aarch64 ' + ' '.join(APU_args) + ' -machine-path ' + mach_path
 
     # Debug prints
-    print('\n%s instance cmd: %s\n' % (mbtype, mb_cmd))
-    print('APU instance cmd: %s\n' % apu_cmd)
+    #print('\n%s instance cmd: %s\n' % (mbtype, mb_cmd))
+    #print('APU instance cmd: %s\n' % apu_cmd)
 
 
     # Invoke QEMU pmu instance

@@ -94,8 +94,9 @@ ssh-rekey() {
 
 do_start-qemu() {
     tmux-panel-title "Main UART, Quad A53, Ctrl-A x to quit"
-    echo "PMU_ARGS=$PMU_ARGS"
-    echo "APU_ARGS=$APU_ARGS"
+    #echo "PMU_ARGS=$PMU_ARGS"
+    #echo "APU_ARGS=$APU_ARGS"
+    echo "Starting qemu ..."
     $SYS_ROOT/usr/bin/qemu-system-aarch64-multiarch \
         $APU_ARGS \
         -pmu-args "$PMU_ARGS"
@@ -103,11 +104,14 @@ do_start-qemu() {
 }
 
 do_sub-shell() {
-    tmux-panel-title "Host shell, exit will close all"
+    tmux-panel-title "$@"
     echo "This is a host shell"
     echo "After the QEMU board boots you can use ssh or scp from here"
-    echo "Like: $ ssh qemu-zcu102"
-    echo "or  : $ scp mine.elf qemu-zcu102:/lib/firmware"
+    echo "Like  $ ssh qemu-zcu102"
+    echo "or    $ scp mine.elf qemu-zcu102:/lib/firmware"
+    echo
+    echo "if you exit this shell, it will exit the emulator also"
+    echo
     bash
     tmux-kill
 }
@@ -140,7 +144,7 @@ start-tmux() {
     tmux set -w -t $SESS:qemu-zcu102 pane-border-status top
 
     # create a session with four panes
-    tmux split-window -h -t $SESS:qemu-zcu102 "$ME subcmd sub-shell"
+    tmux split-window -h -t $SESS:qemu-zcu102 "$ME subcmd sub-shell $USER@$HOSTNAME"
     tmux split-window -v -t $SESS:qemu-zcu102 "$ME subcmd my-socat 1115 '2nd UART, R5_0'"
     tmux split-window -v -t $SESS:qemu-zcu102 "$ME subcmd my-socat 1116 '3rd UART'"
 
