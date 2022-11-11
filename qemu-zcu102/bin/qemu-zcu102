@@ -11,6 +11,8 @@ check-debug-trace() {
 
 check-debug-trace
 
+ORIG_ME="$0"
+MY_ALIAS=$(basename $ORIG_ME)
 ME=$(readlink -f $0)
 SYSBASE=$(cd $(dirname $ME)/..; pwd)
 SYS_ROOT=$SYSBASE/sysroot
@@ -201,14 +203,53 @@ restore-env() {
     check-debug-trace
 }
 
+help() {
+    echo "usage: $MY_ALIAS dir [options]"
+    echo
+    echo "where dir is a directory with the software to run"
+    echo "    sd.img            SD card image R/W"
+    echo "    clean-sd.img*     SD card image read-only, optional"
+    echo "                      will be expanded to sd.img if sd.img is not there"
+    echo "                      can be a symlink"
+ #   echo "    sd-vfat           a read-only directory to serve as a virtual FAT fs"
+ #   echo "                      the board will see it as an SD card wih only the FAT partion"
+    echo
+ #   echo "    if no sd.img nor clean-sd.img not sd-vfat dir, "
+    echo "    if no sd.img nor clean-sd.img, "
+    echo "    then an empty sd.img will be created"
+    echo
+    echo "    tftp              a directory that will be served to the board via TFTP"
+    echo "                      optional"
+    echo
+    echo "suported compressions for .img and .cpio are none, .gz, .bz2, .xz (example clean-sd.xz)"
+    echo
+    echo "there are no supported options as of now"
+    echo
+}
+
 main() {
     SD_DEFAULT_SIZE=32
 
+    # global commands/options
+    while [ -n "$1" ]; do
+        case "$1" in
+        help|--help)
+            help
+            exit 0
+            ;;
+        *)
+            break
+            ;;
+        esac
+    done
+
     if [ -n "$1" -a -d "$1" ]; then
         TESTBASE=$(readlink -f $1)
-    else
-        TESTBASE=$HOME/qemu-zcu102
+    elif [ -n "$QEMU_ZCU102_DEF_TESTBASE" ]; then
+        TESTBASE=$QEMU_ZCU102_DEF_TESTBASE
         mkdir -p $TESTBASE
+    else
+        error "The first argument needs to be a directory, use $MY_ALIAS help for more info"
     fi
 
     IMAGES=$TESTBASE
