@@ -2,3 +2,8 @@ demo/*.tar.gz
 demo-lite/*.tar.gz
 user-dev/opt/*
 user-dev/test-sw/openamp/hacked.cpio.gz
+demo/marker
+demo-lite/marker
+user-dev-marker
+qemu-zcu102-marker
+user-dev-trash.tar.gz

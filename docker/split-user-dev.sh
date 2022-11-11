@@ -30,8 +30,31 @@ mkdir xxx-temp-trash
 cd xxx-temp-base
 TOP=$PWD
 
-tar xvf $ORIG/user-dev.tar.gz 
+echo "copy in the user-dev template"
+cp -a $ORIG/user-dev/* .
+cp -a $ORIG/user-dev/.[a-zA-Z]* .
 
+echo "run the cpio hack script"
+cd test-sw/openamp
+./hack-cpio.sh openamp-image-minimal-generic-arm64.cpio.gz
+rm -rf ./rootfs
+cd $TOP
+
+echo "copy in the pre-installed image of the zephyr-sdk"
+mkdir -p opt
+cd opt
+tar xvf $ORIG/zephyr-sdk-0.15.1-installed.tar.gz
+
+echo "copy in the qemu-zcu102 files"
+cp -a $ORIG/../qemu-zcu102 .
+
+echo "fixup the symlinks"
+ln -sf ../../../../zephyr-sdk-0.15.1/sysroots/x86_64-pokysdk-linux/usr/xilinx/bin/qemu-system-aarch64 \
+    ./qemu-zcu102/sysroot/usr/bin/qemu-system-aarch64
+ln -sf ../../../../zephyr-sdk-0.15.1/sysroots/x86_64-pokysdk-linux/usr/xilinx/bin/qemu-system-microblazeel \
+    ./qemu-zcu102/sysroot/usr/bin/qemu-system-microblazeel
+
+echo "Start the spliting operation"
 cd $TOP/opt/zephyr-sdk-0.15.1
 move-to extra arm-zephyr-eabi
 move-to extra aarch64-zephyr-elf
@@ -42,7 +65,7 @@ move-to extra synopsys
 
 cd $TOP
 
-move-to extra opt/qemu-zcu102/stock-sw/xilinx-5.15/petalinux-rootfs.cpio.gz
+move-to extra test-sw/xilinx-5.15/petalinux-rootfs.cpio.gz
 move-to extra test-sw/openamp/openamp-image-minimal-generic-arm64.cpio.gz
 
 tar czvf $ORIG/demo-lite/user-dev-base.tar.gz .
