@@ -1,5 +1,16 @@
 #/bin/bash
 
+check-debug-trace() {
+    if [ -n "$QEMU_SCRIPT_DEBUG" ]; then
+        export QEMU_SCRIPT_DEBUG
+        exec 19>qemu-script-trace.$$.log
+        BASH_XTRACEFD=19
+        set -x
+    fi
+}
+
+check-debug-trace
+
 ME=$(readlink -f $0)
 SYSBASE=$(cd $(dirname $ME)/..; pwd)
 SYS_ROOT=$SYSBASE/sysroot
@@ -179,6 +190,7 @@ TESTBASE="$TESTBASE"
 TFTPDIR="$TFTPDIR"
 PMU_ARGS="$PMU_ARGS"
 APU_ARGS="$APU_ARGS"
+QEMU_SCRIPT_DEBUG="$QEMU_SCRIPT_DEBUG"
 EOF
 }
 
@@ -186,6 +198,7 @@ EOF
 restore-env() {
     cd $(dirname $ENVF)
     source $ENVF
+    check-debug-trace
 }
 
 main() {
