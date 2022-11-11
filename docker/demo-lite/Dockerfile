@@ -18,5 +18,7 @@ RUN adduser --gecos "dev" --disabled-password dev; adduser dev sudo_nopwd
 
 ADD user-dev-base.tar.gz /home/dev
 
+COPY login_message /home/dev
+
 # default command logs in as dev
 CMD su -l dev

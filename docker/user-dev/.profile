@@ -25,3 +25,7 @@ fi
 if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
+
+if [ -r "$HOME/login_message" ]; then
+    cat "$HOME/login_message"
+fi

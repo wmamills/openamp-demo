@@ -1,0 +1,9 @@
+Welcome to the OpenAMP demo
+You can run the demos by using
+    $ qemu-zcu102 demo1
+Where demo1 is any of the existing demo directories
+
+See what you can build by using
+    $ make help
+
+Enjoy!
