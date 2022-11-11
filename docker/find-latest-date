@@ -1,0 +1,14 @@
+#/bin/bash
+# find the most recent modification in a dir ($1) and put the name in $2
+# then adjust the time of $2 to match the filename it contains
+
+# Don't you love stack exchange
+# find magic is based on answer by Trevor Boyd Smity for
+# https://stackoverflow.com/questions/1015678/get-most-recent-file-in-a-directory-on-linux
+
+# the bit about putting the name in the marker file before setting the date/time is mine
+# we need -h in the touch in case the reference file is a symlink (bit me)
+# that is not in the man page but it seems reasonable and true
+
+echo $(find $1 -printf "%T@ %p\n" | sort -n | cut -d' ' -f 2- | tail -n 1) >$2
+touch -h -r $(cat $2) $2
