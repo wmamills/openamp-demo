@@ -100,6 +100,10 @@ do_start-qemu() {
     $SYS_ROOT/usr/bin/qemu-system-aarch64-multiarch \
         $APU_ARGS \
         -pmu-args "$PMU_ARGS"
+    if [ $? -ne 0 ]; then
+        echo "QEMU error exit $?"
+        sleep 5
+    fi
     tmux-kill
 }
 
