@@ -19,6 +19,13 @@ SYS_ROOT=$SYSBASE/sysroot
 FIRMWARE=$SYSBASE/firmware
 HW_DTBS=$SYSBASE/hw-dtbs/multiarch
 
+# VFAT does not work with current xilinx qemu
+# SD requires r/w (even though some sd cards have a write protect slider)
+# Current Xilinx QEMU in Zephyr wants size to be power of two
+# This was fixed in later versions of Xilinx QEMU
+# Try again later
+VFAT_ENABLE=false
+
 # Where to get PMU rom image if we need it
 PMU_ROM_URL=https://www.xilinx.com/bin/public/openDownload?filename=PMU_ROM.tar.gz
 
@@ -66,6 +73,10 @@ any-cat() {
 
 do_check-sd-img() {
     CLEAN_SD_IMG=$HOME/does-not-exist
+
+    if [  -d $IMAGES/sd-vfat ] && $VFAT_ENABLE; then
+        return
+    fi
 
     # we will only do this once, this is a preferece list
     for f in $IMAGES/clean-sd.img{.xz,.bz2,.gz,}; do
@@ -211,11 +222,15 @@ help() {
     echo "    clean-sd.img*     SD card image read-only, optional"
     echo "                      will be expanded to sd.img if sd.img is not there"
     echo "                      can be a symlink"
- #   echo "    sd-vfat           a read-only directory to serve as a virtual FAT fs"
- #   echo "                      the board will see it as an SD card wih only the FAT partion"
+    if $VFAT_ENABLE; then
+    echo "    sd-vfat           a read-only directory to serve as a virtual FAT fs"
+    echo "                      the board will see it as an SD card wih only the FAT partion"
     echo
- #   echo "    if no sd.img nor clean-sd.img not sd-vfat dir, "
+    echo "    if no sd.img nor clean-sd.img nor sd-vfat dir, "
+    else
+    echo
     echo "    if no sd.img nor clean-sd.img, "
+    fi
     echo "    then an empty sd.img will be created"
     echo
     echo "    tftp              a directory that will be served to the board via TFTP"
@@ -258,6 +273,12 @@ main() {
     do_check-pmu-rom
     do_check-sd-img
 
+    if [  -d $IMAGES/sd-vfat ] && $VFAT_ENABLE; then
+        SD_ARG="-drive if=sd,index=1,file=fat:rw:$IMAGES/sd-vfat,format=vvfat"
+    else
+        SD_ARG="-drive if=sd,index=1,file=$IMAGES/sd.img,format=raw"
+    fi
+
     PMU_ARGS="-M microblaze-fdt \
         -display none \
         -hw-dtb $HW_DTBS/zynqmp-pmu.dtb \
@@ -271,7 +292,7 @@ main() {
         -m 4096 \
         -net nic -net nic -net nic -net nic,netdev=eth0 \
         -netdev user,id=eth0,hostfwd=tcp::1114-:22,tftp=$TFTPDIR \
-        -drive if=sd,index=1,file=$IMAGES/sd.img,format=raw \
+        $SD_ARG \
         -nographic \
         -serial mon:stdio \
         -serial tcp:localhost:1115,server,nowait \
