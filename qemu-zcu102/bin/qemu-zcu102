@@ -3,6 +3,8 @@
 ME=$(readlink -f $0)
 SYSBASE=$(cd $(dirname $ME)/..; pwd)
 SYS_ROOT=$SYSBASE/sysroot
+FIRMWARE=$SYSBASE/firmware
+HW_DTBS=$SYSBASE/hw-dtbs/multiarch
 
 # Where to get PMU rom image if we need it
 PMU_ROM_URL=https://www.xilinx.com/bin/public/openDownload?filename=PMU_ROM.tar.gz
@@ -141,21 +143,21 @@ start-tmux() {
 
     if [ -z "$TMUX" ]; then
         tmux start-server
-        tmux new-session -d -s QEMU -n qemu-zcu102 -d "$ME subcmd start-qemu"
+        tmux new-session -d -s QEMU -n qemu-zcu102 -d "$ME envf $ENVF subcmd start-qemu"
         SESS="QEMU"
         tmux set -s -t $SESS mouse on
     else
         SESS=""
-        tmux new-window -d -n qemu-zcu102 -d "$ME subcmd start-qemu"
+        tmux new-window -d -n qemu-zcu102 -d "$ME envf $ENVF subcmd start-qemu"
         tmux set -s mouse on
     fi
 
     tmux set -w -t $SESS:qemu-zcu102 pane-border-status top
 
     # create a session with four panes
-    tmux split-window -h -t $SESS:qemu-zcu102 "$ME subcmd sub-shell $USER@$HOSTNAME"
-    tmux split-window -v -t $SESS:qemu-zcu102 "$ME subcmd my-socat 1115 '2nd UART, R5_0'"
-    tmux split-window -v -t $SESS:qemu-zcu102 "$ME subcmd my-socat 1116 '3rd UART'"
+    tmux split-window -h -t $SESS:qemu-zcu102 "$ME envf $ENVF subcmd sub-shell $USER@$HOSTNAME"
+    tmux split-window -v -t $SESS:qemu-zcu102 "$ME envf $ENVF subcmd my-socat 1115 '2nd UART, R5_0'"
+    tmux split-window -v -t $SESS:qemu-zcu102 "$ME envf $ENVF subcmd my-socat 1116 '3rd UART'"
 
     tmux select-pane -t $SESS:qemu-zcu102.0
 
@@ -164,6 +166,26 @@ start-tmux() {
     else
         tmux select-window -t:qemu-zcu102
     fi
+}
+
+# tmux does not always transport the environment to the new session, window, or pane
+# save everything we will need in a new process space
+save-env() {
+cat >$ENVF <<EOF
+# This is a saved env file, do not edit
+# if found when no qemu process is running, delete it
+IMAGES="$IMAGES"
+TESTBASE="$TESTBASE"
+TFTPDIR="$TFTPDIR"
+PMU_ARGS="$PMU_ARGS"
+APU_ARGS="$APU_ARGS"
+EOF
+}
+
+# restore the saved environment and PWD
+restore-env() {
+    cd $(dirname $ENVF)
+    source $ENVF
 }
 
 main() {
@@ -181,9 +203,6 @@ main() {
 
     do_check-pmu-rom
     do_check-sd-img
-
-    FIRMWARE=$SYSBASE/firmware
-    HW_DTBS=$SYSBASE/hw-dtbs/multiarch
 
     PMU_ARGS="-M microblaze-fdt \
         -display none \
@@ -212,13 +231,26 @@ main() {
 
     cd $TESTBASE
 
+    ENVF=$(mktemp -p . envf-XXXXXXXX)
+    save-env
     if [ x"$QEMU_TMUX" = x"no" ]; then
         # user does not want us to do anything with TMUX, just start
-        start-qemu
+        do_start-qemu
     else
         start-tmux
     fi
+
+    cd $TESTBASE
+    rm -rf envf-last
+    mv $ENVF envf-last
 }
+
+if [ x"$1" = x"envf" ]; then
+    if [ -z "$2" ]; then error "envf needs a file"; fi
+    ENVF=$2
+    shift 2
+    restore-env
+fi
 
 if [ x"$1" = x"subcmd" ]; then
     if [ -z "$2" ]; then error "subcmd needs a command"; fi
