@@ -116,4 +116,5 @@ if ! shopt -oq posix; then
   fi
 fi
 
-PS1="\u@openamp-demo$ "
+export HOSTNAME=openamp-demo
+PS1="\u@$HOSTNAME$ "
