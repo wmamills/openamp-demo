@@ -119,10 +119,15 @@ do_sub-shell() {
 do_my-socat() {
     PORT=$1; shift
     tmux-panel-title "$@"
-    while true; do
-        echo "fake connect on port $PORT"
-        sleep 5
+    echo -n "waiting for port $PORT "
+    while ! socat tcp:localhost:$PORT /dev/null >/dev/null 2>&1; do
+        echo -n "."
+        sleep 1
     done
+    echo; echo "Connecting"
+    socat tcp:localhost:$PORT /dev/tty
+    echo "Conection closed, exiting"
+    sleep 2
 }
 
 start-tmux() {
@@ -191,8 +196,9 @@ main() {
         -netdev user,id=eth0,hostfwd=tcp::1114-:22,tftp=$TFTPDIR \
         -drive if=sd,index=1,file=$IMAGES/sd.img,format=raw \
         -nographic \
-        -serial mon:stdio -serial null \
-        -serial mon:vc
+        -serial mon:stdio \
+        -serial tcp:localhost:1115,server,nowait \
+        -serial tcp:localhost:1116,server,nowait \
         -global xlnx,zynqmp-boot.cpu-num=0 \
         -global xlnx,zynqmp-boot.use-pmufw=true \
         -device loader,file=$FIRMWARE/arm-trusted-firmware.elf,cpu-num=0 \

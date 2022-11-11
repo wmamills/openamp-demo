@@ -40,7 +40,7 @@ if (mbtype == 'PMU' and os.path.exists(PMU_rom)) or mbtype == 'PLM':
 
     #NEED TO FIX for next yocto release (dont need to switch ports anymore, they will be provided correctly upstream
     # We can only switch these if there are exactly two, otherwise we can't assume what is being executed so we leave it as is
-    if len(tcp_serial_ports) == 2:
+    if len(tcp_serial_ports) == 1042:
         APU_args[tcp_serial_ports[0]],APU_args[tcp_serial_ports[1]] = APU_args[tcp_serial_ports[1]],APU_args[tcp_serial_ports[0]]
 
     mb_cmd =  binpath + '/qemu-system-microblazeel ' + ' '.join(MB_args) + ' -machine-path ' + mach_path
