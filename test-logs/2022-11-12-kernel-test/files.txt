@@ -1,0 +1,38 @@
+ 51052860     12 drwxrwxr-x   3 bill     bill        12288 Nov 12 09:56 6.0.0
+ 50989420      4 lrwxrwxrwx   1 bill     bill           78 Nov 11 18:08 6.0.0/clean-sd.img.xz -> ../../../../openamp-demo/docker/user-dev/test-sw/sd-card/zcu102-tftp-sd.img.xz
+ 51052861      4 drwxrwxr-x   3 bill     bill         4096 Nov 11 18:06 6.0.0/tftp
+ 51052862      4 drwxrwxr-x   2 bill     bill         4096 Nov 11 18:12 6.0.0/tftp/zcu102
+ 50989451      4 -rw-rw-r--   1 bill     bill          589 Nov 11 18:10 6.0.0/tftp/zcu102/uEnv.txt
+ 50989452      0 lrwxrwxrwx   1 bill     bill           30 Nov 11 18:11 6.0.0/tftp/zcu102/system.dtb -> ../../zynqmp-zcu102-rev1.0.dtb
+ 50989453      0 lrwxrwxrwx   1 bill     bill           30 Nov 11 18:12 6.0.0/tftp/zcu102/initramfs.cpio.gz -> ../../../common/hacked.cpio.gz
+ 50989454      4 lrwxrwxrwx   1 bill     bill           68 Nov 11 18:11 6.0.0/tftp/zcu102/Image -> ../../Image--6.0+git0+7fa3714a90-r0-generic-arm64-20221105011203.bin
+ 50989483  36364 -rw-r--r--   1 bill     bill     37231104 Nov  5 01:24 6.0.0/Image--6.0+git0+7fa3714a90-r0-generic-arm64-20221105011203.bin
+ 50989514  65540 -rw-rw-r--   1 bill     bill     67108864 Nov 11 18:20 6.0.0/sd.img
+ 50989579     36 -rwxr-xr-x   1 bill     bill        34678 Nov  5 03:47 6.0.0/zynqmp-zcu102-rev1.0.dtb
+ 51052863     12 drwxrwxr-x   3 bill     bill        12288 Nov 12 09:56 6.0.7
+ 50989621      4 lrwxrwxrwx   1 bill     bill           78 Nov 11 18:08 6.0.7/clean-sd.img.xz -> ../../../../openamp-demo/docker/user-dev/test-sw/sd-card/zcu102-tftp-sd.img.xz
+ 50989626  21656 -rw-rw-r--   1 bill     bill     22172160 Nov  7 13:16 6.0.7/vmlinuz-6.0.0-xilinx-v2022.1-00004-gdc3025255cd5
+ 51052864      4 drwxrwxr-x   3 bill     bill         4096 Nov 11 18:06 6.0.7/tftp
+ 51052865      4 drwxrwxr-x   2 bill     bill         4096 Nov 11 18:15 6.0.7/tftp/zcu102
+ 50989648      4 -rw-rw-r--   1 bill     bill          589 Nov 11 18:10 6.0.7/tftp/zcu102/uEnv.txt
+ 50989649      0 lrwxrwxrwx   1 bill     bill           30 Nov 11 18:11 6.0.7/tftp/zcu102/system.dtb -> ../../zynqmp-zcu102-rev1.0.dtb
+ 50989650      0 lrwxrwxrwx   1 bill     bill           30 Nov 11 18:12 6.0.7/tftp/zcu102/initramfs.cpio.gz -> ../../../common/hacked.cpio.gz
+ 50989651      0 lrwxrwxrwx   1 bill     bill           54 Nov 11 18:15 6.0.7/tftp/zcu102/Image -> ../../vmlinuz-6.0.0-xilinx-v2022.1-00004-gdc3025255cd5
+ 50989706  65536 -rw-rw-r--   1 bill     bill     67108864 Nov 11 20:25 6.0.7/sd.img
+ 50989784     36 -rwxr-xr-x   1 bill     bill        34678 Nov  5 03:47 6.0.7/zynqmp-zcu102-rev1.0.dtb
+ 51052866      4 drwxrwxr-x   2 bill     bill         4096 Nov 11 16:54 common
+ 50989800      4 -rw-rw-r--   1 bill     bill          775 Nov 11 16:52 common/boot.script
+ 50989801      4 -rw-rw-r--   1 bill     bill          847 Nov 11 16:54 common/boot.scr
+ 50989802      4 -rwxrwxr-x   1 bill     bill          150 Nov  5 12:27 common/update.sh
+ 50989803  37796 -rw-rw-r--   1 bill     bill     38702226 Nov 11 16:30 common/hacked.cpio.gz
+ 51052857     12 drwxrwxr-x   3 bill     bill        12288 Nov 12 09:56 xil-5.15
+ 50989224      4 lrwxrwxrwx   1 bill     bill           78 Nov 11 18:08 xil-5.15/clean-sd.img.xz -> ../../../../openamp-demo/docker/user-dev/test-sw/sd-card/zcu102-tftp-sd.img.xz
+ 51052858      4 drwxrwxr-x   3 bill     bill         4096 Nov 11 18:06 xil-5.15/tftp
+ 51052859      4 drwxrwxr-x   2 bill     bill         4096 Nov 11 18:16 xil-5.15/tftp/zcu102
+ 50989256      4 -rw-rw-r--   1 bill     bill          589 Nov 11 18:10 xil-5.15/tftp/zcu102/uEnv.txt
+ 50989257      0 lrwxrwxrwx   1 bill     bill           23 Nov 11 18:16 xil-5.15/tftp/zcu102/system.dtb -> ../../system-top.dtb.xv
+ 50989258      0 lrwxrwxrwx   1 bill     bill           30 Nov 11 18:12 xil-5.15/tftp/zcu102/initramfs.cpio.gz -> ../../../common/hacked.cpio.gz
+ 50989259      4 lrwxrwxrwx   1 bill     bill           74 Nov 11 18:15 xil-5.15/tftp/zcu102/Image -> ../../Image--5.15.19+git0+75872fda9a-r0.0-zcu102-zynqmp-20221009150139.bin
+ 50989309  21880 -rw-r--r--   1 bill     bill     22401536 Oct  9 16:23 xil-5.15/Image--5.15.19+git0+75872fda9a-r0.0-zcu102-zynqmp-20221009150139.bin
+ 50989320  65540 -rw-rw-r--   1 bill     bill     67108864 Nov 11 21:17 xil-5.15/sd.img
+ 50989377     60 -rw-r--r--   1 bill     bill        59428 Oct  9 16:07 xil-5.15/system-top.dtb.xv
