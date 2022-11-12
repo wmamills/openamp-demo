@@ -97,7 +97,7 @@ do_check-sd-img() {
 
 tmux-panel-title() {
     # the escape sequence seems harmless on non-tmux terms but check anyway
-    if [ -n "$TMUX" ]; then
+    if [ -n "$TMUX" -a "$QEMU_TMUX" != "no" ]; then
         printf '\033]2;%s\033\\' "$1"
     fi
 }
@@ -106,7 +106,7 @@ tmux-panel-title() {
 # if we started tmux and the user did not add windows,
 # then this will kill the session also
 tmux-kill() {
-    if [ -n "$TMUX" ]; then
+    if [ -n "$TMUX" -a "$QEMU_TMUX" != "no" ]; then
         tmux kill-window
         # should not really get here
     fi
@@ -128,7 +128,7 @@ do_start-qemu() {
         -pmu-args "$PMU_ARGS"
     if [ $? -ne 0 ]; then
         echo "QEMU error exit $?"
-        sleep 5
+        sleep 15
     fi
     tmux-kill
 }
@@ -204,6 +204,7 @@ TFTPDIR="$TFTPDIR"
 PMU_ARGS="$PMU_ARGS"
 APU_ARGS="$APU_ARGS"
 QEMU_SCRIPT_DEBUG="$QEMU_SCRIPT_DEBUG"
+QEMU_TMUX="$QEMU_TMUX"
 EOF
 }
 
