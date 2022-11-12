@@ -272,6 +272,7 @@ main() {
 
     do_check-pmu-rom
     do_check-sd-img
+    ssh-rekey
 
     if [  -d $IMAGES/sd-vfat ] && $VFAT_ENABLE; then
         SD_ARG="-drive if=sd,index=1,file=fat:rw:$IMAGES/sd-vfat,format=vvfat"
