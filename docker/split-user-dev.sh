@@ -34,10 +34,9 @@ echo "copy in the user-dev template"
 cp -a $ORIG/user-dev/* .
 cp -a $ORIG/user-dev/.[a-zA-Z]* .
 
-echo "run the cpio hack script"
+echo "created the hacked cpio image"
 cd test-sw/openamp
-./hack-cpio.sh openamp-image-minimal-generic-arm64.cpio.gz
-rm -rf ./xxx-temp-rootfs
+$ORIG/../qemu-zcu102/bin/make-image-targets .
 cd $TOP
 
 echo "copy in the pre-installed image of the zephyr-sdk"

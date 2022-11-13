@@ -1,0 +1,18 @@
+# this file is used by make-image-targets
+# do not try to run it on its own
+# use: make-image-targets dir
+# where dir is the directory this file is in
+
+hack-cpio() {
+	echo "Hacking"
+	rm -rf xxx-temp/boot/*
+	rm -rf xxx-temp/lib/firmware/*
+	rm -rf xxx-temp/lib/modules/*/kernel/drivers/gpu
+	#rm -rf xxx-temp-rootfs/etc/rc*/*avahi*
+
+	add-tty ttyPS0
+}
+
+main() {
+	new-cpio hacked.cpio.gz openamp-image-minimal-generic-arm64.cpio.gz cb:hack-cpio
+}
