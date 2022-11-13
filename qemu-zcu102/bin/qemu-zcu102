@@ -95,6 +95,12 @@ do_check-sd-img() {
     fi
 }
 
+check-make-image-targets() {
+    if [ $IMAGES/make-target-helper ]; then
+        make-image-targets $IMAGES
+    fi
+}
+
 tmux-panel-title() {
     # the escape sequence seems harmless on non-tmux terms but check anyway
     if [ -n "$TMUX" -a "$QEMU_TMUX" != "no" ]; then
@@ -273,6 +279,7 @@ main() {
 
     do_check-pmu-rom
     do_check-sd-img
+    check-make-image-targets
     ssh-rekey
 
     if [  -d $IMAGES/sd-vfat ] && $VFAT_ENABLE; then
