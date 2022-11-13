@@ -1,0 +1,206 @@
+#!/bin/bash
+
+ME=$0
+DIR=$PWD
+
+error() {
+	echo "$@"
+	exit 2
+}
+
+any-cat() {
+    if [ -z "$1" ]; then
+        error "any-cat: decompress a file to stdout"
+    fi
+
+    case $1 in
+    *.gz)
+        zcat $1
+        ;;
+    *.bz2)
+        bzcat $1
+        ;;
+    *.xz)
+        xzcat $1
+        ;;
+    *)
+        cat $1
+        ;;
+    esac
+}
+
+any-compress() {
+    if [ -z "$1" ]; then
+        error "any-compress: compress stdin to any format based on name"
+    fi
+
+    case $1 in
+    *.gz)
+        gzip - >$1
+        ;;
+    *.bz2)
+        bzip2 - >$1
+        ;;
+    *.xz)
+        xz - >$1
+        ;;
+    *)
+        cat - >$1
+        ;;
+    esac
+}
+
+
+# new-cpio OUTPUT INPUT callback-function
+new-cpio() {
+	fakeroot $ME in-fakeroot new-cpio "$@"
+}
+
+fr_new-cpio() {
+	echo "new-cpio $@"
+	OUTPUT=$1
+	OUTPUT_NAME=$(basename $OUTPUT)
+	OUTPUT_NAME=${OUTPUT_NAME%%.*}
+	shift
+
+	rm -rf xxx-temp
+	rm -rf xxx-temp.$OUTPUT_NAME
+	mkdir -p xxx-temp
+
+	for i in "$@"; do
+		case $i in 
+		cb:*)
+			f=${i#cb:}
+			echo "Calling $f"
+			$f
+			;;
+		*)
+			extract $i
+			;;
+		esac
+	done
+
+	truncate --size 0 $OUTPUT
+	re-archive $OUTPUT
+	if [ -n "$KEEP_DIRS" ]; then
+		mv xxx-temp xxx-temp.$OUTPUT_NAME
+	else
+		rm -rf xxx-temp
+	fi
+}
+
+# cpio-cat OUTPUT INPUT INPUT ...
+cpio-cat() {
+	OUTPUT=$1
+	shift
+	truncate --size 0 $OUTPUT
+	for i in "$@"; do
+		cat $i >>$OUTPUT
+	done
+}
+
+add-tty() {
+	TTY=$1
+	SHORT=${TTY#tty}
+	BAUD=115200
+	TERM=vt102
+	INITTAB=xxx-temp/etc/inittab
+	SEC=xxx-temp/etc/securetty
+
+	if ! grep -q "^${SHORT}:" $INITTAB; then
+		echo "$SHORT:12345:respawn:/bin/start_getty $BAUD $TTY $TERM" >>$INITTAB
+	fi
+
+	if ! grep -q "^${TTY}" $SEC; then
+		chmod u+w $SEC
+		echo "$TTY" >>$SEC
+		chmod -w $SEC
+	fi
+}
+
+extract() {
+	echo "Extracting $1"
+
+	# handle directories first
+	if [ -d $1 ]; then
+		cp -dR --preserve=mode,timestamps $1/. xxx-temp
+		return
+	fi
+
+	if [ ! -e $1 ]; then
+		error "$1 does not exist"
+	fi
+
+	# otherwise archives		
+	case $1 in
+	*.tar.gz|*.tar.bz2|*.tar.xz|*.tar)
+	    any-cat $1 | tar x -C xxx-temp
+	    ;;
+	*.cpio.gz|*.cpio.bz2|*.cpio.xz|*.cpio)
+	    any-cat $1 | (cd xxx-temp; cpio -i)
+	    ;;
+	*)
+	    echo "don't know how to handle $1"
+	    exit 2
+	    ;;
+	esac
+}
+
+re-archive() {
+	echo "Re-archiving to $1"
+	case $1 in
+	*.tar|*.tar.gz|*.tar.bz2|*.tar.xz)
+	    tar c -C xxx-temp | any-compress ../$1
+	    ;;
+	*.cpio|*.cpio.gz|*.cpio.bz2|*.cpio.xz)
+		(cd xxx-temp; find . | cpio -H newc -o | any-compress ../$1)
+		;;
+	*)
+	    echo "don't know how to handle $1"
+	    exit 2
+	    ;;
+	esac
+}
+
+# this will only get used if the dir has no helper script
+# these should only be very safe things
+main() {
+	echo "running default main()"
+	echo "no defaults for now"
+}
+
+import-helper() {
+	if [ -e ./make-targets-helper ]; then
+		source ./make-targets-helper
+	fi
+}
+
+premain() {
+	if [ -d $1 ]; then
+		cd $1
+		if [ -e ./make-targets-helper ]; then
+			echo " sourcing $1/make-targets-helper"
+			source ./make-targets-helper
+		else
+			echo "no helper found, doing default processing"
+		fi
+		main
+	else
+		error "input 1 needs to be a dir"
+	fi
+}
+
+case $1 in
+"")
+	echo "need an input dir"
+	exit 2
+	;;
+"in-fakeroot")
+	CMD=$2; shift 2
+	import-helper
+	fr_${CMD} "$@"
+	;;
+*)
+	premain "$@"
+	;;
+esac

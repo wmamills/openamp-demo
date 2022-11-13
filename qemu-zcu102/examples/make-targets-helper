@@ -1,0 +1,30 @@
+# this file is used by make-image-targets
+# do not try to run it on its own
+# use: make-image-targets dir
+# where dir is the directory this file is in
+
+# uncomment to keep the working dirs for debug
+#KEEP_DIRS=y
+
+hack-base() {
+    echo "Hacking Base"
+    rm -rf xxx-temp/lib/modules/*
+}
+
+trim-modules() {
+    echo "Trim modules"
+    rm -rf xxx-temp/lib/modules/*/kernel/drivers/gpu
+}
+
+main() {
+    D=generated
+    mkdir -p $D
+
+    # new-cpio OUTPUT INPUT call-back-function
+    new-cpio $D/hacked-base.cpio.gz openamp/base.cpio.gz cb:hack-base
+    new-cpio $D/modules.cpio.gz modules*.tar.gz cb:trim-modules
+    new-cpio $D/my-extra-stuff.cpio.gz my-extra-stuff
+
+    # cpio-cat OUTPUT INPUT INPUT ...
+    cpio-cat $D/initrd.cpio.gz $D/hacked-base.cpio.gz $D/modules.cpio.gz $D/my-extra-stuff.cpio.gz
+}
