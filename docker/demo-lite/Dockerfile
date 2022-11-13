@@ -8,7 +8,7 @@ RUN echo 'Etc/UTC' > /etc/timezone; ln -s /usr/share/zoneinfo/Etc/UTC /etc/local
 
 # Install prerequisites
 RUN apt-get --quiet=2 update && apt-get install --quiet=2 --assume-yes \
-    sudo nano wget python3 python3-pip openssh-client bash-completion tmux socat
+    sudo nano wget python3 python3-pip openssh-client bash-completion tmux socat cpio
 
 # setup a no password required sudo group
 RUN addgroup --system sudo_nopwd; echo "%sudo_nopwd ALL=(ALL:ALL) NOPASSWD:ALL" >/etc/sudoers.d/20-sudo_nopwd; chmod 600 /etc/sudoers.d/*
