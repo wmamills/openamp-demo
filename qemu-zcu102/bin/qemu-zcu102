@@ -19,6 +19,8 @@ SYS_ROOT=$SYSBASE/sysroot
 FIRMWARE=$SYSBASE/firmware
 HW_DTBS=$SYSBASE/hw-dtbs/multiarch
 
+TMP_MARKER=qemu-tmp-dir-marker
+
 # VFAT does not work with current xilinx qemu
 # SD requires r/w (even though some sd cards have a write protect slider)
 # Current Xilinx QEMU in Zephyr wants size to be power of two
@@ -124,6 +126,21 @@ ssh-rekey() {
     ssh-keygen -R localhost:1114 >/dev/null 2>&1 || true
 }
 
+final-clean-up() {
+    cd $TESTBASE
+    if [ -e $ENVF ]; then
+        mv $ENVF envf-last
+    fi
+
+    # cleanup the tmp dir after verifing it is really ours
+    if [ -e $TMPDIR/$TMP_MARKER ]; then
+        rm -rf $TMPDIR
+        echo "cleaned up tmp dir"
+    elif [ x"$1" != x"-q" ]; then
+        echo "failed to clean up tmp dir"
+    fi
+}
+
 do_start-qemu() {
     tmux-panel-title "Main UART, Quad A53, Ctrl-A x to quit"
     #echo "PMU_ARGS=$PMU_ARGS"
@@ -136,6 +153,7 @@ do_start-qemu() {
         echo "QEMU error exit $?"
         sleep 15
     fi
+    final-clean-up
     tmux-kill
 }
 
@@ -149,6 +167,7 @@ do_sub-shell() {
     echo "if you exit this shell, it will exit the emulator also"
     echo
     bash
+    final-clean-up
     tmux-kill
 }
 
@@ -193,9 +212,18 @@ start-tmux() {
 
     if [ -n "$SESS" ]; then
         tmux attach -t$SESS:qemu-zcu102
+
+        # this is probably redundant, don't complain is it is not there
+        if ! tmux has -t$SESS >/dev/null 2>&1; then
+            final-clean-up -q
+        fi
     else
         tmux select-window -t:qemu-zcu102
+
+        # there is no way to do failsafe clean up in this case
+        # the above command returns immediately from the POV of the shell running it
     fi
+
 }
 
 # tmux does not always transport the environment to the new session, window, or pane
@@ -211,13 +239,14 @@ PMU_ARGS="$PMU_ARGS"
 APU_ARGS="$APU_ARGS"
 QEMU_SCRIPT_DEBUG="$QEMU_SCRIPT_DEBUG"
 QEMU_TMUX="$QEMU_TMUX"
+TMPDIR="$TMPDIR"
 EOF
 }
 
 # restore the saved environment and PWD
 restore-env() {
-    cd $(dirname $ENVF)
     source $ENVF
+    cd $TESTBASE
     check-debug-trace
 }
 
@@ -274,6 +303,13 @@ main() {
         error "The first argument needs to be a directory, use $MY_ALIAS help for more info"
     fi
 
+    # create our own tmpdir for easy cleanup
+    # define a default starting tmp dir if not defined already
+    : ${TMPDIR:=/tmp}
+    export MY_TMPDIR=$(mktemp -d -p $TMPDIR qemu-XXXXXXXX)
+    touch $MY_TMPDIR/$TMP_MARKER
+    export TMPDIR=$MY_TMPDIR
+
     IMAGES=$TESTBASE
     TFTPDIR=$TESTBASE/tftp
 
@@ -315,7 +351,8 @@ main() {
 
     cd $TESTBASE
 
-    ENVF=$(mktemp -p . envf-XXXXXXXX)
+    ENVF=$(mktemp -p $TMPDIR envf-XXXXXXXX)
+    rm -rf envf-last
     save-env
     if [ x"$QEMU_TMUX" = x"no" ]; then
         # user does not want us to do anything with TMUX, just start
@@ -323,10 +360,6 @@ main() {
     else
         start-tmux
     fi
-
-    cd $TESTBASE
-    rm -rf envf-last
-    mv $ENVF envf-last
 }
 
 if [ x"$1" = x"envf" ]; then
