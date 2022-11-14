@@ -104,6 +104,8 @@ do_host() {
 	echo "RUNS=$RUNS TESTS=$TESTS KERNELS=${KERNELS[@]}"
 	sleep 2
 
+	#for i in $(seq 1 100); do echo "fake FAIL #$i" >>$LOG; done
+
 	for run in $(seq 1 $RUNS); do
 		for k in ${KERNELS[@]}; do
 			tmux-panel-title "run=$run kernel=$k boot"
