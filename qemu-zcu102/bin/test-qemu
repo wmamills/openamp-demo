@@ -14,7 +14,7 @@ FAIL=0
 
 RUNS=100
 TESTS=2
-KERNELS=( 6.0.0 6.0.7 xil-5.15 )
+KERNELS=( 6.0.0 6.0.7 oas-6.0.y )
 
 tmux-panel-title() {
     printf '\033]2;%s\033\\' "$1"
