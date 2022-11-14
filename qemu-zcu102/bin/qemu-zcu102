@@ -120,6 +120,13 @@ tmux-kill() {
     fi
 }
 
+# kill all other panes in this window
+tmux-kill-other-panes() {
+    if [ -n "$TMUX" -a "$QEMU_TMUX" != "no" ]; then
+        tmux kill-pane -a -t $TMUX_PANE
+    fi
+}
+
 ssh-rekey() {
     # Clear out any old known_key ssh value
     ssh-keygen -R [localhost]:1114 >/dev/null 2>&1 || true
@@ -166,7 +173,15 @@ do_sub-shell() {
     echo
     echo "if you exit this shell, it will exit the emulator also"
     echo
+
     bash
+
+    # kill QEMU pane (and others)
+    # give it time to exit
+    tmux-kill-other-panes
+    sleep 0.5
+
+    # now safe(er) to clean temp files
     final-clean-up
     tmux-kill
 }
