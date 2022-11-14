@@ -20,8 +20,8 @@ tmux-panel-title() {
 
 update_totals() {
 	echo "TOTAL=$TOTAL FAIL=$FAIL" >totals.txt
-	echo "$LAST_OK"   >>totals.txt
-	echo "$LAST_FAIL" >>totals.txt
+	echo "LAST $LAST_OK" >>totals.txt
+	tac $LOG | grep FAIL | head -n 25 >>totals.txt
 }
 
 record_sucess() {
