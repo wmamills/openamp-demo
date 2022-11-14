@@ -128,16 +128,15 @@ do_qemu() {
 main() {
 echo "Starting..." >totals.txt
 
-if [ -z "$TMUX" ]; then
+if [ -n "$TMUX" ]; then
+	echo "nested tmux not supported"
+	exit 2
+fi
+
 	tmux start-server
 	tmux new-session -d -s QEMU -n qemu-zcu102 -d "$ME subcmd totals"
 	SESS="QEMU"
 	tmux set -s -t $SESS mouse on
-else
-	SESS=""
-	tmux new-window -d -n qemu-zcu102 -d "$ME subcmd totals"
-	tmux set -s mouse on
-fi
 
 tmux set -w -t $SESS:qemu-zcu102 pane-border-status top
 
@@ -148,11 +147,8 @@ tmux split-window -v -l $(( $LINES - 10 )) -t $SESS:qemu-zcu102 "$ME subcmd host
 #sleep 1
 #tmux select-pane -t $SESS:qemu-zcu102.1
 
-if [ -n "$SESS" ]; then
 	tmux attach -t$SESS:qemu-zcu102
-else
-	tmux select-window -t:qemu-zcu102
-fi
+
 }
 
 if [ x"$1" = x"subcmd" ]; then
