@@ -7,6 +7,8 @@ ME=$(readlink -f $0)
 NOW=$(date +%Y-%m-%d-%H%M%S)
 LOG=test-log-$NOW.log
 
+TMP_MARKER=test-qemu-marker
+
 TOTAL=0
 FAIL=0
 
@@ -86,6 +88,16 @@ do_totals() {
 	watch -t -n 1 -d cat totals.txt
 }
 
+clean_tmp() {
+	if [ $TMPDIR/$TMP_MARKER ]; then
+		echo "cleaning our private tmp dir"
+		rm -rf $TMPDIR/* || true
+		touch $TMPDIR/$TMP_MARKER
+	else
+		echo "private tmp dir not found"
+	fi
+}
+
 do_host() {
 	tmux-panel-title "host side $@"
 	sleep 2
@@ -113,8 +125,11 @@ do_host() {
 				record_failure $run $k 0
 			fi
 			tmux kill-pane -t .2
+			echo "sleeping before cleaning"
+			sleep 5
+			clean_tmp
 			echo "sleeping before next run"
-			sleep 15
+			sleep 10
 		done
 	done			
 	tmux kill-win	
@@ -133,6 +148,10 @@ if [ -n "$TMUX" ]; then
 	exit 2
 fi
 
+	export MY_TMPDIR=$(mktemp -d -p $TMPDIR test-qemu-XXXXXXXX)
+	touch $MY_TMPDIR/$TMP_MARKER
+	export TMPDIR=$MY_TMPDIR
+
 	tmux start-server
 	tmux new-session -d -s QEMU -n qemu-zcu102 -d "$ME subcmd totals"
 	SESS="QEMU"
@@ -149,6 +168,10 @@ tmux split-window -v -l $(( $LINES - 10 )) -t $SESS:qemu-zcu102 "$ME subcmd host
 
 	tmux attach -t$SESS:qemu-zcu102
 
+	# if finsihed or killed (but not detached)
+	if ! tmux has -t$SESS; then
+		clean_tmp
+	fi
 }
 
 if [ x"$1" = x"subcmd" ]; then
