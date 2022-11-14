@@ -98,7 +98,7 @@ do_check-sd-img() {
 }
 
 check-make-image-targets() {
-    if [ $IMAGES/make-target-helper ]; then
+    if [ -e $IMAGES/make-targets-helper ]; then
         make-image-targets $IMAGES
     fi
 }
