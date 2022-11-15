@@ -53,7 +53,7 @@ ln -sf ../../../../zephyr-sdk-0.15.1/sysroots/x86_64-pokysdk-linux/usr/xilinx/bi
 ln -sf ../../../../zephyr-sdk-0.15.1/sysroots/x86_64-pokysdk-linux/usr/xilinx/bin/qemu-system-microblazeel \
     ./qemu-zcu102/sysroot/usr/bin/qemu-system-microblazeel
 
-echo "Start the spliting operation"
+echo "Start the splitting operation"
 cd $TOP/opt/zephyr-sdk-0.15.1
 move-to extra arm-zephyr-eabi
 move-to extra aarch64-zephyr-elf
@@ -65,7 +65,8 @@ move-to extra synopsys
 cd $TOP
 
 move-to extra test-sw/xilinx-5.15/petalinux-rootfs.cpio.gz
-move-to extra test-sw/openamp/openamp-image-minimal-generic-arm64.cpio.gz
+move-to extra test-sw/openamp/openamp-image-minimal-generic-arm64*.cpio.gz
+move-to extra test-sw/openamp/modules-*.tgz
 
 tar czvf $ORIG/demo-lite/user-dev-base.tar.gz .
 cd $ORIG/xxx-temp-extra
