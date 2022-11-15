@@ -16,6 +16,11 @@ RUNS=10
 TESTS=2
 KERNELS=( demo1 )
 
+error() {
+	echo "$@"
+	exit 2
+}
+
 tmux-panel-title() {
     printf '\033]2;%s\033\\' "$1"
 }
@@ -89,10 +94,11 @@ do_totals() {
 }
 
 clean_tmp() {
-	if [ $TMPDIR/$TMP_MARKER ]; then
+	MY_TMPDIR=$(dirname $TMPDIR)
+	if [ -e $MY_TMPDIR/test-qemu-tmp/$TMP_MARKER ]; then
 		echo "cleaning our private tmp dir"
-		rm -rf $TMPDIR/* || true
-		touch $TMPDIR/$TMP_MARKER
+		rm -rf $MY_TMPDIR/test-qemu-tmp/* || true
+		touch $MY_TMPDIR/test-qemu-tmp/$TMP_MARKER || error "Can't touch tmp marker"
 	else
 		echo "private tmp dir not found"
 	fi
@@ -150,9 +156,13 @@ if [ -n "$TMUX" ]; then
 	exit 2
 fi
 
+	: ${TMPDIR:=/tmp}
 	export MY_TMPDIR=$(mktemp -d -p $TMPDIR test-qemu-XXXXXXXX)
-	touch $MY_TMPDIR/$TMP_MARKER
-	export TMPDIR=$MY_TMPDIR
+	mkdir -p $MY_TMPDIR/test-qemu-tmp || error "Can't create tmp dir"
+	if ! touch $MY_TMPDIR/test-qemu-tmp/$TMP_MARKER; then
+		error "Can't create private tmpdir"
+	fi
+	export TMPDIR=$MY_TMPDIR/test-qemu-tmp
 
 	tmux start-server
 	tmux new-session -d -s QEMU -n qemu-zcu102 -d "$ME subcmd totals"
