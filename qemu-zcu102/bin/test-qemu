@@ -12,9 +12,9 @@ TMP_MARKER=test-qemu-marker
 TOTAL=0
 FAIL=0
 
-RUNS=100
+RUNS=10
 TESTS=2
-KERNELS=( 6.0.0 6.0.7 oas-6.0.y )
+KERNELS=( demo1 )
 
 tmux-panel-title() {
     printf '\033]2;%s\033\\' "$1"
@@ -26,7 +26,7 @@ update_totals() {
 	tac $LOG | grep FAIL | head -n 25 >>totals.txt
 }
 
-record_sucess() {
+record_success() {
 	TOTAL=$(( $TOTAL + 1 ))
 	MSG="OK   $1 $2 $3"
 	echo "$MSG"
@@ -121,7 +121,7 @@ do_host() {
 					fi
 				done
 				if $status; then
-					record_sucess $run $k $TESTS
+					record_success $run $k $TESTS
 				fi
 			else
 				record_failure $run $k 0
@@ -175,6 +175,10 @@ tmux split-window -v -l $(( $LINES - 10 )) -t $SESS:qemu-zcu102 "$ME subcmd host
 		clean_tmp
 	fi
 }
+
+if [ -e ./test-qemu-vars ]; then
+	. ./test-qemu-vars
+fi
 
 if [ x"$1" = x"subcmd" ]; then
 	CMD=$2
