@@ -1,0 +1,70 @@
+ 51069338      4 drwxrwxr-x   7 bill     bill         4096 Nov 15 10:42 .
+ 51069339      4 drwxrwxr-x   3 bill     bill         4096 Nov 14 07:00 ./xil-5.15
+ 51058817      4 lrwxrwxrwx   1 bill     bill           78 Nov 11 18:08 ./xil-5.15/clean-sd.img.xz -> ../../../../openamp-demo/docker/user-dev/test-sw/sd-card/zcu102-tftp-sd.img.xz
+ 51069340      4 drwxrwxr-x   3 bill     bill         4096 Nov 11 18:06 ./xil-5.15/tftp
+ 51069341      4 drwxrwxr-x   2 bill     bill         4096 Nov 15 06:22 ./xil-5.15/tftp/zcu102
+ 51058819      4 -rw-rw-r--   1 bill     bill          589 Nov 11 18:10 ./xil-5.15/tftp/zcu102/uEnv.txt
+ 51058824      0 lrwxrwxrwx   1 bill     bill           23 Nov 11 18:16 ./xil-5.15/tftp/zcu102/system.dtb -> ../../system-top.dtb.xv
+ 51058826      0 lrwxrwxrwx   1 bill     bill           30 Nov 11 18:12 ./xil-5.15/tftp/zcu102/initramfs.cpio.gz -> ../../../common/hacked.cpio.gz
+ 51058827      4 lrwxrwxrwx   1 bill     bill           74 Nov 11 18:15 ./xil-5.15/tftp/zcu102/Image -> ../../Image--5.15.19+git0+75872fda9a-r0.0-zcu102-zynqmp-20221009150139.bin
+ 51058828  21880 -rw-r--r--   1 bill     bill     22401536 Oct  9 16:23 ./xil-5.15/Image--5.15.19+git0+75872fda9a-r0.0-zcu102-zynqmp-20221009150139.bin
+ 51058829  65540 -rw-rw-r--   1 bill     bill     67108864 Nov 11 21:17 ./xil-5.15/sd.img
+ 51058830     60 -rw-r--r--   1 bill     bill        59428 Oct  9 16:07 ./xil-5.15/system-top.dtb.xv
+ 51058831      4 -rw-rw-r--   1 bill     bill           58 Nov 15 06:23 ./test-qemu-vars
+ 51069342      4 drwxrwxr-x   3 bill     bill         4096 Nov 15 08:08 ./6.0p2
+ 51058833      4 lrwxrwxrwx   1 bill     bill           78 Nov 11 18:08 ./6.0p2/clean-sd.img.xz -> ../../../../openamp-demo/docker/user-dev/test-sw/sd-card/zcu102-tftp-sd.img.xz
+ 51069343      4 drwxrwxr-x   3 bill     bill         4096 Nov 11 18:06 ./6.0p2/tftp
+ 51069344      4 drwxrwxr-x   2 bill     bill         4096 Nov 15 06:21 ./6.0p2/tftp/zcu102
+ 51058832      0 lrwxrwxrwx   1 bill     bill           38 Nov 15 06:21 ./6.0p2/tftp/zcu102/hacked-no-mods.cpio.gz -> ../../../common/hacked-no-mods.cpio.gz
+ 51058834      4 -rw-rw-r--   1 bill     bill          589 Nov 11 18:10 ./6.0p2/tftp/zcu102/uEnv.txt
+ 51058835      0 lrwxrwxrwx   1 bill     bill           30 Nov 11 18:11 ./6.0p2/tftp/zcu102/system.dtb -> ../../zynqmp-zcu102-rev1.0.dtb
+ 51058836      0 lrwxrwxrwx   1 bill     bill           30 Nov 11 18:12 ./6.0p2/tftp/zcu102/initramfs.cpio.gz -> ../../../common/hacked.cpio.gz
+ 51058837      4 lrwxrwxrwx   1 bill     bill           68 Nov 11 18:11 ./6.0p2/tftp/zcu102/Image -> ../../Image--6.0+git0+7fa3714a90-r0-generic-arm64-20221105011203.bin
+ 51058838  36360 -rw-r--r--   1 bill     bill     37231104 Nov  5 01:24 ./6.0p2/Image--6.0+git0+7fa3714a90-r0-generic-arm64-20221105011203.bin
+ 51058839  65540 -rw-rw-r--   1 bill     bill     67108864 Nov 11 18:20 ./6.0p2/sd.img
+ 51058840     36 -rwxr-xr-x   1 bill     bill        34678 Nov  5 03:47 ./6.0p2/zynqmp-zcu102-rev1.0.dtb
+ 51058875      4 -rw-rw-r--   1 bill     bill          132 Nov 15 09:47 ./totals.txt
+ 51069345      4 drwxrwxr-x   3 bill     bill         4096 Nov 15 10:39 ./6.0p3
+ 51058841   1464 -rw-rw-r--   1 bill     bill      1498932 Nov 12 08:09 ./6.0p3/modules-6.0.7-xilinx-v2022.1-00002-gf8e58890569b.tar.gz
+ 51058842      4 lrwxrwxrwx   1 bill     bill           78 Nov 11 18:08 ./6.0p3/clean-sd.img.xz -> ../../../../openamp-demo/docker/user-dev/test-sw/sd-card/zcu102-tftp-sd.img.xz
+ 51058843   4664 -rw-rw-r--   1 bill     bill      4775382 Nov 12 08:09 ./6.0p3/System.map-6.0.7-xilinx-v2022.1-00002-gf8e58890569b
+ 51069346      4 drwxrwxr-x   3 bill     bill         4096 Nov 11 18:06 ./6.0p3/tftp
+ 51069347      4 drwxrwxr-x   2 bill     bill         4096 Nov 15 06:22 ./6.0p3/tftp/zcu102
+ 51058844      4 -rw-rw-r--   1 bill     bill          589 Nov 11 18:10 ./6.0p3/tftp/zcu102/uEnv.txt
+ 51058845      0 lrwxrwxrwx   1 bill     bill           30 Nov 11 18:11 ./6.0p3/tftp/zcu102/system.dtb -> ../../zynqmp-zcu102-rev1.0.dtb
+ 51058846      0 lrwxrwxrwx   1 bill     bill           30 Nov 11 18:12 ./6.0p3/tftp/zcu102/initramfs.cpio.gz -> ../../../common/hacked.cpio.gz
+ 51058847      0 lrwxrwxrwx   1 bill     bill           54 Nov 13 07:32 ./6.0p3/tftp/zcu102/Image -> ../../vmlinuz-6.0.7-xilinx-v2022.1-00002-gf8e58890569b
+ 51058848  21720 -rw-rw-r--   1 bill     bill     22237696 Nov 12 08:09 ./6.0p3/vmlinuz-6.0.7-xilinx-v2022.1-00002-gf8e58890569b
+ 51058849    188 -rw-rw-r--   1 bill     bill       190992 Nov 12 08:09 ./6.0p3/config-6.0.7-xilinx-v2022.1-00002-gf8e58890569b
+ 51058862      4 -rw-------   1 bill     bill         1969 Nov 15 10:32 ./6.0p3/envf-last
+ 51058850  65540 -rw-rw-r--   1 bill     bill     67108864 Nov 13 07:38 ./6.0p3/sd.img
+ 51058851     36 -rwxr-xr-x   1 bill     bill        34678 Nov 12 08:09 ./6.0p3/zynqmp-zcu102-rev1.0.dtb
+ 51069348      4 drwxrwxr-x   3 bill     bill         4096 Nov 15 07:27 ./oas-6.0.y
+ 51058852      4 lrwxrwxrwx   1 bill     bill           62 Nov 14 00:27 ./oas-6.0.y/Image-generic-arm64.bin -> Image--6.0+git0+f8e5889056-r0-generic-arm64-20221114002025.bin
+ 51058853      4 lrwxrwxrwx   1 bill     bill           78 Nov 11 18:08 ./oas-6.0.y/clean-sd.img.xz -> ../../../../openamp-demo/docker/user-dev/test-sw/sd-card/zcu102-tftp-sd.img.xz
+ 51058854  59968 -rw-rw-r--   1 bill     bill     61401587 Nov 14 19:52 ./oas-6.0.y/modules--6.0+git0+f8e5889056-r0-generic-arm64-20221114002025.tgz
+ 51058855     56 -rw-rw-r--   1 bill     bill        55204 Nov  6 21:28 ./oas-6.0.y/zcu102-openamp-lockstep.dtb
+ 51069349      4 drwxrwxr-x   3 bill     bill         4096 Nov 11 18:06 ./oas-6.0.y/tftp
+ 51069350      4 drwxrwxr-x   2 bill     bill         4096 Nov 15 06:22 ./oas-6.0.y/tftp/zcu102
+ 51058856      4 -rw-rw-r--   1 bill     bill          589 Nov 11 18:10 ./oas-6.0.y/tftp/zcu102/uEnv.txt
+ 51058857      0 lrwxrwxrwx   1 bill     bill           30 Nov 11 18:11 ./oas-6.0.y/tftp/zcu102/system.dtb -> ../../zynqmp-zcu102-rev1.0.dtb
+ 51058858      0 lrwxrwxrwx   1 bill     bill           30 Nov 11 18:12 ./oas-6.0.y/tftp/zcu102/initramfs.cpio.gz -> ../../../common/hacked.cpio.gz
+ 51058859      0 lrwxrwxrwx   1 bill     bill           11 Nov 13 21:02 ./oas-6.0.y/tftp/zcu102/Image -> ../../Image
+ 51058860    104 -rw-rw-r--   1 bill     bill       103724 Nov 14 19:53 ./oas-6.0.y/openamp-image-minimal-generic-arm64-20221114164222.rootfs.manifest
+ 51058861  36360 -rw-rw-r--   1 bill     bill     37231104 Nov 14 19:52 ./oas-6.0.y/Image--6.0+git0+f8e5889056-r0-generic-arm64-20221114002025.bin
+ 51058863  65540 -rw-rw-r--   1 bill     bill     67108864 Nov 13 21:20 ./oas-6.0.y/sd.img
+ 51058864      4 lrwxrwxrwx   1 bill     bill           64 Nov 14 19:52 ./oas-6.0.y/modules-generic-arm64.tgz -> modules--6.0+git0+f8e5889056-r0-generic-arm64-20221114002025.tgz
+ 51058865    264 -rw-rw-r--   1 bill     bill       267968 Nov 14 19:52 ./oas-6.0.y/config-6.0+git0+f8e5889056-r0-generic-arm64-20221114002025
+ 51058866     36 -rwxr-xr-x   1 bill     bill        34678 Nov  5 03:47 ./oas-6.0.y/zynqmp-zcu102-rev1.0.dtb
+ 51058867     56 -rw-rw-r--   1 bill     bill        56790 Nov  6 21:28 ./oas-6.0.y/zcu102-openamp-split.dtb
+ 51058868      4 lrwxrwxrwx   1 bill     bill           62 Nov 14 00:27 ./oas-6.0.y/Image -> Image--6.0+git0+f8e5889056-r0-generic-arm64-20221114002025.bin
+ 51058869 447652 -rw-rw-r--   1 bill     bill     458391070 Nov 14 19:53 ./oas-6.0.y/openamp-image-minimal-generic-arm64-20221114164222.rootfs.cpio.gz
+ 51058825      4 -rw-rw-r--   1 bill     bill          4096 Nov 15 10:42 ./files.txt
+ 51069351      4 drwxrwxr-x   2 bill     bill          4096 Nov 15 06:20 ./common
+ 51058871      4 -rw-rw-r--   1 bill     bill           775 Nov 11 16:52 ./common/boot.script
+ 51058872      4 -rw-rw-r--   1 bill     bill           847 Nov 11 16:54 ./common/boot.scr
+ 51058898  24816 -rw-rw-r--   1 bill     bill      25408342 Nov 15 06:20 ./common/hacked-no-mods.cpio.gz
+ 51058873      4 -rwxrwxr-x   1 bill     bill           150 Nov  5 12:27 ./common/update.sh
+ 51016641      4 -rw-rw-r--   1 bill     bill           297 Nov 15 06:20 ./common/make-targets-helper
+ 51058874  37796 -rw-rw-r--   1 bill     bill      38702226 Nov 11 16:30 ./common/hacked.cpio.gz
+ 51058820      4 -rw-rw-r--   1 bill     bill          2094 Nov 15 09:47 ./test-log-2022-11-15-080748.log

@@ -1,0 +1,4 @@
+RUNS=30
+TESTS=2
+KERNELS=(oas-6.0.y 6.0p2 6.0p3 xil-5.15)
+
