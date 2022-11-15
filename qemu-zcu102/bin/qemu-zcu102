@@ -139,9 +139,15 @@ final-clean-up() {
         mv $ENVF envf-last
     fi
 
-    # cleanup the tmp dir after verifing it is really ours
-    if [ -e $TMPDIR/$TMP_MARKER ]; then
-        rm -rf $TMPDIR
+    MY_TMPDIR=$(dirname $TMPDIR)
+    # cleanup the tmp dir after verifying it is really ours
+    if [ -e $MY_TMPDIR/qemu-run/$TMP_MARKER ]; then
+        rm -rf $MY_TMPDIR/qemu-run
+
+        # don't want to leak tmp dirs
+        # however, don't want to cause big damage on script coding errors
+        # below is a compromise, at most it will delete an empty dir
+        rmdir $MY_TMPDIR
         echo "cleaned up tmp dir"
     elif [ x"$1" != x"-q" ]; then
         echo "failed to clean up tmp dir"
@@ -322,8 +328,9 @@ main() {
     # define a default starting tmp dir if not defined already
     : ${TMPDIR:=/tmp}
     export MY_TMPDIR=$(mktemp -d -p $TMPDIR qemu-XXXXXXXX)
-    touch $MY_TMPDIR/$TMP_MARKER
-    export TMPDIR=$MY_TMPDIR
+    mkdir -p $MY_TMPDIR/qemu-run/ || error "Can't create private tmpdir"
+    touch $MY_TMPDIR/qemu-run/$TMP_MARKER || error "Can't touch tmpdir marker"
+    export TMPDIR=$MY_TMPDIR/qemu-run
 
     IMAGES=$TESTBASE
     TFTPDIR=$TESTBASE/tftp
