@@ -1,0 +1,5 @@
+This is demo4, zephyr running on R5 using virtio devices supplied by Linux userspace
+$ cat demo4
+or just 
+$ ./demo4
+

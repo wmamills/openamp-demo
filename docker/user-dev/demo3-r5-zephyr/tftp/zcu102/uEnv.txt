@@ -8,7 +8,7 @@ fdt_addr_r=00100000
 ramdisk_addr_r=04000000
 
 kernel_name=openamp/Image-generic-arm64.bin
-dtb_name=openamp/zcu102-openamp-lockstep.dtb
+dtb_name=openamp/zcu102-openamp-split.dtb
 ramdisk_name=initrd.cpio.gz
 
 uenvcmd=\

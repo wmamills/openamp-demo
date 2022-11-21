@@ -9,7 +9,7 @@ ramdisk_addr_r=04000000
 
 kernel_name=openamp/Image-generic-arm64.bin
 dtb_name=openamp/zcu102-openamp-split.dtb
-ramdisk_name=openamp/hacked.cpio.gz
+ramdisk_name=initrd.cpio.gz
 
 uenvcmd=\
 tftpboot $kernel_addr_r  ${prefix}${kernel_name}; \
