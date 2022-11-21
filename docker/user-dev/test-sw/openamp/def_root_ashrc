@@ -1,0 +1,6 @@
+# This is the default .ashrc file
+# This file will be sourced, not executed
+
+if [ -e $HOME/login_message ]; then
+    cat $HOME/login_message
+fi

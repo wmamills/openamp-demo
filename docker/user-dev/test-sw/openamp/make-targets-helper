@@ -8,9 +8,20 @@ hack-cpio() {
 	rm -rf xxx-temp/boot/*
 	rm -rf xxx-temp/lib/firmware/*
 	rm -rf xxx-temp/lib/modules/*/kernel/drivers/gpu
-	#rm -rf xxx-temp-rootfs/etc/rc*/*avahi*
 
+	# ensure our tty is enabled
 	add-tty ttyPS0
+
+	# give the user login hints
+	echo "(Login as root with no password)" >>xxx-temp/etc/issue
+
+	# configure ash shell to look for .ashrc
+	mkdir -p xxx-temp/etc/profile.d
+	echo "export ENV=.ashrc" >xxx-temp/etc/profile.d/10-ashrc.sh
+
+	# provide a default .ashrc for the root user
+	mkdir -p xxx-temp/home/root
+	cp def_root_ashrc xxx-temp/home/root/.ashrc
 }
 
 main() {
