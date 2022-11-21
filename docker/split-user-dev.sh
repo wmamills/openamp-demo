@@ -65,7 +65,7 @@ move-to extra synopsys
 cd $TOP
 
 move-to extra test-sw/xilinx-5.15/petalinux-rootfs.cpio.gz
-move-to extra test-sw/openamp/openamp-image-minimal-generic-arm64*.cpio.gz
+move-to extra test-sw/openamp/openamp-initramfs-minimal-generic-arm64*.cpio.gz
 move-to extra test-sw/openamp/modules-*.tgz
 
 tar czvf $ORIG/demo-lite/user-dev-base.tar.gz .

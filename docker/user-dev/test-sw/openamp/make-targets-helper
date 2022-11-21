@@ -14,5 +14,5 @@ hack-cpio() {
 }
 
 main() {
-	new-cpio hacked.cpio.gz openamp-image-minimal-generic-arm64.cpio.gz cb:hack-cpio
+	new-cpio hacked.cpio.gz openamp-initramfs-minimal-generic-arm64.cpio.gz cb:hack-cpio
 }
