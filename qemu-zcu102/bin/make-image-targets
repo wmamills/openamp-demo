@@ -14,7 +14,7 @@ any-cat() {
     fi
 
     case $1 in
-    *.gz)
+    *.gz|*.tgz)
         zcat $1
         ;;
     *.bz2)
@@ -133,7 +133,7 @@ extract() {
 
 	# otherwise archives		
 	case $1 in
-	*.tar.gz|*.tar.bz2|*.tar.xz|*.tar)
+	*.tar.gz|*.tgz|*.tar.bz2|*.tar.xz|*.tar)
 	    any-cat $1 | tar x -C xxx-temp
 	    ;;
 	*.cpio.gz|*.cpio.bz2|*.cpio.xz|*.cpio)
