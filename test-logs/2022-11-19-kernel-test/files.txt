@@ -1,0 +1,38 @@
+ 51061491      4 drwxrwxr-x   3 bill     bill         4096 Nov 20 08:07 .
+ 51058979      4 -rw-rw-r--   1 bill     bill           45 Nov 19 20:55 ./test-qemu-vars
+ 51058980      4 -rw-rw-r--   1 bill     bill           12 Nov 20 08:05 ./totals.txt
+ 51058984      0 -rw-rw-r--   1 bill     bill            0 Nov 20 08:07 ./files.txt
+ 51058917      4 -rw-rw-r--   1 bill     bill         2052 Nov 19 23:54 ./test-log-2022-11-19-205529.log
+ 51061492      4 drwxrwxr-x   5 bill     bill         4096 Nov 19 23:53 ./11-19A
+ 51016049      4 lrwxrwxrwx   1 bill     bill           62 Nov 19 13:58 ./11-19A/Image-generic-arm64.bin -> Image--6.0+git0+dc3025255c-r0-generic-arm64-20221119135010.bin
+ 51058918      4 lrwxrwxrwx   1 bill     bill           68 Nov 19 23:24 ./11-19A/openamp-initramfs-minimal-generic-arm64.testdata.json -> openamp-initramfs-minimal-generic-arm64-20221119232434.testdata.json
+ 51016059      4 lrwxrwxrwx   1 bill     bill           78 Nov 11 18:08 ./11-19A/clean-sd.img.xz -> ../../../../openamp-demo/docker/user-dev/test-sw/sd-card/zcu102-tftp-sd.img.xz
+ 51058919   4048 -rw-r--r--   1 bill     bill      4142971 Nov 19 23:24 ./11-19A/openamp-initramfs-minimal-generic-arm64-20221119232434.cpio.gz
+ 51016050  59968 -rw-r--r--   1 bill     bill     61400053 Nov 19 13:58 ./11-19A/modules--6.0+git0+dc3025255c-r0-generic-arm64-20221119135010.tgz
+ 51061493      4 drwxrwxr-x   3 bill     bill         4096 Nov 11 18:06 ./11-19A/tftp
+ 51061494      4 drwxrwxr-x   2 bill     bill         4096 Nov 19 11:48 ./11-19A/tftp/zcu102
+ 51053112      4 -rw-rw-r--   1 bill     bill          589 Nov 19 11:34 ./11-19A/tftp/zcu102/uEnv.txt
+ 51058912      0 lrwxrwxrwx   1 bill     bill           30 Nov 19 11:38 ./11-19A/tftp/zcu102/system.dtb -> ../../zynqmp-zcu102-rev1.0.dtb
+ 51058914  51080 -rw-rw-r--   1 bill     bill     52302036 Nov 19 23:53 ./11-19A/tftp/zcu102/initramfs.cpio.gz
+ 51058913      0 lrwxrwxrwx   1 bill     bill           11 Nov 19 11:35 ./11-19A/tftp/zcu102/Image -> ../../Image
+ 51016055    280 -rw-r--r--   1 bill     bill       284461 Nov 19 17:49 ./11-19A/openamp-initramfs-minimal-generic-arm64-20221119174916.testdata.json
+ 51016053   3980 -rw-r--r--   1 bill     bill      4073004 Nov 19 17:49 ./11-19A/openamp-initramfs-minimal-generic-arm64-20221119174916.cpio.gz
+ 51061496      4 drwxrwxr-x   2 bill     bill         4096 Nov 19 11:58 ./11-19A/generated
+ 51059210   3940 -rw-rw-r--   1 bill     bill      4034248 Nov 19 23:53 ./11-19A/generated/hacked-base.cpio.gz
+ 51059102  47132 -rw-rw-r--   1 bill     bill     48260574 Nov 19 23:53 ./11-19A/generated/modules.cpio.gz
+ 51053114      8 -rw-rw-r--   1 bill     bill         7214 Nov 19 23:53 ./11-19A/generated/my-extra-stuff.cpio.gz
+ 51058923    280 -rw-r--r--   1 bill     bill       284551 Nov 19 23:24 ./11-19A/openamp-initramfs-minimal-generic-arm64-20221119232434.testdata.json
+ 51016056      4 lrwxrwxrwx   1 bill     bill           62 Nov 19 23:24 ./11-19A/openamp-initramfs-minimal-generic-arm64.cpio.gz -> openamp-initramfs-minimal-generic-arm64-20221119232434.cpio.gz
+ 51053113      4 -rw-rw-r--   1 bill     bill          917 Nov 19 11:56 ./11-19A/make-targets-helper
+ 51058916  26632 -rw-rw-r--   1 bill     bill     67108864 Nov 19 11:59 ./11-19A/sd.img
+ 51016054      4 -rw-r--r--   1 bill     bill         1212 Nov 19 17:49 ./11-19A/openamp-initramfs-minimal-generic-arm64-20221119174916.manifest
+ 51016048  36364 -rw-r--r--   1 bill     bill     37231104 Nov 19 13:58 ./11-19A/Image--6.0+git0+dc3025255c-r0-generic-arm64-20221119135010.bin
+ 51058921      4 -rw-r--r--   1 bill     bill         1230 Nov 19 23:24 ./11-19A/openamp-initramfs-minimal-generic-arm64-20221119232434.manifest
+ 51061495      4 drwxrwxr-x   3 bill     bill         4096 Nov 19 11:50 ./11-19A/my-extra-stuff
+ 51061497      4 drwxrwxr-x   3 bill     bill         4096 Nov 19 11:50 ./11-19A/my-extra-stuff/lib
+ 51061498      4 drwxrwxr-x   2 bill     bill         4096 Nov 19 11:50 ./11-19A/my-extra-stuff/lib/firmware
+ 51058915     20 -rwxrwxr-x   1 bill     bill        17560 Oct 26 10:54 ./11-19A/my-extra-stuff/lib/firmware/zephyr-3.2-hello.elf
+ 51016051      4 lrwxrwxrwx   1 bill     bill           64 Nov 19 13:58 ./11-19A/modules-generic-arm64.tgz -> modules--6.0+git0+dc3025255c-r0-generic-arm64-20221119135010.tgz
+ 51016058     36 -rwxr-xr-x   1 bill     bill        34678 Nov  5 03:47 ./11-19A/zynqmp-zcu102-rev1.0.dtb
+ 51016057      4 lrwxrwxrwx   1 bill     bill           63 Nov 19 23:24 ./11-19A/openamp-initramfs-minimal-generic-arm64.manifest -> openamp-initramfs-minimal-generic-arm64-20221119232434.manifest
+ 50998927      4 lrwxrwxrwx   1 bill     bill           62 Nov 19 13:58 ./11-19A/Image -> Image--6.0+git0+dc3025255c-r0-generic-arm64-20221119135010.bin
