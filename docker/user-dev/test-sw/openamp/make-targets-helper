@@ -3,11 +3,14 @@
 # use: make-image-targets dir
 # where dir is the directory this file is in
 
-hack-cpio() {
+# uncomment to keep the working dirs for debug
+#KEEP_DIRS=y
+
+hack-base() {
 	echo "Hacking"
 	rm -rf xxx-temp/boot/*
 	rm -rf xxx-temp/lib/firmware/*
-	rm -rf xxx-temp/lib/modules/*/kernel/drivers/gpu
+	rm -rf xxx-temp/lib/modules/*
 
 	# ensure our tty is enabled
 	add-tty ttyPS0
@@ -24,6 +27,12 @@ hack-cpio() {
 	cp def_root_ashrc xxx-temp/home/root/.ashrc
 }
 
+trim-modules() {
+    echo "Trim modules"
+    rm -rf xxx-temp/lib/modules/*/kernel/drivers/gpu
+}
+
 main() {
-	new-cpio hacked.cpio.gz openamp-initramfs-minimal-generic-arm64.cpio.gz cb:hack-cpio
+    # new-cpio OUTPUT INPUT ( INPUT | cb:call-back-function ) ...
+    new-cpio hacked.cpio.gz openamp-initramfs-minimal-generic-arm64.cpio.gz cb:hack-base modules*.tgz cb:trim-modules
 }
