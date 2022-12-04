@@ -1,0 +1,4 @@
+#!/bin/sh
+
+ifconfig tap0 192.168.200.254
+
