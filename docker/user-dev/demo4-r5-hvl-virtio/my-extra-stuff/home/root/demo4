@@ -1,3 +1,29 @@
 #!/bin/sh
 
-echo "Nothing here yet"
+R5_0=/sys/class/remoteproc/remoteproc0
+
+echo "Run the setup script in the background"
+# special syntax below creates an orphan process
+# for busybox ash this allows it to write to the tty and still continue
+(( /hvl/setup.sh & ) & )
+# allow messages to come out
+sleep 1
+
+echo "we need to wait for the entropy to build up in the Linux system"
+sleep 4
+
+echo "Now we will start the firmware"
+echo start >$R5_0/state
+sleep 1
+
+echo "look at the 2nd UART, you should see the results of the entropy test"
+sleep 4
+
+echo "now we will ping the firmware through the virtio-net device"
+ping -c 3 192.168.200.2
+
+echo "now click in the 2nd UART pane to give it focus"
+echo "try these commands from the 2nd UART"
+echo "    device list"
+echo "    net iface"
+echo "    net ping -c 20 192.168.200.254"
