@@ -1,0 +1,2 @@
+TOTAL=160 FAIL=0
+LAST OK   40 ../../demo4 2
