@@ -175,7 +175,7 @@ do_sub-shell() {
     echo "This is a host shell"
     echo "After the QEMU board boots you can use ssh or scp from here"
     echo "Like  $ ssh qemu-zcu102"
-    echo "or    $ scp mine.elf qemu-zcu102:/lib/firmware"
+    echo "or    $ scp qemu-zcu102:my-results.log ."
     echo
     echo "if you exit this shell, it will exit the emulator also"
     echo
