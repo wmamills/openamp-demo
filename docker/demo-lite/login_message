@@ -1,6 +1,8 @@
 Welcome to the OpenAMP demo (lite version)
 You can run the demos by using
     $ qemu-zcu102 demo1
-Where demo1 is any of the existing demo directories
+Where demo1 is any of demo1 demo2 demo3 or demo4
+You can also run the lopper demo like
+    $ ./demo5/demo5
 
 Enjoy!

@@ -1,0 +1,75 @@
+#!/bin/bash
+# demo5: Run the commands from the Lopper openamp demo
+
+set -x
+set -e
+
+# These steps were already done in the conatiner setup
+# sudo apt install device-tree-compiler python3-yaml
+# sudo pip3 install ruamel.yaml anytree
+# git clone https://github.com/devicetree-org/lopper.git -b systemdt-linaro-demo
+#
+
+cd $(dirname $0)/lopper/demos/openamp
+mkdir -p scratch
+export LOPPER_DIR=$(cd ../..; pwd)
+
+echo "**** step 3 ****"
+$LOPPER_DIR/lopper.py -f -O scratch --enhanced --permissive \
+    -a openamp.py -a openamp_xlnx.py -a openamp-xlnx-zynq.py \
+    -i ./inputs/openamp-overlay-zynqmp.yaml \
+    -i $LOPPER_DIR/lopper/lops/lop-xlate-yaml.dts \
+    -i $LOPPER_DIR/lopper/lops/lop-a53-imux.dts \
+    -i $LOPPER_DIR/lopper/lops/lop-domain-linux-a53.dts \
+    -i $LOPPER_DIR/lopper/lops/lop-openamp-versal.dts \
+    -i $LOPPER_DIR/lopper/lops/lop-domain-linux-a53-prune.dts \
+    inputs/system-dt/system-top.dts linux-boot.dts
+
+echo "**** step 3a ****"
+cat linux-boot.dts
+
+echo "**** step 3b ****"
+cat openamp-channel-info.txt
+
+echo "**** step 3c ****"
+diff -u inputs/openamp-overlay-zynqmp.yaml inputs/openamp-overlay-zynqmp-dev-mem.yaml || true
+
+echo "**** step 3d ****"
+$LOPPER_DIR/lopper.py -f -O scratch --enhanced --permissive \
+    -a openamp.py -a openamp_xlnx.py -a openamp-xlnx-zynq.py \
+    -i ./inputs/openamp-overlay-zynqmp-dev-mem.yaml \
+    -i $LOPPER_DIR/lopper/lops/lop-xlate-yaml.dts \
+    -i $LOPPER_DIR/lopper/lops/lop-a53-imux.dts \
+    -i $LOPPER_DIR/lopper/lops/lop-domain-linux-a53.dts \
+    -i $LOPPER_DIR/lopper/lops/lop-openamp-versal.dts \
+    -i $LOPPER_DIR/lopper/lops/lop-domain-linux-a53-prune.dts \
+    inputs/system-dt/system-top.dts linux-boot2.dts
+
+diff -u linux-boot.dts linux-boot2.dts || true
+
+echo "**** step 4 ****"
+$LOPPER_DIR/lopper.py --permissive -f inputs/dt/host-device-tree.dts system-device-tree-out.dts  -- \
+      extract -t /axi/serial@ff010000 \
+      -i zynqmp-firmware \
+      -x pinctrl-0 -x pinctrl-names -x power-domains -x current-speed \
+      -x resets -x 'interrupt-controller.*' -- \
+      extract-xen -t serial@ff010000 -o serial@ff010000.dts
+
+echo "**** step 4a ****"
+cat serial@ff010000.dts
+
+echo "**** step 4b ****"
+grep -A2 -B16 xen,passthrough system-device-tree-out.dts
+
+echo "**** step 4c ****"
+$LOPPER_DIR/lopper.py --permissive -f system-device-tree-out.dts system-device-tree-out-final.dts  -- \
+    extract -o extracted_tree.dts -p -t ethernet@ff0e0000 \
+    -i zynqmp-firmware \
+    -x 'interrupt-controller.*' -x power-domains -x current-speed -- \
+    extract-xen -v -t ethernet@ff0e0000 -o xen-passthrough-eth.dts
+
+grep -A2 -B24 xen,passthrough system-device-tree-out-final.dts
+
+echo "**** Done"
+echo "The files are all in $PWD"
+

@@ -20,5 +20,7 @@ ADD user-dev-base.tar.gz /home/dev
 
 COPY login_message /home/dev
 
+RUN su dev /home/dev/demo5/demo5-setup
+
 # default command logs in as dev
 CMD su -l dev

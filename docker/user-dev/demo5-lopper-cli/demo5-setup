@@ -1,0 +1,10 @@
+#!/bin/bash
+# demo5-setup: run as part of contianer setup
+
+sudo apt-get install -y git device-tree-compiler python3-yaml
+sudo pip3 install ruamel.yaml anytree
+cd $(dirname $0)
+git clone https://github.com/devicetree-org/lopper.git -b systemdt-linaro-demo
+cd lopper
+sudo pip3 install .
+
