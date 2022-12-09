@@ -1,20 +1,79 @@
 #!/bin/bash
 # demo5: Run the commands from the Lopper openamp demo
 
-set -x
-set -e
+WAIT=true
 
-# These steps were already done in the conatiner setup
-# sudo apt install device-tree-compiler python3-yaml
-# sudo pip3 install ruamel.yaml anytree
-# git clone https://github.com/devicetree-org/lopper.git -b systemdt-linaro-demo
-#
+case $1 in
+--no-wait)
+    shift
+    WAIT=false
+    ;;
+*)
+    ;;
+esac
+
+step-run() {
+    STEP="$1"; shift
+    COMMENT="$1"; shift
+    echo "*** $STEP ***"
+    if [ -n "$COMMENT" ]; then
+        echo -e "$COMMENT"
+    fi
+    if $WAIT; then
+        echo "about to run this command:"
+        echo "$@"
+        echo "hit enter to run it, ^c to stop"
+        read
+    fi
+    "$@"
+    if [ $? -ne 0 ]; then
+        echo "Command returned non zero status \$?=$?"
+    fi
+}
+
+step-view() {
+    STEP="$1"; shift
+    COMMENT="$1"; shift
+    echo "*** $STEP ***"
+    if [ -n "$COMMENT" ]; then
+        echo -e "$COMMENT"
+    fi
+    if $WAIT; then
+        echo "about to look at this file:"
+        echo "$@"
+        echo "hit enter to view it, ^c to stop"
+        echo "while viewing hit q to exit (you are using less)"
+        read
+        "$@" | less
+    else
+        "$@"
+    fi
+}
+
+step-comment() {
+    STEP="$1"; shift
+    echo "*** $STEP ***"
+    echo -e "$@"
+    if $WAIT; then
+        echo "hit enter to continue, ^c to stop"
+        read
+    fi
+}
 
 cd $(dirname $0)/lopper/demos/openamp
 mkdir -p scratch
 export LOPPER_DIR=$(cd ../..; pwd)
 
-echo "**** step 3 ****"
+step-comment "README" \
+    "Bring up the following README file in a browser to follow along:\n" \
+    "   https://github.com/devicetree-org/lopper/blob/systemdt-linaro-demo/demos/openamp/README.md"
+
+step-comment "step 1 & 2" \
+    "Step 1 has already been done for you in the container setup\n" \
+    "   demo5-setup was used to do this, you can look at this later" \
+    "\nStep 2 is also done as we have already switched to lopper/demos/openamp"
+
+step-run "step 3" "" \
 $LOPPER_DIR/lopper.py -f -O scratch --enhanced --permissive \
     -a openamp.py -a openamp_xlnx.py -a openamp-xlnx-zynq.py \
     -i ./inputs/openamp-overlay-zynqmp.yaml \
@@ -25,16 +84,16 @@ $LOPPER_DIR/lopper.py -f -O scratch --enhanced --permissive \
     -i $LOPPER_DIR/lopper/lops/lop-domain-linux-a53-prune.dts \
     inputs/system-dt/system-top.dts linux-boot.dts
 
-echo "**** step 3a ****"
+step-view "step 3a" "" \
 cat linux-boot.dts
 
-echo "**** step 3b ****"
+step-view "step 3b" "" \
 cat openamp-channel-info.txt
 
-echo "**** step 3c ****"
-diff -u inputs/openamp-overlay-zynqmp.yaml inputs/openamp-overlay-zynqmp-dev-mem.yaml || true
+step-view "step 3c" "" \
+diff -u inputs/openamp-overlay-zynqmp.yaml inputs/openamp-overlay-zynqmp-dev-mem.yaml
 
-echo "**** step 3d ****"
+step-run "step 3d" "" \
 $LOPPER_DIR/lopper.py -f -O scratch --enhanced --permissive \
     -a openamp.py -a openamp_xlnx.py -a openamp-xlnx-zynq.py \
     -i ./inputs/openamp-overlay-zynqmp-dev-mem.yaml \
@@ -45,9 +104,10 @@ $LOPPER_DIR/lopper.py -f -O scratch --enhanced --permissive \
     -i $LOPPER_DIR/lopper/lops/lop-domain-linux-a53-prune.dts \
     inputs/system-dt/system-top.dts linux-boot2.dts
 
-diff -u linux-boot.dts linux-boot2.dts || true
+step-view "step 3d output" "" \
+diff -u linux-boot.dts linux-boot2.dts
 
-echo "**** step 4 ****"
+step-run "step 4" "Now we start the Xen SysDT demo" \
 $LOPPER_DIR/lopper.py --permissive -f inputs/dt/host-device-tree.dts system-device-tree-out.dts  -- \
       extract -t /axi/serial@ff010000 \
       -i zynqmp-firmware \
@@ -55,21 +115,20 @@ $LOPPER_DIR/lopper.py --permissive -f inputs/dt/host-device-tree.dts system-devi
       -x resets -x 'interrupt-controller.*' -- \
       extract-xen -t serial@ff010000 -o serial@ff010000.dts
 
-echo "**** step 4a ****"
+step-view "step 4a" "" \
 cat serial@ff010000.dts
 
-echo "**** step 4b ****"
+step-view "step 4b" "" \
 grep -A2 -B16 xen,passthrough system-device-tree-out.dts
 
-echo "**** step 4c ****"
+step-run "step 4c" "" \
 $LOPPER_DIR/lopper.py --permissive -f system-device-tree-out.dts system-device-tree-out-final.dts  -- \
     extract -o extracted_tree.dts -p -t ethernet@ff0e0000 \
     -i zynqmp-firmware \
     -x 'interrupt-controller.*' -x power-domains -x current-speed -- \
     extract-xen -v -t ethernet@ff0e0000 -o xen-passthrough-eth.dts
 
+step-view "step 4c output" "" \
 grep -A2 -B24 xen,passthrough system-device-tree-out-final.dts
 
-echo "**** Done"
-echo "The files are all in $PWD"
-
+step-comment "Done" "The files are all in $PWD"
