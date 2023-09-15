@@ -1,0 +1,53 @@
+#!/bin/sh
+
+echo 'Right now there is only a stub in EL2 and all 4 A53s are running here in Linux'
+echo
+
+echo 'First, Install the Jailhouse kernel driver'
+echo 'This will taint the kernel and Jailhouse is out of tree'
+modprobe jailhouse
+echo
+
+echo 'Now enable Jailhouse'
+echo 'This will load the hypervisor image into its memory slot'
+echo '   we defined this slot in the root cell AND in the DTB'
+echo 'It will then activate the hypervisor as EL2 and "Jail" our root cell Linux'
+echo '   the root cells also defines what IO we can still access'
+echo 'We will still have all four A53s after this.'
+jailhouse enable /etc/jailhouse/zynqmp-zcu102.cell
+echo
+
+echo 'Now, create the first "cell", it will have:'
+echo '   * the 3rd A53'
+echo '   * 256MB of memory'
+echo '   * direct access to UART2'
+echo 'the 3rd A53 will be unplugged from our root Linux'
+jailhouse cell create /etc/jailhouse/zynqmp-zcu102-inmate1-demo.cell | tee cell1.id
+CELL1_ID=$(cat cell1.id)
+echo "CELL1_ID=$CELL1_ID"
+echo
+
+echo 'Now, create the second "cell", it will have:'
+echo '   * the 4th A53'
+echo '   * 256MB of memory'
+echo '   * no UART but can use the Jailhouse console'
+echo 'the 4th A53 will be unplugged from our root Linux'
+jailhouse cell create /etc/jailhouse/zynqmp-zcu102-inmate2-demo.cell | tee cell2.id
+CELL2_ID=$(cat cell2.id)
+echo "CELL2_ID=$CELL2_ID"
+echo
+
+echo 'List the cells'
+jailhouse cell list
+echo
+
+echo 'Now load and start the bare-metal demo on cell1'
+jailhouse cell load $CELL1_ID /lib/firmware/gic-demo.bin
+jailhouse cell start $CELL1_ID
+echo 'You should see messaged on the 2nd UART'
+echo
+
+sleep 3
+
+
+

@@ -1,0 +1,9 @@
+This is demo6, running Jailhouse hypervisor on A53's, will have
+* 2 A53's with the root cell Linux
+* 1 A53 running Zephyr
+* 1 A53 running bare-metal (gic-demo)
+
+$ cat demo6
+or just
+$ ./demo6
+
