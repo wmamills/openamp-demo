@@ -324,6 +324,14 @@ main() {
         error "The first argument needs to be a directory, use $MY_ALIAS help for more info"
     fi
 
+    # see if this TESTBASE has its own firmware
+    # right now it is all or nothing,
+    # provide all the needed files or use all the defaults
+    if [ -d $TESTBASE/firmware ]; then
+        echo "Override default firmware with $TESTBASE/firmware"
+        FIRMWARE=$TESTBASE/firmware
+    fi
+
     # create our own tmpdir for easy cleanup
     # define a default starting tmp dir if not defined already
     : ${TMPDIR:=/tmp}
