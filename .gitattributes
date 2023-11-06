@@ -8,3 +8,4 @@
 *.img.xz filter=lfs diff=lfs merge=lfs -text
 *.img.gz filter=lfs diff=lfs merge=lfs -text
 *.img.bz2 filter=lfs diff=lfs merge=lfs -text
+*.tgz filter=lfs diff=lfs merge=lfs -text
