@@ -1,0 +1,55 @@
+# this file is used by make-image-targets
+# do not try to run it on its own
+# use: make-image-targets dir
+# where dir is the directory this file is in
+
+# uncomment to keep the working dirs for debug
+#KEEP_DIRS=y
+
+hack-base() {
+    echo "Hacking"
+    rm -rf xxx-temp/boot/*
+    rm -rf xxx-temp/lib/firmware/*
+
+    # give the user login hints
+    echo "(Login as root with no password)" >>xxx-temp/etc/issue
+
+    # configure ash shell to look for .ashrc
+    mkdir -p xxx-temp/etc/profile.d
+    echo "export ENV=.ashrc" >xxx-temp/etc/profile.d/10-ashrc.sh
+
+    # provide a default .ashrc for the root user
+    mkdir -p xxx-temp/home/root
+    cp $MIXINS/def_root_ashrc xxx-temp/home/root/.ashrc
+}
+
+rm-modules() {
+    echo "Remove all modules"
+    rm -rf xxx-temp/lib/modules/*
+}
+
+trim-modules() {
+    echo "Trim modules"
+    rm -rf xxx-temp/lib/modules/*/kernel/drivers/gpu
+}
+
+add_firmware() {
+    # for now we use the same zephyr firmware for kv260 and zcu102
+    OFS=../test-sw/openamp-firmware/kv260_r5
+    XFS=../test-sw/xilinx-firmware/
+
+    # populate the Openamp firmware
+    for i in rpmsg_multi_services.elf zephyr-hello.elf; do
+        cp $OFS/$i $DF/
+    done
+
+    # populate Xilinx bare metal lockstep firmware
+    for i in image_echo_test image_matrix_multiply image_rpc_demo; do
+        cp $XFS/$BOARD-lockstep/$i $DF/
+    done
+
+    # populate Xilinx bare metal split firmware
+    for i in split_rpu0.elf split_rpu1.elf; do
+        cp $XFS/$BOARD-split/$i $DF/
+    done
+}
