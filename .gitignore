@@ -1,0 +1,3 @@
+demos/*/generated
+demos/*/tftp/*/initrd.cpio.gz
+envf-last
