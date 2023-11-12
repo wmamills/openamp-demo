@@ -6,13 +6,32 @@
 # uncomment to keep the working dirs for debug
 #KEEP_DIRS=y
 
+my-tty() {
+    # ensure our tty is enabled
+    add-tty ttyPS0
+}
+
+MIXINS=../test-sw/openamp-mixins
+. $MIXINS/make-targets-lib
+
 main() {
+    # get common sub routines
+    BOARD=zcu102
+
     D=generated
+    S=../test-sw/openamp-ci-arm64
     mkdir -p $D
+
+    # new-cpio OUTPUT INPUT ( INPUT | cb:call-back-function ) ...
+    # use existing modules but trim them
+    new-cpio $D/hacked.cpio.gz \
+        $S/openamp-initramfs-minimal-generic-arm64.cpio.gz \
+        cb:hack-base cb:rm-modules cb:my-tty
 
     # new-cpio OUTPUT INPUT call-back-function
     new-cpio $D/my-extra-stuff.cpio.gz my-extra-stuff
 
     # cpio-cat OUTPUT INPUT INPUT ...
-    cpio-cat tftp/zcu102/initrd.cpio.gz ../test-sw/openamp/hacked.cpio.gz $D/my-extra-stuff.cpio.gz
+    cpio-cat tftp/$BOARD/initrd.cpio.gz $D/hacked.cpio.gz \
+        $D/my-extra-stuff.cpio.gz
 }
