@@ -1,13 +1,14 @@
+# OpenAMP all the way, split mode
+
 bootargs=earlycon clk_ignore_unused root=/dev/mmcblk0p2 ro rootwait earlyprintk debug uio_pdrv_genirq.of_id=generic-uio
 
 prefix=kv260/
-
 kernel_addr_r=00200000
 fdt_addr_r=00100000
 ramdisk_addr_r=04000000
 
-kernel_name=Image
-dtb_name=system.dtb
+kernel_name=openamp/Image-generic-arm64.bin
+dtb_name=dtb/kv260-openamp-lockstep.dtb
 ramdisk_name=initrd.cpio.gz
 
 uenvcmd=\
