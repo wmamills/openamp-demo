@@ -1,0 +1,44 @@
+# this file is used by make-image-targets
+# do not try to run it on its own
+# use: make-image-targets dir
+# where dir is the directory this file is in
+
+# uncomment to keep the working dirs for debug
+#KEEP_DIRS=y
+
+my-tty() {
+    # ensure our tty is enabled
+    add-tty ttyPS0
+}
+
+MIXINS=../test-sw/openamp-mixins
+. $MIXINS/make-targets-lib
+
+main() {
+    # get common sub routines
+    BOARD=zcu102
+
+    D=generated
+    S=../test-sw/openamp-ci-arm64
+    DF=$D/default-firmware/lib/firmware
+    mkdir -p $D
+    mkdir -p $DF
+
+    add_firmware
+
+    # new-cpio OUTPUT INPUT ( INPUT | cb:call-back-function ) ...
+    # use existing modules but trim them
+    new-cpio $D/hacked.cpio.gz \
+        $S/openamp-initramfs-minimal-generic-arm64.cpio.gz \
+        cb:hack-base cb:trim-modules cb:my-tty
+
+    # new-cpio OUTPUT INPUT call-back-function
+    new-cpio $D/default-firmware.cpio.gz $D/default-firmware
+
+    # new-cpio OUTPUT INPUT call-back-function
+    new-cpio $D/my-extra-stuff.cpio.gz my-extra-stuff
+
+    # cpio-cat OUTPUT INPUT INPUT ...
+    cpio-cat tftp/$BOARD/initrd.cpio.gz $D/hacked.cpio.gz \
+        $D/default-firmware.cpio.gz $D/my-extra-stuff.cpio.gz
+}

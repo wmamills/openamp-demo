@@ -1,0 +1,115 @@
+#!/bin/sh
+
+echo "Zephyr rpmsg_multi_service demo"
+
+RPROC_0=/sys/class/remoteproc/remoteproc0
+
+echo "Make sure the remoteproc is not running"
+echo stop >$RPROC_0/state 2>/dev/null
+
+echo "Set the firmware to use"
+echo rpmsg_multi_services.elf >$RPROC_0/firmware
+
+echo "Start remoteproc"
+echo start >$RPROC_0/state
+
+# sleeps are so you can see what is happening
+sleep 5
+echo
+
+echo "At this point we should have rpmsg_ctrl0 rpmsg0 and ttyRPMSG0"
+ls -l /dev/rpmsg* /dev/ttyRPMSG*
+
+sleep 5
+echo
+
+echo "Test rpmsg0"
+rpmsg_ping /dev/rpmsg0
+
+sleep 5
+echo
+
+echo "Test ttyRPMGS0, you should see TTY 0: Test 1"
+cat /dev/ttyRPMSG0 &
+sleep 0.5
+echo "Test 1" >/dev/ttyRPMSG0
+
+sleep 5
+echo
+
+echo "Now we will create a new ttyRPMSG*"
+rpmsg_export_dev /dev/rpmsg_ctrl0 rpmsg-tty 257 -1
+
+sleep 2
+
+echo "You should now see ttyRPMSG0 and ttyRPMSG1"
+ls -l /dev/ttyRPMSG*
+
+sleep 2
+
+echo "We can test both tty's"
+cat /dev/ttyRPMSG1 &
+echo "This is from ttyRPMSG0" >/dev/ttyRPMSG0
+sleep 1
+echo "This is from ttyRPMSG1" >/dev/ttyRPMSG1
+
+sleep 5
+echo
+
+echo "Now we will destroy ttyRPMSG1"
+echo "You may see that the cat background process terminates"
+sleep 0.5
+rpmsg_export_dev /dev/rpmsg_ctrl0 -d rpmsg-tty 257 -1
+sleep 2
+ls -l /dev/ttyRPMSG*
+
+sleep 5
+echo
+
+echo "Now we will create 3 new /dev/rpmsg* devices"
+echo "All of these end points will be addressed to port 1 on the remoteproc"
+echo "Remote port 1 is an echo service much as 0x402 used by rpmsg0"
+rpmsg_export_ept /dev/rpmsg_ctrl0 my_endpoint1 100 1
+rpmsg_export_ept /dev/rpmsg_ctrl0 my_endpoint1 101 1
+rpmsg_export_ept /dev/rpmsg_ctrl0 my_endpoint1 102 1
+sleep 1
+ls -l /dev/rpmsg?
+
+sleep 5
+echo
+
+echo "And we can test all of them"
+rpmsg_ping /dev/rpmsg0
+sleep 1
+rpmsg_ping /dev/rpmsg1
+sleep 1
+rpmsg_ping /dev/rpmsg2
+sleep 1
+rpmsg_ping /dev/rpmsg3
+sleep 1
+
+sleep 5
+echo
+
+echo "We will now destroy the 3 new rpmsg devices"
+rpmsg_destroy_ept /dev/rpmsg1
+rpmsg_destroy_ept /dev/rpmsg2
+rpmsg_destroy_ept /dev/rpmsg3
+ls -l /dev/rpmsg?
+
+sleep 5
+echo
+
+echo "We will now stop the remote processor"
+sleep 0.5
+echo stop  >$RPROC_0/state
+
+sleep 2
+echo
+echo "We should see that all devices are cleaned up"
+ls -l /dev/rpmsg* /dev/ttyRPMSG*
+
+sleep 2
+echo
+
+echo "Thats is all"

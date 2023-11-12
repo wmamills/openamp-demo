@@ -1,0 +1,20 @@
+#!/bin/sh
+
+echo "AMD Xilinx bare metal matrix multiply"
+
+R5_0=/sys/class/remoteproc/remoteproc0
+
+echo "Make sure the R5 is not running"
+echo stop >$R5_0/state 2>/dev/null
+
+echo "Set the firmware to use"
+echo image_matrix_multiply >$R5_0/firmware
+
+echo "Start the R5"
+echo start >$R5_0/state
+
+echo "Now run the matrix_multiply Linux application"
+mat_mul_demo
+
+
+
