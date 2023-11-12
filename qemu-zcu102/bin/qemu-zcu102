@@ -344,8 +344,8 @@ main() {
     TFTPDIR=$TESTBASE/tftp
 
     do_check-pmu-rom
-    do_check-sd-img
     check-make-image-targets
+    do_check-sd-img
     ssh-rekey
 
     if [  -d $IMAGES/sd-vfat ] && $VFAT_ENABLE; then
