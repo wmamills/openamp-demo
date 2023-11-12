@@ -1,0 +1,86 @@
+# Import and run the file specified by the DHCP server
+# file should be
+# *.txt: in the uEnv.txt format
+# *.scr: a mkimage wrapped boot script
+# *.fit: a fit image
+# *.efi: not handled yet
+
+echo "Boot file specified by DHCP or defaults"
+
+# ST32MP157c|f-DK2
+# the default vars are good for kernel < 32MB
+# DDR           0xc000_0000  512MB
+# reserved?     0xc000_0000  32M
+# loadaddr      0xc200_0000  32M
+# fdt_addr_r    0xc400_0000  1M
+# script        0xc410_0000  1M (512K if also using scriptaddr2)
+# pxe           0xc420_0000  1M
+# fdt overlay   0xc430_0000  1M
+# ramdisk       0xc440_0000  >>100MB
+# end of NS DDR 0xcdff_ffff
+# Secure DDR	0xde00_0000  32M
+# end of DDR	0xdfff_ffff
+
+# If our script wants to load a script don't overwrite ourselves
+# This give 512K for each script
+setenv scriptaddr2      0xc4180000
+
+# generic below here
+
+# This is normally where we set defaults for when DHCP does not work.
+# The STMP1 u-boot build from st-oss mickledore branch does not honor
+# bootfile and serverip sent in DHCP.  This is bad for automated testing
+# Workaround this by using saved env on board.
+# Thus don't overwrite the loaded values.
+#setenv serverip 192.168.1.1
+#setenv bootfile stm32mp157c-dk2/uEnv.txt
+setenv ipaddr   192.168.1.92
+setenv autoload no
+dhcp
+
+# override settings even if we got something from DHCP
+#setenv serverip 192.168.1.1
+#setenv bootfile stm32mp157c-dk2/uEnv.txt
+
+echo "ipaddr   = $ipaddr"
+echo "serverip = $serverip"
+echo "bootfile = $bootfile"
+
+if test x"${bootfile}" = x"None" -o x"${bootfile}" = x"" ; then
+	echo "No DHCP filename"
+else
+    echo "PARSE ${bootfile}"
+    setexp prefix   sub "[/][^/]*$"   "/"  ${bootfile}
+    setexp filename sub "^${prefix}"  ""   ${bootfile}
+    setexp ext      sub ".*[.]"       "."  ${filename}
+    if test "${ext}" = ".txt"; then
+        if tftpboot $kernel_addr_r ${bootfile}; then
+            echo "Importing environment from ${bootfile}..."
+            env import -t $kernel_addr_r $filesize
+            if test -n $uenvcmd; then
+                echo "Running uenvcmd ..."
+                run uenvcmd
+            fi
+        else
+            echo "DHCP advertised filename ${bootfile} does not exist"
+        fi
+    elif test "${ext}" = ".scr"; then
+        if tftpboot ${scriptaddr2} ${bootfile}; then
+            echo "running script ${bootfile}..."
+            source ${scriptaddr2}
+        else
+            echo "DHCP advertised filename ${bootfile} does not exist"
+        fi
+    elif test "${ext}" = ".fit"; then
+        if tftpboot ${loadddr} ${bootfile}; then
+            echo "Booting fit image ${bootfile}..."
+            bootm ${loadaddr}
+        else
+            echo "DHCP advertised filename ${bootfile} does not exist"
+        fi
+    else
+        echo "I do not know what to do with ${ext} file from DHCP ${bootfile}"
+    fi
+fi
+
+echo "All done with DHCP, nothing worked"
