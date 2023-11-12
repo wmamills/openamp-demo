@@ -1,0 +1,5 @@
+This is demo1, running zephyr rpmsg_multi_service demo on the remote processor
+$ cat demo1
+or just
+$ ./demo1
+

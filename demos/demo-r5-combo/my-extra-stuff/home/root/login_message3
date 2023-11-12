@@ -1,0 +1,7 @@
+This is demo3, AMD Xilinx bare-metal rpmsg examples on R5 lockstep
+There are 3 sub-demos here: demo3A demo3B and demo3C
+Look at them
+$ cat demo3A
+or just run them
+$ ./demo3A
+

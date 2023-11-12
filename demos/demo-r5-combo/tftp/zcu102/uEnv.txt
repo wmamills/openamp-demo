@@ -1,0 +1,45 @@
+# OpenAMP all the way, split mode
+
+bootargs=earlycon clk_ignore_unused root=/dev/mmcblk0p2 ro rootwait earlyprintk debug uio_pdrv_genirq.of_id=generic-uio
+
+prefix=zcu102/
+kernel_addr_r=00200000
+fdt_addr_r=00100000
+ramdisk_addr_r=04000000
+
+kernel_name=openamp/Image-generic-arm64.bin
+ramdisk_name=initrd.cpio.gz
+
+bootcmd_lockstep_z=\
+tftpboot $kernel_addr_r  ${prefix}${kernel_name}; \
+tftpboot $fdt_addr_r     ${prefix}dtb/zcu102-openamp-lockstep.dtb; \
+\
+# this must be last so filesize is still set below \
+tftpboot $ramdisk_addr_r ${prefix}${ramdisk_name}; \
+\
+booti $kernel_addr_r $ramdisk_addr_r:$filesize $fdt_addr_r
+
+bootcmd_split=\
+tftpboot $kernel_addr_r  ${prefix}${kernel_name}; \
+tftpboot $fdt_addr_r     ${prefix}dtb/zcu102-openamp-split.dtb; \
+\
+# this must be last so filesize is still set below \
+tftpboot $ramdisk_addr_r ${prefix}${ramdisk_name}; \
+\
+booti $kernel_addr_r $ramdisk_addr_r:$filesize $fdt_addr_r
+
+bootcmd_lockstep_bm=\
+tftpboot $kernel_addr_r  ${prefix}${kernel_name}; \
+tftpboot $fdt_addr_r     ${prefix}dtb/zcu102-xilinx-bm-lockstep.dtb; \
+\
+# this must be last so filesize is still set below \
+tftpboot $ramdisk_addr_r ${prefix}${ramdisk_name}; \
+\
+booti $kernel_addr_r $ramdisk_addr_r:$filesize $fdt_addr_r
+
+bootmenu_delay=5
+bootmenu_0=R5 lockstep w/ Zephyr=run bootcmd_lockstep_z
+bootmenu_1=R5 split mode=run bootcmd_split
+bootmenu_2=R5 lockstep bare-metal demos=run bootcmd_lockstep_bm
+
+uenvcmd=bootmenu
