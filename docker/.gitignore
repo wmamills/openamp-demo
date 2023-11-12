@@ -6,5 +6,6 @@ user-dev/demo5-lopper-cli/lopper
 demo/marker
 demo-lite/marker
 user-dev-marker
+demos-marker
 qemu-zcu102-marker
 user-dev-trash.tar.gz
