@@ -1,0 +1,15 @@
+# this file is used by make-image-targets
+# do not try to run it on its own
+# use: make-image-targets dir
+# where dir is the directory this file is in
+
+# We don't need anything fancy here but we
+# reuse this hook into qemu-zcu102 startup to 
+# decompress the sd card image if it does not already
+# exist
+
+main() {
+    if [ ! -e openamp-image-minimal-zcu102-zynqmp.wic ]; then
+        xz -dk openamp-image-minimal-zcu102-zynqmp.wic.xz
+    fi
+}
