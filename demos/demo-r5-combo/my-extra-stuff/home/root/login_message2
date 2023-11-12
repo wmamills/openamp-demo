@@ -1,5 +1,7 @@
 This is demo2, R5 split mode, load run and stop
-$ cat demo2
+$ cat demo2A
 or just
-$ ./demo2
+$ ./demo2A
+
+demo2B is also available.
 
