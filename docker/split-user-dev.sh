@@ -34,10 +34,8 @@ echo "copy in the user-dev template"
 cp -a $ORIG/user-dev/* .
 cp -a $ORIG/user-dev/.[a-zA-Z]* .
 
-echo "created the hacked cpio image"
-cd test-sw/openamp
-$ORIG/../qemu-zcu102/bin/make-image-targets .
-cd $TOP
+echo "copy in the demos directory"
+cp -a $ORIG/../demos/* .
 
 echo "copy in the pre-installed image of the zephyr-sdk"
 mkdir -p opt
@@ -64,9 +62,7 @@ move-to extra synopsys
 
 cd $TOP
 
-move-to extra test-sw/xilinx-5.15/petalinux-rootfs.cpio.gz
-move-to extra test-sw/openamp/openamp-initramfs-minimal-generic-arm64*.cpio.gz
-move-to extra test-sw/openamp/modules-*.tgz
+move-to extra test-sw/openamp-ci-*/modules-*.tgz
 
 tar czvf $ORIG/demo-lite/user-dev-base.tar.gz .
 cd $ORIG/xxx-temp-extra
