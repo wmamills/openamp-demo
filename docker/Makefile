@@ -13,11 +13,15 @@ demo-lite/marker: demo-lite/user-dev-base.tar.gz demo-lite/Dockerfile
 	touch $@
 
 demo-lite/user-dev-base.tar.gz demo/user-dev-extra.tar.gz &: \
-	user-dev-marker qemu-zcu102-marker split-user-dev.sh zephyr-sdk-0.15.1-installed.tar.gz
+	user-dev-marker qemu-zcu102-marker split-user-dev.sh \
+	zephyr-sdk-0.15.1-installed.tar.gz demos-marker
 	./split-user-dev.sh
 
 user-dev-marker:
 	./find-latest-date user-dev $@
+
+demos-marker:
+	./find-latest-date ../demos $@
 
 qemu-zcu102-marker:
 	./find-latest-date ../qemu-zcu102 $@
