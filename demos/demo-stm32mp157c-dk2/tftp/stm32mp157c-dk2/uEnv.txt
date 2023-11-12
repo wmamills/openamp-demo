@@ -1,0 +1,18 @@
+# OpenAMP
+
+#bootargs=earlycon clk_ignore_unused root=/dev/mmcblk0p2 ro rootwait earlyprintk debug uio_pdrv_genirq.of_id=generic-uio
+
+prefix=stm32mp157c-dk2/
+
+kernel_name=openamp/zimage-generic-arm32.bin
+dtb_name=openamp/stm32mp157c-dk2
+ramdisk_name=initrd.cpio.gz
+
+uenvcmd=\
+tftpboot $kernel_addr_r  ${prefix}${kernel_name}; \
+tftpboot $fdt_addr_r     ${prefix}${dtb_name}; \
+\
+# this must be last so filesize is still set below \
+tftpboot $ramdisk_addr_r ${prefix}${ramdisk_name}; \
+\
+booti $kernel_addr_r $ramdisk_addr_r:$filesize $fdt_addr_r
