@@ -5,9 +5,11 @@ echo "Zephyr rpmsg_multi_service demo"
 RPROC_0=/sys/class/remoteproc/remoteproc0
 
 echo "Make sure the remoteproc is not running"
+sleep 0.5
 echo stop >$RPROC_0/state 2>/dev/null
 
 echo "Set the firmware to use"
+sleep 0.5
 echo rpmsg_multi_services.elf >$RPROC_0/firmware
 
 echo "Start remoteproc"
@@ -41,11 +43,13 @@ echo "Now we will create a new ttyRPMSG*"
 rpmsg_export_dev /dev/rpmsg_ctrl0 rpmsg-tty 257 -1
 
 sleep 2
+echo
 
 echo "You should now see ttyRPMSG0 and ttyRPMSG1"
 ls -l /dev/ttyRPMSG*
 
 sleep 2
+echo
 
 echo "We can test both tty's"
 cat /dev/ttyRPMSG1 &
