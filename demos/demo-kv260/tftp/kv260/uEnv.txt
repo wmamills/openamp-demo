@@ -2,20 +2,45 @@
 
 bootargs=earlycon clk_ignore_unused root=/dev/mmcblk0p2 ro rootwait earlyprintk debug uio_pdrv_genirq.of_id=generic-uio
 
+my_board=kv260
 prefix=kv260/
 kernel_addr_r=00200000
 fdt_addr_r=00100000
 ramdisk_addr_r=04000000
 
 kernel_name=openamp/Image-generic-arm64.bin
-dtb_name=dtb/kv260-openamp-lockstep.dtb
 ramdisk_name=initrd.cpio.gz
 
-uenvcmd=\
+bootcmd_lockstep_z=\
 tftpboot $kernel_addr_r  ${prefix}${kernel_name}; \
-tftpboot $fdt_addr_r     ${prefix}${dtb_name}; \
+tftpboot $fdt_addr_r     ${prefix}dtb/${my_board}-openamp-lockstep.dtb; \
 \
 # this must be last so filesize is still set below \
 tftpboot $ramdisk_addr_r ${prefix}${ramdisk_name}; \
 \
 booti $kernel_addr_r $ramdisk_addr_r:$filesize $fdt_addr_r
+
+bootcmd_split=\
+tftpboot $kernel_addr_r  ${prefix}${kernel_name}; \
+tftpboot $fdt_addr_r     ${prefix}dtb/${my_board}-openamp-split.dtb; \
+\
+# this must be last so filesize is still set below \
+tftpboot $ramdisk_addr_r ${prefix}${ramdisk_name}; \
+\
+booti $kernel_addr_r $ramdisk_addr_r:$filesize $fdt_addr_r
+
+bootcmd_lockstep_bm=\
+tftpboot $kernel_addr_r  ${prefix}${kernel_name}; \
+tftpboot $fdt_addr_r     ${prefix}dtb/${my_board}-xilinx-bm-lockstep.dtb; \
+\
+# this must be last so filesize is still set below \
+tftpboot $ramdisk_addr_r ${prefix}${ramdisk_name}; \
+\
+booti $kernel_addr_r $ramdisk_addr_r:$filesize $fdt_addr_r
+
+bootmenu_delay=5
+bootmenu_0=R5 lockstep w/ Zephyr=run bootcmd_lockstep_z
+bootmenu_1=R5 split mode=run bootcmd_split
+bootmenu_2=R5 lockstep bare-metal demos=run bootcmd_lockstep_bm
+
+uenvcmd=bootmenu
