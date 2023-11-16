@@ -13,6 +13,9 @@ echo image_rpc_demo >$R5_0/firmware
 echo "Start the R5"
 echo start >$R5_0/state
 
+# The app does not wait for the rpmsg device to show up
+sleep 1
+
 echo "Now run the matrix_multiply Linux application"
 proxy_app
 
