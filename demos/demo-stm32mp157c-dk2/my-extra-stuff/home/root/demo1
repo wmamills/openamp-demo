@@ -51,9 +51,10 @@ ls -l /dev/ttyRPMSG*
 sleep 2
 echo
 
-echo "We can test both tty's"
 cat /dev/ttyRPMSG1 &
 echo "This is from ttyRPMSG0" >/dev/ttyRPMSG0
+sleep 1
+echo "" >/dev/ttyRPMSG1
 sleep 1
 echo "This is from ttyRPMSG1" >/dev/ttyRPMSG1
 
