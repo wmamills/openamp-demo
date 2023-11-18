@@ -9,6 +9,9 @@
 my-tty() {
     # ensure our tty is enabled
     add-tty ttySTM0
+
+    # remove this problematic one
+    rm-tty  ttyS0
 }
 
 MIXINS=../test-sw/openamp-mixins
