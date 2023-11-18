@@ -1,11 +1,9 @@
 # OpenAMP
 
-#bootargs=earlycon clk_ignore_unused root=/dev/mmcblk0p2 ro rootwait earlyprintk debug uio_pdrv_genirq.of_id=generic-uio
-
 prefix=stm32mp157c-dk2/
 
 kernel_name=openamp/zImage-generic-armv7a.bin
-dtb_name=openamp/stm32mp157c-dk2.dtb
+dtb_name=dtb/stm32mp157c-dk2-no-audio.dtb
 ramdisk_name=initrd.cpio.gz
 
 uenvcmd=\
