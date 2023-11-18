@@ -23,6 +23,9 @@ any-cat() {
     *.xz)
         xzcat $1
         ;;
+    *.zstd)
+        zstdcat $1
+        ;;
     *)
         cat $1
         ;;
@@ -43,6 +46,9 @@ any-compress() {
         ;;
     *.xz)
         xz - >$1
+        ;;
+    *.zstd)
+        zstd - >$1
         ;;
     *)
         cat - >$1
@@ -143,10 +149,10 @@ extract() {
 
 	# otherwise archives		
 	case $1 in
-	*.tar.gz|*.tgz|*.tar.bz2|*.tar.xz|*.tar)
+	*.tar.gz|*.tgz|*.tar.bz2|*.tar.xz|*.tar.zstd|*.tar)
 	    any-cat $1 | tar x -C xxx-temp
 	    ;;
-	*.cpio.gz|*.cpio.bz2|*.cpio.xz|*.cpio)
+	*.cpio.gz|*.cpio.bz2|*.cpio.xz|*.cpio.zstd|*.cpio)
 	    any-cat $1 | (cd xxx-temp; cpio -i)
 	    ;;
 	*)
@@ -159,10 +165,10 @@ extract() {
 re-archive() {
 	echo "Re-archiving to $1"
 	case $1 in
-	*.tar|*.tar.gz|*.tar.bz2|*.tar.xz)
+	*.tar|*.tar.gz|*.tar.bz2|*.tar.xz|*.tar.zstd)
 	    tar c -C xxx-temp | any-compress ../$1
 	    ;;
-	*.cpio|*.cpio.gz|*.cpio.bz2|*.cpio.xz)
+	*.cpio|*.cpio.gz|*.cpio.bz2|*.cpio.xz|*.cpio.zstd)
 		(cd xxx-temp; find . | cpio -H newc -o | any-compress ../$1)
 		;;
 	*)
