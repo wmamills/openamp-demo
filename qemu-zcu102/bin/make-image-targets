@@ -118,6 +118,16 @@ add-tty() {
 	fi
 }
 
+rm-tty() {
+	TTY=$1
+	SHORT=${TTY#tty}
+	INITTAB=xxx-temp/etc/inittab
+
+	if grep -q "^${SHORT}:" $INITTAB; then
+		sed -i -e "s/^${SHORT}:/#${SHORT}:/" $INITTAB
+	fi
+}
+
 extract() {
 	echo "Extracting $1"
 
