@@ -9,53 +9,52 @@ error() {
 }
 
 any-cat() {
-    if [ -z "$1" ]; then
-        error "any-cat: decompress a file to stdout"
-    fi
+	if [ -z "$1" ]; then
+		error "any-cat: decompress a file to stdout"
+	fi
 
-    case $1 in
-    *.gz|*.tgz)
-        zcat $1
-        ;;
-    *.bz2)
-        bzcat $1
-        ;;
-    *.xz)
-        xzcat $1
-        ;;
-    *.zstd)
-        zstdcat $1
-        ;;
-    *)
-        cat $1
-        ;;
-    esac
+	case $1 in
+	*.gz|*.tgz)
+		zcat $1
+		;;
+	*.bz2)
+		bzcat $1
+		;;
+	*.xz)
+		xzcat $1
+		;;
+	*.zstd)
+		zstdcat $1
+		;;
+	*)
+		cat $1
+		;;
+	esac
 }
 
 any-compress() {
-    if [ -z "$1" ]; then
-        error "any-compress: compress stdin to any format based on name"
-    fi
+	if [ -z "$1" ]; then
+		error "any-compress: compress stdin to any format based on name"
+	fi
 
-    case $1 in
-    *.gz)
-        gzip - >$1
-        ;;
-    *.bz2)
-        bzip2 - >$1
-        ;;
-    *.xz)
-        xz - >$1
-        ;;
-    *.zstd)
-        zstd - >$1
-        ;;
-    *)
-        cat - >$1
-        ;;
-    esac
+	case $1 in
+	*.gz)
+		gzip - >$1
+		;;
+	*.bz2)
+		bzip2 - >$1
+		;;
+	*.xz)
+		xz - >$1
+		;;
+	*.zstd)
+		zstd - >$1
+		;;
+	*)
+		cat - >$1
+		;;
+	esac
 }
-
 
 # new-cpio OUTPUT INPUT callback-function
 new-cpio() {
@@ -150,15 +149,15 @@ extract() {
 	# otherwise archives		
 	case $1 in
 	*.tar.gz|*.tgz|*.tar.bz2|*.tar.xz|*.tar.zstd|*.tar)
-	    any-cat $1 | tar x -C xxx-temp
-	    ;;
+		any-cat $1 | tar x -C xxx-temp
+		;;
 	*.cpio.gz|*.cpio.bz2|*.cpio.xz|*.cpio.zstd|*.cpio)
-	    any-cat $1 | (cd xxx-temp; cpio -i)
-	    ;;
+		any-cat $1 | (cd xxx-temp; cpio -i)
+		;;
 	*)
-	    echo "don't know how to handle $1"
-	    exit 2
-	    ;;
+		echo "don't know how to handle $1"
+		exit 2
+		;;
 	esac
 }
 
@@ -166,15 +165,15 @@ re-archive() {
 	echo "Re-archiving to $1"
 	case $1 in
 	*.tar|*.tar.gz|*.tar.bz2|*.tar.xz|*.tar.zstd)
-	    tar c -C xxx-temp | any-compress ../$1
-	    ;;
+		tar c -C xxx-temp | any-compress ../$1
+		;;
 	*.cpio|*.cpio.gz|*.cpio.bz2|*.cpio.xz|*.cpio.zstd)
 		(cd xxx-temp; find . | cpio -H newc -o | any-compress ../$1)
 		;;
 	*)
-	    echo "don't know how to handle $1"
-	    exit 2
-	    ;;
+		echo "don't know how to handle $1"
+		exit 2
+		;;
 	esac
 }
 
