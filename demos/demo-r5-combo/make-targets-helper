@@ -28,9 +28,8 @@ do_sdcard() {
     cp ../test-sw/sd-card/$BOARD/boot-uenv.scr $DV/boot.scr
     cp ../test-sw/petalinux/$BOARD/boot.bin $DV
 
-    new-vfat $D/boot.vfat 128M BOOT $DV
-    new-ext4 $D/rootfs.ext4 128M rootfs tftp/$BOARD/initrd.cpio.gz
-    new-mbr-image sdcard/demo.img 512M $D/boot.vfat $D/rootfs.ext4
+    new-vfat $D/boot.vfat 124M BOOT $DV
+    new-mbr-image sdcard/demo.img 128M $D/boot.vfat
 }
 
 main() {
