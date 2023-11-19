@@ -1,3 +1,5 @@
 demos/*/generated
 demos/*/tftp/*/initrd.cpio.gz
+demos/*/sdcard/*.img
+demos/*/sdcard/*.sfdisk
 envf-last
