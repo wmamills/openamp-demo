@@ -94,6 +94,124 @@ fr_new-cpio() {
 	fi
 }
 
+# new-vfat OUTPUT SIZE NAME INPUT ... callback-function ...
+new-vfat() {
+	fakeroot $ME in-fakeroot new-fs vfat "$@"
+}
+
+# new-ext4 OUTPUT SIZE NAME INPUT ... callback-function ...
+new-ext4() {
+	fakeroot $ME in-fakeroot new-fs ext4 "$@"
+}
+
+fr_new-fs() {
+	echo "new-vfat $@"
+	FS_TYPE=$1
+	OUTPUT=$2
+	SIZE=$3
+	LABEL=$4
+	OUTPUT_DIR=$(dirname $OUTPUT)
+	OUTPUT_NAME=$(basename $OUTPUT)
+	OUTPUT_NAME=${OUTPUT_NAME%%.*}
+	OUTPUT_IMAGE=${OUTPUT_DIR}/${OUTPUT_NAME}.${FS_TYPE}
+	shift 4
+
+	rm -rf xxx-temp
+	rm -rf xxx-temp.$OUTPUT_NAME
+	mkdir -p xxx-temp
+
+	for i in "$@"; do
+		case $i in
+		cb:*)
+			f=${i#cb:}
+			echo "Calling $f"
+			$f
+			;;
+		*)
+			extract $i
+			;;
+		esac
+	done
+
+	rm $OUTPUT_IMAGE || true
+	truncate --size $SIZE $OUTPUT_IMAGE
+	case $FS_TYPE in
+	vfat)
+		mkfs.vfat -n $LABEL $OUTPUT_IMAGE
+		mcopy -i $OUTPUT_IMAGE xxx-temp/* ::
+		;;
+	ext4)
+		mkfs.ext4 -L $LABEL -d xxx-temp/ $OUTPUT_IMAGE
+		;;
+	*)
+		error unknown fs type $FS_TYPE
+		;;
+	esac
+
+	if [ -n "$KEEP_DIRS" ]; then
+		mv xxx-temp xxx-temp.$OUTPUT_NAME
+	else
+		rm -rf xxx-temp
+	fi
+}
+
+# new-mbr-image OUTPUT SIZE PART1 PART2
+# PART1 will have boot flag set
+new-mbr-image() {
+	echo "new-mbr-image $@"
+	OUTPUT=$1
+	SIZE=$2
+	OUTPUT_DIR=$(dirname $OUTPUT)
+	OUTPUT_NAME=$(basename $OUTPUT)
+	OUTPUT_NAME=${OUTPUT_NAME%%.*}
+	OUTPUT_IMAGE=${OUTPUT_DIR}/${OUTPUT_NAME}.img
+	SFDISK_FILE=${OUTPUT_DIR}/${OUTPUT_NAME}.sfdisk
+	shift 2
+
+	cat >$SFDISK_FILE <<EOF
+label: dos
+unit:  sectors
+EOF
+
+	START=2048
+	BOOTABLE=", bootable"
+	for part in "$@"; do
+		case $part in
+		*.vfat)
+			TYPE="c"
+			;;
+		*.ext4)
+			TYPE="83"
+			;;
+		*)
+			error "partition $part is not a know format"
+			;;
+		esac
+
+		# get the block count
+		F_SIZE=$(( ( $(stat --printf="%s" $part) + 511 ) / 512 ));
+		printf "start=$START, size=$F_SIZE, type=$TYPE $BOOTABLE \n" \
+			>>$SFDISK_FILE
+		START=$(( $START + $F_SIZE ))
+		BOOTABLE=""
+	done
+
+	rm $OUTPUT_IMAGE || true
+	truncate --size $SIZE $OUTPUT_IMAGE
+	ls -l $OUTPUT_IMAGE
+	sfdisk $OUTPUT_IMAGE <$SFDISK_FILE
+
+	# now actually copy the data into the partitions
+	START=2048
+	for part in "$@"; do
+		# get the block count
+		F_SIZE=$(( ( $(stat --printf="%s" $part) + 511 ) / 512 ));
+		dd if=$part of=$OUTPUT_IMAGE bs=512 seek=$START count=$F_SIZE \
+			conv=notrunc
+		START=$(( $START + $F_SIZE ))
+	done
+}
+
 # cpio-cat OUTPUT INPUT INPUT ...
 cpio-cat() {
 	OUTPUT=$1
