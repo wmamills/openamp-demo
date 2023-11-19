@@ -317,7 +317,8 @@ premain() {
 		else
 			echo "no helper found, doing default processing"
 		fi
-		main
+		shift
+		main "$@"
 	else
 		error "input 1 needs to be a dir"
 	fi
