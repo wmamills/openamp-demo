@@ -2,7 +2,7 @@
 
 echo "Boot uEnv.txt file"
 
-# Xilinx zcu102 specific
+# Xilinx zynqmp specific
 # the default vars are pretty useless
 # these came from 2021.1 boot.scr but ramdisk_r was doubled
 setenv fdt_addr_r       0x00100000
