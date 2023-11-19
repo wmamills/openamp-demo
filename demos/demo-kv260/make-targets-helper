@@ -41,4 +41,8 @@ main() {
     # cpio-cat OUTPUT INPUT INPUT ...
     cpio-cat tftp/$BOARD/initrd.cpio.gz $D/hacked.cpio.gz \
         $D/default-firmware.cpio.gz $D/my-extra-stuff.cpio.gz
+
+    for target in $@; do
+        do_${target}
+    done
 }
