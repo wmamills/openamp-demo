@@ -1,0 +1,29 @@
+# Import and run the uEnv.txt file
+
+echo "Boot uEnv.txt file"
+
+# Xilinx zcu102 specific
+# the default vars are pretty useless
+# these came from 2021.1 boot.scr but ramdisk_r was doubled
+setenv fdt_addr_r       0x00100000
+setenv kernel_addr_r    0x00200000
+setenv ramdisk_r        0x08000000
+
+# this script runs at 0x2000_0000 and will be overwritten by large
+# ramdisks > 448 MB, fit images > 256 MB
+# set a new low address for any new scripts. limit scripts to 32K each
+setenv scriptaddr       0x00080000
+setenv scriptaddr2      0x00088000
+
+setenv bootfile uEnv.txt
+
+if load ${devtype} ${devnum}:${distro_bootpart} $kernel_addr_r ${bootfile}; then
+    echo "Importing environment from ${bootfile}..."
+    env import -t $kernel_addr_r $filesize
+    if test -n $uenvcmd; then
+        echo "Running uenvcmd ..."
+        run uenvcmd
+    fi
+else
+    echo "DHCP advertised filename ${bootfile} does not exist"
+fi
