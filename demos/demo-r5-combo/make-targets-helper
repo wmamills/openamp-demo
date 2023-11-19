@@ -14,24 +14,6 @@ my-tty() {
 MIXINS=../test-sw/openamp-mixins
 . $MIXINS/make-targets-lib
 
-do_sdcard() {
-    # create the FAT partition contents
-    DV=$D/vfat
-    rm -rf generated/vfat
-    mkdir -p $DV
-    cp tftp/$BOARD/initrd.cpio.gz $DV
-    cp -L tftp/$BOARD/openamp/Image $DV
-    mkdir -p $DV/dtb
-    cp -L tftp/$BOARD/dtb/${BOARD}-*.dtb $DV/dtb
-    cp sdcard/uEnv.txt $DV
-    (cd ../test-sw/sd-card/$BOARD; ./update.sh)
-    cp ../test-sw/sd-card/$BOARD/boot-uenv.scr $DV/boot.scr
-    cp ../test-sw/petalinux/$BOARD/boot.bin $DV
-
-    new-vfat $D/boot.vfat 124M BOOT $DV
-    new-mbr-image sdcard/demo.img 128M $D/boot.vfat
-}
-
 main() {
     # get common sub routines
     BOARD=zcu102
