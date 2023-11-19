@@ -14,6 +14,25 @@ my-tty() {
 MIXINS=../test-sw/openamp-mixins
 . $MIXINS/make-targets-lib
 
+do_sdcard() {
+    # create the FAT partition contents
+    DV=$D/vfat
+    rm -rf generated/vfat
+    mkdir -p $DV
+    cp tftp/$BOARD/initrd.cpio.gz $DV
+    cp -L tftp/$BOARD/openamp/Image $DV
+    mkdir -p $DV/dtb
+    cp -L tftp/$BOARD/dtb/${BOARD}-*.dtb $DV/dtb
+    cp sdcard/uEnv.txt $DV
+    (cd ../test-sw/sd-card/$BOARD; ./update.sh)
+    cp ../test-sw/sd-card/$BOARD/boot-uenv.scr $DV/boot.scr
+    cp ../test-sw/petalinux/$BOARD/boot.bin $DV
+
+    new-vfat $D/boot.vfat 128M BOOT $DV
+    new-ext4 $D/rootfs.ext4 128M rootfs tftp/$BOARD/initrd.cpio.gz
+    new-mbr-image sdcard/demo.img 512M $D/boot.vfat $D/rootfs.ext4
+}
+
 main() {
     # get common sub routines
     BOARD=zcu102
@@ -42,20 +61,7 @@ main() {
     cpio-cat tftp/$BOARD/initrd.cpio.gz $D/hacked.cpio.gz \
         $D/default-firmware.cpio.gz $D/my-extra-stuff.cpio.gz
 
-    # create the FAT partition contents
-    DV=$D/vfat
-    rm -rf generated/vfat
-    mkdir -p $DV
-    cp tftp/$BOARD/initrd.cpio.gz $DV
-    cp -L tftp/$BOARD/openamp/Image $DV
-    mkdir -p $DV/dtb
-    cp -L tftp/$BOARD/dtb/${BOARD}-*.dtb $DV/dtb
-    cp sdcard/uEnv.txt $DV
-    (cd ../test-sw/sd-card/$BOARD; ./update.sh)
-    cp ../test-sw/sd-card/$BOARD/boot-uenv.scr $DV/boot.scr
-    cp ../test-sw/petalinux/$BOARD/boot.bin $DV
-
-    new-vfat $D/boot.vfat 128M BOOT $DV
-    new-ext4 $D/rootfs.ext4 128M rootfs tftp/$BOARD/initrd.cpio.gz
-    new-mbr-image sdcard/demo.img 512M $D/boot.vfat $D/rootfs.ext4
+    for target in $@; do
+        do_${target}
+    done
 }
