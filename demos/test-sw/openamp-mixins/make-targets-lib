@@ -54,20 +54,30 @@ add_firmware() {
     done
 }
 
-do_sdcard() {
+do_vfat() {
+    # defaults
+    : ${KERNEL:=Image}
+    : ${VENDOR:=petalinux}
+
     # create the FAT partition contents
     DV=$D/vfat
     rm -rf generated/vfat
     mkdir -p $DV
     cp tftp/$BOARD/initrd.cpio.gz $DV
-    cp -L tftp/$BOARD/openamp/Image $DV
+    cp -L tftp/$BOARD/openamp/$KERNEL $DV
     mkdir -p $DV/dtb
     cp -L tftp/$BOARD/dtb/${BOARD}-*.dtb $DV/dtb
     cp sdcard/uEnv.txt $DV
     (cd ../test-sw/sd-card/$BOARD; ./update.sh)
     cp ../test-sw/sd-card/$BOARD/boot-uenv.scr $DV/boot.scr
-    cp ../test-sw/petalinux/$BOARD/boot.bin $DV
+    if [ -e ../test-sw/$VENDOR/$BOARD/boot.bin ]; then
+        cp ../test-sw/$VENDOR/$BOARD/boot.bin $DV
+    fi
 
-    new-vfat $D/boot.vfat 124M BOOT $DV
+    new-vfat $D/boot.vfat 123M BOOT $DV
+}
+
+do_sdcard() {
+    do_vfat
     new-mbr-image sdcard/demo.img 128M $D/boot.vfat
 }
