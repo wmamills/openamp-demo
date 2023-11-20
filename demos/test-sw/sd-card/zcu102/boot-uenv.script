@@ -25,5 +25,5 @@ if load ${devtype} ${devnum}:${distro_bootpart} $kernel_addr_r ${bootfile}; then
         run uenvcmd
     fi
 else
-    echo "DHCP advertised filename ${bootfile} does not exist"
+    echo "no uEnv.txt found"
 fi
