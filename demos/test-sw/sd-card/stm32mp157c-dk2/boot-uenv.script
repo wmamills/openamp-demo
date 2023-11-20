@@ -1,0 +1,20 @@
+# Import and run the uEnv.txt file
+
+echo "Boot uEnv.txt file"
+
+echo "Boot file specified by DHCP or defaults"
+
+setenv scriptaddr2      0xc4180000
+
+setenv bootfile uEnv.txt
+
+if load ${devtype} ${devnum}:${distro_bootpart} $kernel_addr_r ${bootfile}; then
+    echo "Importing environment from ${bootfile}..."
+    env import -t $kernel_addr_r $filesize
+    if test -n $uenvcmd; then
+        echo "Running uenvcmd ..."
+        run uenvcmd
+    fi
+else
+    echo "no uEnv.txt found"
+fi
