@@ -26,9 +26,29 @@ add_firmware() {
     done
 }
 
+do_sdcard() {
+    do_vfat
+
+    # get the template
+    any-cat ../test-sw/st-oss/boot-n-vfat.wic.xz >sdcard/demo.img
+
+    # make sure nothing has changed in the template or vfat
+    if ! sgdisk -p sdcard/demo.img | grep -Ee " +5 +10274 +262177 " >/dev/null; then
+        rm sdcard/demo.img
+        error "boot-n-vfat template has changed"
+    fi
+    if [ $(stat --printf="%s" $D/boot.vfat) -ne 128974848 ]; then
+        rm sdcard/demo.img
+        error "boot.vfat is not 123MB"
+    fi
+
+    dd if=$D/boot.vfat of=sdcard/demo.img bs=512 seek=10274 conv=notrunc
+}
+
 main() {
     # get common sub routines
     BOARD=stm32mp157c-dk2
+    KERNEL=zImage
 
     D=generated
     S=../test-sw/openamp-ci-arm32
@@ -53,4 +73,8 @@ main() {
     # cpio-cat OUTPUT INPUT INPUT ...
     cpio-cat tftp/$BOARD/initrd.cpio.gz $D/hacked.cpio.gz \
         $D/default-firmware.cpio.gz $D/my-extra-stuff.cpio.gz
+
+    for target in $@; do
+        do_${target}
+    done
 }

@@ -1,0 +1,16 @@
+# OpenAMP
+
+prefix="/"
+
+kernel_name=zImage
+dtb_name=dtb/stm32mp157c-dk2-no-audio.dtb
+ramdisk_name=initrd.cpio.gz
+
+uenvcmd=\
+load ${devtype} ${devnum}:${distro_bootpart} $kernel_addr_r  ${prefix}${kernel_name}; \
+load ${devtype} ${devnum}:${distro_bootpart} $fdt_addr_r     ${prefix}${dtb_name}; \
+\
+# this must be last so filesize is still set below \
+load ${devtype} ${devnum}:${distro_bootpart} $ramdisk_addr_r ${prefix}${ramdisk_name}; \
+\
+bootz $kernel_addr_r $ramdisk_addr_r:$filesize $fdt_addr_r
