@@ -304,7 +304,14 @@ extract() {
 		any-cat $1 | (cd xxx-temp; cpio -i)
 		;;
 	*.rpm)
+		# This does not add the package scripts or info
 		rpm2cpio $1 | (cd xxx-temp; cpio -i)
+		;;
+	*.deb|*.ipk)
+		# This does not add the package scripts or info
+		# This does not handle OpenWRT's *.ipk's as they are not *.deb's
+		# This does work fine with Yocto Project *.ipk'ss
+		dpkg-deb -x $1 xxx-temp
 		;;
 	*)
 		echo "don't know how to handle $1"
