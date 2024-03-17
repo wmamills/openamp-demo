@@ -113,7 +113,7 @@ fr_new-fs() {
 	OUTPUT_DIR=$(dirname $OUTPUT)
 	OUTPUT_NAME=$(basename $OUTPUT)
 	OUTPUT_NAME=${OUTPUT_NAME%%.*}
-	OUTPUT_IMAGE=${OUTPUT_DIR}/${OUTPUT_NAME}.${FS_TYPE}
+	OUTPUT_IMAGE=${OUTPUT}
 	shift 4
 
 	rm -rf xxx-temp
@@ -158,35 +158,66 @@ fr_new-fs() {
 # new-mbr-image OUTPUT SIZE PART1 PART2
 # PART1 will have boot flag set
 new-mbr-image() {
-	echo "new-mbr-image $@"
-	OUTPUT=$1
-	SIZE=$2
+	new-disk-image dos "$@"
+}
+
+# new-gpt-image OUTPUT SIZE PART1 PART2
+# PART1 will have boot flag set
+new-gpt-image() {
+	new-disk-image gpt "$@"
+}
+
+part-type-dos() {
+	case $1 in
+	*.vfat)
+		TYPE="c"
+		;;
+	*.ext4)
+		TYPE="83"
+		;;
+	*)
+		error "partition $part is not a know format"
+		;;
+	esac
+}
+
+part-type-gpt() {
+	case $1 in
+	*.efi|*.uefi)
+		echo "C12A7328-F81F-11D2-BA4B-00A0C93EC93B"
+		;;
+	*.ext4|*.vfat)
+		echo "0FC63DAF-8483-4772-8E79-3D69D8477DE4"
+		;;
+	*)
+		error "partition $part is not a know format"
+		;;
+	esac
+}
+
+# new-disk-image dos|gpt OUTPUT SIZE PART1 PART2
+# PART1 will have boot flag set
+new-disk-image() {
+	echo "new-disk-image $@"
+	FORMAT=$1
+	OUTPUT=$2
+	SIZE=$3
 	OUTPUT_DIR=$(dirname $OUTPUT)
 	OUTPUT_NAME=$(basename $OUTPUT)
 	OUTPUT_NAME=${OUTPUT_NAME%%.*}
-	OUTPUT_IMAGE=${OUTPUT_DIR}/${OUTPUT_NAME}.img
+	OUTPUT_IMAGE=${OUTPUT}
 	SFDISK_FILE=${OUTPUT_DIR}/${OUTPUT_NAME}.sfdisk
-	shift 2
+	shift 3
 
 	cat >$SFDISK_FILE <<EOF
-label: dos
+label: $FORMAT
 unit:  sectors
 EOF
 
 	START=2048
 	BOOTABLE=", bootable"
 	for part in "$@"; do
-		case $part in
-		*.vfat)
-			TYPE="c"
-			;;
-		*.ext4)
-			TYPE="83"
-			;;
-		*)
-			error "partition $part is not a know format"
-			;;
-		esac
+		TYPE=$(part-type-$FORMAT $part)
 
 		# get the block count
 		F_SIZE=$(( ( $(stat --printf="%s" $part) + 511 ) / 512 ));
