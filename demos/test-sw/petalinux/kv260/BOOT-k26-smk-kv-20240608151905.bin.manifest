@@ -1,0 +1,36 @@
+SHA1: a2ea6fc11b60d788b4163df17c978b6cac904a7f
+
+* bootbin-version-header
+VERSION: K26-BootFW-01.01-b31575b4
+PV: 1.0
+XILINX_VER_MAIN: 2024.1
+XILINX_VER_UPDATE: snapshot
+XILINX_VER_BUILD: b31575b49f230b006aa3193cb564368e357777ed
+
+* fsbl-firmware
+SRCREV: b173d246826f662b9a98215d8f39e93d39d699b4
+BRANCH: xlnx_rel_v2024.1
+
+* pmu-firmware
+SRCREV: b173d246826f662b9a98215d8f39e93d39d699b4
+BRANCH: xlnx_rel_v2024.1
+
+* arm-trusted-firmware
+SRCREV: 4f82b6134e7b43722616c855e5016d42a3ea26d2
+BRANCH: xlnx_rebase_v2.10
+
+* u-boot-xlnx
+SRCREV: fbed1010e50d75e7d25acc1c2d09e1c34cb7e882
+BRANCH: xlnx_rebase_v2024.01
+
+* device-tree
+SRCREV: e30e471c0b466c0d6f51fa5c9611cb7ad2c83da1
+BRANCH: xlnx_rel_v2024.1
+** device-tree - u-boot-xlnx
+DT_UBOOT_SRCREV: fbed1010e50d75e7d25acc1c2d09e1c34cb7e882
+DT_UBOOT_BRANCH: xlnx_rebase_v2024.01
+
+* Yocto Layers
+meta-xilinx-standalone -> 77eba12b28e4258e1f6a8e613902c1b084a170e1
+meta-xilinx-tools -> c798ef1da7ffbf0a7ebb8c546add62f9eef4a44d
+meta-kria -> 221af51888d04e8d27083469a147389181dcb343
