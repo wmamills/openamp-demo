@@ -3,7 +3,7 @@
 prefix="/"
 
 kernel_name=zImage
-dtb_name=dtb/stm32mp157c-dk2-no-audio.dtb
+dtb_name=dtb/stm32mp157c-dk2.dtb
 ramdisk_name=initrd.cpio.gz
 
 uenvcmd=\
