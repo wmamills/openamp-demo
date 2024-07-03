@@ -66,7 +66,7 @@ do_vfat() {
     cp tftp/$BOARD/initrd.cpio.gz $DV
     cp -L tftp/$BOARD/openamp/$KERNEL $DV
     mkdir -p $DV/dtb
-    cp -L tftp/$BOARD/dtb/${BOARD}-*.dtb $DV/dtb
+    cp -L tftp/$BOARD/dtb/${BOARD}*.dtb $DV/dtb
     cp sdcard/uEnv.txt $DV
     (cd ../test-sw/sd-card/$BOARD; ./update.sh)
     cp ../test-sw/sd-card/$BOARD/boot-uenv.scr $DV/boot.scr
