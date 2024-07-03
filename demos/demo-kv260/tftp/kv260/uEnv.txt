@@ -8,7 +8,7 @@ kernel_addr_r=00200000
 fdt_addr_r=00100000
 ramdisk_addr_r=04000000
 
-kernel_name=openamp/Image-generic-arm64.bin
+kernel_name=openamp/Image
 ramdisk_name=initrd.cpio.gz
 
 bootcmd_lockstep_z=\

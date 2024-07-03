@@ -29,7 +29,7 @@ main() {
     # new-cpio OUTPUT INPUT ( INPUT | cb:call-back-function ) ...
     # use existing modules but trim them
     new-cpio $D/hacked.cpio.gz \
-        $S/openamp-initramfs-minimal-generic-arm64.cpio.gz \
+        $S/openamp-initramfs-minimal-genericarm64.cpio.gz \
         cb:hack-base cb:trim-modules cb:my-tty
 
     # new-cpio OUTPUT INPUT call-back-function
