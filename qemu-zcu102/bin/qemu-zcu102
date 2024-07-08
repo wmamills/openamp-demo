@@ -374,9 +374,13 @@ main() {
         -serial tcp:localhost:1116,server,nowait \
         -global xlnx,zynqmp-boot.cpu-num=0 \
         -global xlnx,zynqmp-boot.use-pmufw=true \
+        -device loader,addr=0xfffc0000,data=0x584c4e5801000000,data-be=true,data-len=8 \
+        -device loader,addr=0xfffc0008,data=0x0000000800000000,data-be=true,data-len=8 \
+        -device loader,addr=0xfffc0010,data=0x1000000000000000,data-be=true,data-len=8 \
+        -device loader,addr=0xffd80048,data=0xfffc0000,data-len=4,attrs-secure=on \
         -device loader,file=$FIRMWARE/arm-trusted-firmware.elf,cpu-num=0 \
         -device loader,file=$FIRMWARE/u-boot.elf \
-        -device loader,file=$FIRMWARE/system.dtb,addr=0x100000 \
+        -device loader,file=$FIRMWARE/system.dtb,addr=0x100000,force-raw=on \
         -boot mode=5"
 
     cd $TESTBASE
