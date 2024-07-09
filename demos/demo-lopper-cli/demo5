@@ -1,6 +1,8 @@
 #!/bin/bash
 # demo5: Run the commands from the Lopper openamp demo
 
+MY_DIR=$(dirname $0)
+
 WAIT=true
 
 case $1 in
@@ -60,7 +62,8 @@ step-comment() {
     fi
 }
 
-cd $(dirname $0)/lopper/demos/openamp
+. $MY_DIR/.venv/bin/activate
+cd $MY_DIR/lopper/demos/openamp
 mkdir -p scratch
 export LOPPER_DIR=$(cd ../..; pwd)
 
@@ -74,7 +77,7 @@ step-comment "step 1 & 2" \
     "\nStep 2 is also done as we have already switched to lopper/demos/openamp"
 
 step-run "step 3" "" \
-$LOPPER_DIR/lopper.py -f -O scratch --enhanced --permissive \
+lopper -f -O scratch --enhanced --permissive \
     -a openamp.py -a openamp_xlnx.py -a openamp-xlnx-zynq.py \
     -i ./inputs/openamp-overlay-zynqmp.yaml \
     -i $LOPPER_DIR/lopper/lops/lop-xlate-yaml.dts \
@@ -94,7 +97,7 @@ step-view "step 3c" "" \
 diff -u inputs/openamp-overlay-zynqmp.yaml inputs/openamp-overlay-zynqmp-dev-mem.yaml
 
 step-run "step 3d" "" \
-$LOPPER_DIR/lopper.py -f -O scratch --enhanced --permissive \
+lopper -f -O scratch --enhanced --permissive \
     -a openamp.py -a openamp_xlnx.py -a openamp-xlnx-zynq.py \
     -i ./inputs/openamp-overlay-zynqmp-dev-mem.yaml \
     -i $LOPPER_DIR/lopper/lops/lop-xlate-yaml.dts \
@@ -108,7 +111,7 @@ step-view "step 3d output" "" \
 diff -u linux-boot.dts linux-boot2.dts
 
 step-run "step 4" "Now we start the Xen SysDT demo" \
-$LOPPER_DIR/lopper.py --permissive -f inputs/dt/host-device-tree.dts system-device-tree-out.dts  -- \
+lopper --permissive -f inputs/dt/host-device-tree.dts system-device-tree-out.dts  -- \
       extract -t /axi/serial@ff010000 \
       -i zynqmp-firmware \
       -x pinctrl-0 -x pinctrl-names -x power-domains -x current-speed \
@@ -122,7 +125,7 @@ step-view "step 4b" "" \
 grep -A2 -B16 xen,passthrough system-device-tree-out.dts
 
 step-run "step 4c" "" \
-$LOPPER_DIR/lopper.py --permissive -f system-device-tree-out.dts system-device-tree-out-final.dts  -- \
+lopper --permissive -f system-device-tree-out.dts system-device-tree-out-final.dts  -- \
     extract -o extracted_tree.dts -p -t ethernet@ff0e0000 \
     -i zynqmp-firmware \
     -x 'interrupt-controller.*' -x power-domains -x current-speed -- \

@@ -1,4 +1,0 @@
-[submodule "demos/demo-lopper-cli/lopper"]
-	path = demos/demo-lopper-cli/lopper
-	url = https://github.com/devicetree-org/lopper.git
-	branch = systemdt-linaro-demo
