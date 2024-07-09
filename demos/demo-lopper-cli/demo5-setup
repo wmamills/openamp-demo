@@ -1,10 +1,13 @@
 #!/bin/bash
-# demo5-setup: run as part of contianer setup
+# demo5-setup: run as part of container setup
 
-sudo apt-get install -y git device-tree-compiler python3-yaml
-sudo pip3 install ruamel.yaml anytree
+sudo apt-get install -y git device-tree-compiler
+
 cd $(dirname $0)
+python3 -m venv .venv
+. ./.venv/bin/activate
+pip3 install ruamel.yaml==0.17.40 anytree pyyaml
 git clone https://github.com/devicetree-org/lopper.git -b systemdt-linaro-demo
 cd lopper
-sudo pip3 install .
+pip3 install .
 
