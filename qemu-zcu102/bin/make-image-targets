@@ -170,10 +170,10 @@ new-gpt-image() {
 part-type-dos() {
 	case $1 in
 	*.vfat)
-		TYPE="c"
+		echo "c"
 		;;
 	*.ext4)
-		TYPE="83"
+		echo "83"
 		;;
 	*)
 		error "partition $part is not a know format"
