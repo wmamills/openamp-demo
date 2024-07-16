@@ -1,14 +1,16 @@
 # Makefile for docker images
 
-.PHONY: all user-dev-marker qemu-zcu102-marker
+.PHONY: all check-dates split
 
 all: demo-lite/marker demo/marker
 
-demo/marker: demo-lite/marker demo/user-dev-extra.tar.gz demo/Dockerfile
+demo/marker: demo-lite/marker demo/user-dev-extra.tar.gz \
+	demo/Dockerfile demo/login_message demo/Makefile
 	cd demo; docker build -t openamp/demo .
 	touch $@
 
-demo-lite/marker: demo-lite/user-dev-base.tar.gz demo-lite/Dockerfile
+demo-lite/marker: demo-lite/user-dev-base.tar.gz \
+	demo-lite/Dockerfile demo-lite/login_message
 	cd demo-lite; docker build -t openamp/demo-lite .
 	touch $@
 
@@ -17,11 +19,15 @@ demo-lite/user-dev-base.tar.gz demo/user-dev-extra.tar.gz &: \
 	zephyr-sdk-0.15.1-installed.tar.gz demos-marker
 	./split-user-dev.sh
 
-user-dev-marker:
-	./find-latest-date user-dev $@
+split: demo-lite/user-dev-base.tar.gz
 
-demos-marker:
-	./find-latest-date ../demos $@
+user-dev-marker: check-dates
 
-qemu-zcu102-marker:
-	./find-latest-date ../qemu-zcu102 $@
+demos-marker: check-dates
+
+qemu-zcu102-marker: check-dates
+
+check-dates:
+	./find-latest-date user-dev        user-dev-marker
+	./find-latest-date ../demos        demos-marker
+	./find-latest-date ../qemu-zcu102  qemu-zcu102-marker
