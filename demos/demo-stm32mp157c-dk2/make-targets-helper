@@ -28,21 +28,23 @@ add_firmware() {
 
 do_sdcard() {
     do_vfat
+    SD=sdcard/${BOARD}-demo.img
 
     # get the template
-    any-cat ../test-sw/st-oss/boot-n-vfat.wic.xz >sdcard/demo.img
+    any-cat ../test-sw/st-oss/boot-n-vfat.wic.xz >$SD
 
     # make sure nothing has changed in the template or vfat
-    if ! sgdisk -p sdcard/demo.img | grep -Ee " +5 +10274 +262177 " >/dev/null; then
-        rm sdcard/demo.img
+    if ! sgdisk -p $SD | grep -Ee " +5 +10274 +262177 " >/dev/null; then
+        rm $SD
         error "boot-n-vfat template has changed"
     fi
     if [ $(stat --printf="%s" $D/boot.vfat) -ne 128974848 ]; then
-        rm sdcard/demo.img
+        rm $SD
         error "boot.vfat is not 123MB"
     fi
 
-    dd if=$D/boot.vfat of=sdcard/demo.img bs=512 seek=10274 conv=notrunc
+    dd if=$D/boot.vfat of=$SD bs=512 seek=10274 conv=notrunc
+    xz -v $SD
 }
 
 main() {
