@@ -9,9 +9,13 @@ demo/marker: demo-lite/marker demo/user-dev-extra.tar.gz \
 	cd demo; docker build -t openamp/demo .
 	touch $@
 
-demo-lite/marker: demo-lite/user-dev-base.tar.gz \
+demo-lite/marker: demo-base/marker demo-lite/user-dev-base.tar.gz \
 	demo-lite/Dockerfile demo-lite/login_message
 	cd demo-lite; docker build -t openamp/demo-lite .
+	touch $@
+
+demo-base/marker: demo-base/Dockerfile demo-base/login_message
+	cd demo-base; docker build -t openamp/demo-base .
 	touch $@
 
 demo-lite/user-dev-base.tar.gz demo/user-dev-extra.tar.gz &: \
