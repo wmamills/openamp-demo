@@ -5,6 +5,7 @@ user-dev/test-sw/openamp/hacked.cpio.gz
 user-dev/demo5-lopper-cli/lopper
 demo/marker
 demo-lite/marker
+demo-base/marker
 user-dev-marker
 demos-marker
 qemu-zcu102-marker
