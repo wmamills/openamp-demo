@@ -27,25 +27,34 @@ mkdir xxx-temp-extra
 rm -rf xxx-temp-trash || true
 mkdir xxx-temp-trash
 
-cd xxx-temp-base
-TOP=$PWD
+cd ..
+echo "make archive of user-dev template"
+(cd docker/user-dev; git archive -o $ORIG/user-dev.tar.gz HEAD -- .)
 
-echo "copy in the user-dev template"
-cp -a $ORIG/user-dev/* .
-cp -a $ORIG/user-dev/.[a-zA-Z]* .
+echo "make archive of qemu-zcu102"
+git archive -o $ORIG/qemu-zcu102.tar.gz HEAD -- qemu-zcu102
+
+echo "make archive of demos"
+(cd demos; git archive -o $ORIG/demos.tar.gz HEAD -- *)
+
+cd $ORIG/xxx-temp-base
+TOP=$PWD
+mkdir -p opt
+
+echo "copy user-dev template"
+tar xvf $ORIG/user-dev.tar.gz
 
 echo "copy in the demos directory"
-cp -a $ORIG/../demos/* .
-
-echo "copy in the pre-installed image of the zephyr-sdk"
-mkdir -p opt
-cd opt
-tar xvf $ORIG/zephyr-sdk-0.15.1-installed.tar.gz
+tar xvf $ORIG/demos.tar.gz
 
 echo "copy in the qemu-zcu102 files"
-cp -a $ORIG/../qemu-zcu102 .
+tar xvf $ORIG/qemu-zcu102.tar.gz -C opt
+
+echo "copy in the pre-installed image of the zephyr-sdk"
+tar xvf $ORIG/zephyr-sdk-0.15.1-installed.tar.gz -C opt
 
 echo "fixup the symlinks"
+cd $TOP/opt
 ln -sf ../../../../zephyr-sdk-0.15.1/sysroots/x86_64-pokysdk-linux/usr/xilinx/bin/qemu-system-aarch64 \
     ./qemu-zcu102/sysroot/usr/bin/qemu-system-aarch64
 ln -sf ../../../../zephyr-sdk-0.15.1/sysroots/x86_64-pokysdk-linux/usr/xilinx/bin/qemu-system-microblazeel \
