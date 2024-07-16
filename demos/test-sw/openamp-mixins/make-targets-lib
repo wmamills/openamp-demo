@@ -79,5 +79,7 @@ do_vfat() {
 
 do_sdcard() {
     do_vfat
-    new-mbr-image sdcard/demo.img 128M $D/boot.vfat
+    SD=sdcard/${BOARD}-demo.img
+    new-mbr-image $SD 128M $D/boot.vfat
+    xz -v $SD
 }
