@@ -1,4 +1,4 @@
-FROM openamp/demo-lite
+FROM openamp/demo-base
 
 ADD user-dev-base.tar.gz /home/dev
 
