@@ -8,7 +8,8 @@ RUN echo 'Etc/UTC' > /etc/timezone; ln -s /usr/share/zoneinfo/Etc/UTC /etc/local
 
 # Install prerequisites
 RUN apt-get --quiet=2 update && apt-get install --quiet=2 --assume-yes \
-    sudo nano wget python3 python3-pip openssh-client bash-completion \
+    sudo nano wget python3 python3-pip python3-venv \
+    openssh-client bash-completion \
     tmux socat cpio git
 
 # setup a no password required sudo group
