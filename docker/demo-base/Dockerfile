@@ -18,6 +18,7 @@ RUN apt-get --quiet=2 update && apt-get install --quiet=2 --assume-yes \
 RUN addgroup --system sudo_nopwd; echo "%sudo_nopwd ALL=(ALL:ALL) NOPASSWD:ALL" >/etc/sudoers.d/20-sudo_nopwd; chmod 600 /etc/sudoers.d/*
 
 # add the dev user
+RUN adduser --gecos "admin" --disabled-password admin; adduser admin sudo_nopwd
 RUN adduser --gecos "dev" --disabled-password dev; adduser dev sudo_nopwd
 
 COPY login_message /home/dev
