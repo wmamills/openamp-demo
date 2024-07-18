@@ -15,7 +15,7 @@ RUN apt-get install --quiet=2 --assume-yes \
     zstd libssl-dev lz4
 
 # install kas
-RUN pip3 install kas==3.1
+RUN pip3 install kas==4.4
 
 # install Zephyr requirements
 # again some of these should already be covered but be complete
@@ -25,8 +25,8 @@ RUN apt-get install --quiet=2 --assume-yes --no-install-recommends \
     python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file \
     make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
 
-# install west and Zephyr compatible cmake
-RUN pip3 install west==0.14.0 cmake==3.24.3
+# install west (cmake is in base now)
+RUN pip3 install west==1.2.0
 
 # add just the stuff we took out of the base
 ADD user-dev-extra.tar.gz /home/dev
