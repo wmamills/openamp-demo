@@ -94,16 +94,27 @@ do_install_zephyr_toolchains() {
     done
 }
 
+# tar archives of sub-dir w/o files considered ignored or untracked
+# I did try tar's --exclude-vcs-ignore but I could not make it work correctly
+tar_one() {
+    NAME=$1
+    TARGET=$2
+    (cd $TARGET; git clean -ndx |
+        sed -e "s:Would remove :$TARGET/:" |
+        sed -e "s:/$::" >$SOURCE/$NAME.exclude)
+    tar czf $SOURCE/$NAME.tar.gz --exclude-from=$SOURCE/$NAME.exclude $TARGET
+}
+
 do_git_archives() {
     cd $SOURCE/..
     echo "make archive of user-dev template"
-    (cd docker/user-dev; git archive -o $SOURCE/user-dev.tar.gz HEAD -- .)
+    (cd docker/user-dev; tar_one user-dev .)
 
     echo "make archive of qemu-zcu102"
-    git archive -o $SOURCE/qemu-zcu102.tar.gz HEAD -- qemu-zcu102
+    (tar_one qemu-zcu102 qemu-zcu102)
 
     echo "make archive of demos"
-    (cd demos; git archive -o $SOURCE/demos.tar.gz HEAD -- *)
+    (cd demos; tar_one demos .)
 }
 
 user_dev_inner() {

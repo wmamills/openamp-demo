@@ -3,4 +3,5 @@ user-dev/opt/*
 user-dev/test-sw/openamp/hacked.cpio.gz
 user-dev/demo5-lopper-cli/lopper
 *marker
+*.exclude
 xxx-temp-*/
