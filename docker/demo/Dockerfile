@@ -23,7 +23,13 @@ RUN apt-get install --quiet=2 --assume-yes --no-install-recommends \
     git ninja-build gperf \
     ccache dfu-util device-tree-compiler wget \
     python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file \
-    make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
+    make gcc libsdl2-dev libmagic1
+
+# These don't exist on aarch64
+RUN if [ $(uname -m)=="x86_64" ]; then \
+        apt-get install --quiet=2 --assume-yes --no-install-recommends \
+        gcc-multilib g++-multilib; \
+    fi
 
 # install west (cmake is in base now)
 RUN pip3 install west==1.2.0
