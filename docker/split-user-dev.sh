@@ -133,7 +133,7 @@ user_dev_inner() {
 
     cd $ORIG/xxx-temp-base
     TOP=$PWD
-    mkdir -p opt
+    mkdir -p opt/zephyr
 
     echo "copy user-dev template"
     tar xvf $SOURCE/user-dev.tar.gz
@@ -146,7 +146,7 @@ user_dev_inner() {
 
     echo "install zephyr minimal sdk"
     (do_install_zephyr_sdk)
-    cp -a $ZEPHYR_SDK_INSTALL_DIR/$ZEPHYR_SDK_SETUP_DIR opt
+    cp -a $ZEPHYR_SDK_INSTALL_DIR/$ZEPHYR_SDK_SETUP_DIR opt/zephyr
 
     echo "fixup the symlinks"
     cd opt
@@ -160,7 +160,7 @@ user_dev_inner() {
     # before trim 429 MB
     # after trim 228.1 MB
     echo "Trim the zephyr sdk"
-    cd $TOP/opt/zephyr-sdk-$ZEPHYR_SDK_VERSION
+    cd $TOP/opt/zephyr/zephyr-sdk-$ZEPHYR_SDK_VERSION
     move-to trash zephyr-sdk-*-hosttools-standalone-*.sh
     cd sysroots/$ARCH-pokysdk-linux
     move-to extra usr/bin/qemu-system-{xtensa,i386,mips,mipsel,sparc,nios2}
