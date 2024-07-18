@@ -22,7 +22,7 @@ demo-lite/user-dev-base.tar.gz demo/user-dev-extra.tar.gz &: \
 	user-dev-marker qemu-zcu102-marker demos-marker \
 	split-user-dev.sh
 	./split-user-dev.sh git_archives
-	docker run -it --rm -v${PWD}/..:/prj openamp/demo-base \
+	docker run --rm -v${PWD}/..:/prj openamp/demo-base \
 		/prj/docker/split-user-dev.sh inside_container
 
 split: demo-lite/user-dev-base.tar.gz
