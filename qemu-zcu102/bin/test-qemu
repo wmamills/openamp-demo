@@ -116,6 +116,7 @@ do_host() {
 	for run in $(seq 1 $RUNS); do
 		for k in ${KERNELS[@]}; do
 			tmux-panel-title "run=$run kernel=$k boot"
+			tmux select-pane -t $TMUX_PANE
 			tmux split-window -h "$ME subcmd qemu $k"
 			if wait_for_ssh 60; then 
 				status=true
@@ -140,8 +141,8 @@ do_host() {
 			echo "sleeping before next run"
 			sleep 10
 		done
-	done			
-	tmux kill-win	
+	done
+	tmux kill-win
 }
 
 do_qemu() {
