@@ -2,6 +2,19 @@
 
 set -e
 
+ZEPHYR_SDK_VERSION=0.16.8
+ZEPHYR_TOOLCHAINS_COMMON=" \
+    aarch64-zephyr-elf \
+    arm-zephyr-eabi \
+    microblazeel-zephyr-elf \
+    riscv64-zephyr-elf \
+    x86_64-zephyr-elf \
+"
+ZEPHYR_TOOLCHAINS_MIN=" \
+    aarch64-zephyr-elf \
+    arm-zephyr-eabi \
+"
+
 move-to() {
     WHERE=$ORIG/xxx-temp-$1
     DIR=${PWD#$TOP}
@@ -19,6 +32,68 @@ move-to() {
     done
 }
 
+set_zephyr_vars() {
+    ARCH=$(uname -m)
+    ZEPHYR_SDK_INSTALL_DIR=~/opt/zephyr
+    ZEPHYR_SDK_DOWNLOAD_FOLDER=https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v$ZEPHYR_SDK_VERSION
+    ZEPHYR_SDK_SETUP_DIR=zephyr-sdk-$ZEPHYR_SDK_VERSION
+    ZEPHYR_SDK_SETUP_TAR=${ZEPHYR_SDK_SETUP_DIR}_linux-${ARCH}_minimal.tar.xz
+    ZEPHYR_SDK_DOWNLOAD_URL=$ZEPHYR_SDK_DOWNLOAD_FOLDER/$ZEPHYR_SDK_SETUP_TAR
+}
+
+do_install_zephyr_sdk() {
+    set_zephyr_vars
+    mkdir -p ~/setup
+    mkdir -p ~/opt/zephyr
+    cd ~/setup
+
+    if false; then
+        python3 -m venv .venv
+        . .venv/bin/activate
+        pip3 install cmake==3.24.3
+        pip3 list
+        which cmake
+        read
+    fi
+
+    rm -rf $ZEPHYR_SDK_INSTALL_DIR/$ZEPHYR_SDK_SETUP_DIR
+    rm -f $ZEPHYR_SDK_SETUP_TAR
+    wget $ZEPHYR_SDK_DOWNLOAD_URL
+    tar xvf $ZEPHYR_SDK_SETUP_TAR -C $ZEPHYR_SDK_INSTALL_DIR
+    rm -rf ~/setup
+    cd $ZEPHYR_SDK_INSTALL_DIR/$ZEPHYR_SDK_SETUP_DIR
+    ./setup.sh -h
+}
+
+do_install_zephyr_toolchains() {
+    local TOOLCHAINS
+    set_zephyr_vars
+
+    # 0.16.8 stats
+    # 1.4 GB min    arm aarch64 only 
+    # 2.9 GB common arm aarch64 riscv64 microblazeel x86_64
+    # 7.6 GB all
+    case $1 in
+    min)
+        TOOLCHAINS="$ZEPHYR_TOOLCHAINS_MIN"
+        ;;
+    common|"")
+        TOOLCHAINS="$ZEPHYR_TOOLCHAINS_COMMON"
+        ;;
+    all)
+        TOOLCHAINS="all"
+        ;;
+    *)
+        TOOLCHAINS="$1"
+    esac
+
+    cd $ZEPHYR_SDK_INSTALL_DIR/$ZEPHYR_SDK_SETUP_DIR
+    ./setup.sh -c
+    for T in $TOOLCHAINS; do
+        ./setup.sh -t $T
+    done
+}
+
 do_git_archives() {
     cd $SOURCE/..
     echo "make archive of user-dev template"
@@ -32,6 +107,8 @@ do_git_archives() {
 }
 
 user_dev_inner() {
+    set_zephyr_vars
+
     cd $ORIG
     rm -rf xxx-temp-base|| true
     mkdir xxx-temp-base
@@ -56,32 +133,41 @@ user_dev_inner() {
     echo "copy in the qemu-zcu102 files"
     tar xvf $SOURCE/qemu-zcu102.tar.gz -C opt
 
-    echo "copy in the pre-installed image of the zephyr-sdk"
-    tar xvf $SOURCE/zephyr-sdk-0.15.1-installed.tar.gz -C opt
+    echo "install zephyr minimal sdk"
+    (do_install_zephyr_sdk)
+    cp -a $ZEPHYR_SDK_INSTALL_DIR/$ZEPHYR_SDK_SETUP_DIR opt
 
     echo "fixup the symlinks"
     cd opt
-    ln -sf ../../../../zephyr-sdk-0.15.1/sysroots/x86_64-pokysdk-linux/usr/xilinx/bin/qemu-system-aarch64 \
+    ln -sf ../../../../zephyr/zephyr-sdk-$ZEPHYR_SDK_VERSION/sysroots/${ARCH}-pokysdk-linux/usr/xilinx/bin/qemu-system-aarch64 \
         ./qemu-zcu102/sysroot/usr/bin/qemu-system-aarch64
-    ln -sf ../../../../zephyr-sdk-0.15.1/sysroots/x86_64-pokysdk-linux/usr/xilinx/bin/qemu-system-microblazeel \
+    ln -sf ../../../../zephyr/zephyr-sdk-$ZEPHYR_SDK_VERSION/sysroots/${ARCH}-pokysdk-linux/usr/xilinx/bin/qemu-system-microblazeel \
         ./qemu-zcu102/sysroot/usr/bin/qemu-system-microblazeel
 
-    echo "Start the splitting operation"
-    cd $TOP/opt/zephyr-sdk-0.15.1
-    move-to extra arm-zephyr-eabi
-    move-to extra aarch64-zephyr-elf
-    cd sysroots/x86_64-pokysdk-linux/usr
-    move-to extra bin/qemu-*
-    move-to extra bin/openocd
-    move-to extra synopsys
+    # trim zephyr sdk for our needs
+    # 0.16.8 stats
+    # before trim 429 MB
+    # after trim 228.1 MB
+    echo "Trim the zephyr sdk"
+    cd $TOP/opt/zephyr-sdk-$ZEPHYR_SDK_VERSION
+    move-to trash zephyr-sdk-*-hosttools-standalone-*.sh
+    cd sysroots/$ARCH-pokysdk-linux
+    move-to extra usr/bin/qemu-system-{xtensa,i386,mips,mipsel,sparc,nios2}
+    move-to extra usr/{bin,share}/openocd
+    move-to extra usr/synopsys
 
+    echo "Trim the demos"
     cd $TOP
-
     move-to extra test-sw/openamp-ci-*/modules-*.tgz
 
+    # tar up everything left
     tar czvf $OUT/user-dev-base.tar.gz .
+
+    # and the stuff saved for later
     cd $ORIG/xxx-temp-extra
     tar czvf $OUT/user-dev-extra.tar.gz .
+
+    # and the stuff we are getting rid of
     cd $ORIG/xxx-temp-trash
     tar czvf $OUT/user-dev-trash.tar.gz .
 
@@ -135,9 +221,13 @@ ORIG=$PWD
 SOURCE=$PWD
 CMD=$1
 case $CMD in
-"user_dev"|"git_archives"|"inside_container"|"sudo_user_dev")
+"user_dev"|"git_archives"|"inside_container"|"sudo_user_dev"|"install_zephyr_sdk")
     shift
-    do_$CMD
+    do_$CMD "$@"
+    ;;
+install_zephyr*)
+    shift
+    do_$CMD "$@"
     ;;
 *)
     echo "Unknown sub-command $1"

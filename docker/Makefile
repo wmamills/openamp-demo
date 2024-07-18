@@ -19,8 +19,8 @@ demo-base/marker: demo-base/Dockerfile demo-base/login_message
 	touch $@
 
 demo-lite/user-dev-base.tar.gz demo/user-dev-extra.tar.gz &: \
-	user-dev-marker qemu-zcu102-marker split-user-dev.sh \
-	zephyr-sdk-0.15.1-installed.tar.gz demos-marker
+	user-dev-marker qemu-zcu102-marker demos-marker \
+	split-user-dev.sh
 	./split-user-dev.sh git_archives
 	docker run -it --rm -v${PWD}/..:/prj openamp/demo-base \
 		/prj/docker/split-user-dev.sh inside_container

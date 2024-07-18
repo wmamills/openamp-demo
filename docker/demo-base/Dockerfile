@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
@@ -7,10 +7,12 @@ ENV LC_ALL C.UTF-8
 RUN echo 'Etc/UTC' > /etc/timezone; ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime
 
 # Install prerequisites
+# zephyr install script requires cmake and file
 RUN apt-get --quiet=2 update && apt-get install --quiet=2 --assume-yes \
     sudo nano wget python3 python3-pip python3-venv \
     openssh-client bash-completion \
-    tmux socat cpio git
+    tmux socat cpio git \
+    cmake file
 
 # setup a no password required sudo group
 RUN addgroup --system sudo_nopwd; echo "%sudo_nopwd ALL=(ALL:ALL) NOPASSWD:ALL" >/etc/sudoers.d/20-sudo_nopwd; chmod 600 /etc/sudoers.d/*

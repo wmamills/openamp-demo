@@ -15,7 +15,7 @@ RUN apt-get install --quiet=2 --assume-yes \
     zstd libssl-dev lz4
 
 # install kas
-RUN pip3 install kas==3.1
+RUN pip3 install kas==4.4
 
 # install Zephyr requirements
 # again some of these should already be covered but be complete
