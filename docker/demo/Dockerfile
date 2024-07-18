@@ -26,7 +26,7 @@ RUN apt-get install --quiet=2 --assume-yes --no-install-recommends \
     make gcc libsdl2-dev libmagic1
 
 # These don't exist on aarch64
-RUN if [ $(uname -m)=="x86_64" ]; then \
+RUN if [ $(uname -m) = "x86_64" ]; then \
         apt-get install --quiet=2 --assume-yes --no-install-recommends \
         gcc-multilib g++-multilib; \
     fi
