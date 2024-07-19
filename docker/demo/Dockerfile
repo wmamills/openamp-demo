@@ -34,6 +34,11 @@ RUN if [ $(uname -m) = "x86_64" ]; then \
 # install west (cmake is in base now)
 RUN pip3 install west==1.2.0
 
+# add zephyr toolchains
+COPY split-user-dev.sh /home/dev
+RUN su dev /home/dev/split-user-dev.sh install_zephyr_toolchains common
+RUN rm /home/dev/split-user-dev.sh
+
 # add just the stuff we took out of the base
 ADD user-dev-extra.tar.gz /home/dev
 
