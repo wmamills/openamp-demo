@@ -6,7 +6,9 @@ all: demo-lite/marker demo/marker
 
 demo/marker: demo-lite/marker demo/user-dev-extra.tar.gz \
 	demo/Dockerfile demo/login_message demo/Makefile
+	cp split-user-dev.sh demo
 	cd demo; docker build -t openamp/demo .
+	rm demo/split-user-dev.sh
 	touch $@
 
 demo-lite/marker: demo-base/marker demo-lite/user-dev-base.tar.gz \
