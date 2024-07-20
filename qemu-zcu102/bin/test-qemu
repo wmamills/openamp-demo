@@ -112,13 +112,15 @@ do_host() {
 	sleep 2
 
 	#for i in $(seq 1 100); do echo "fake FAIL #$i" >>$LOG; done
+	set -xe
+	exec > >(tee host-log-$NOW.txt) 2>&1
 
 	for run in $(seq 1 $RUNS); do
 		for k in ${KERNELS[@]}; do
 			tmux-panel-title "run=$run kernel=$k boot"
 			tmux select-pane -t $TMUX_PANE
-			tmux split-window -h "$ME subcmd qemu $k"
-			if wait_for_ssh 60; then 
+			tmux split-window -h "$ME subcmd qemu $run $k"
+			if wait_for_ssh; then
 				status=true
 				for test in $(seq 1 $TESTS); do
 					tmux-panel-title "run=$run kernel=$k test=$test"
@@ -146,8 +148,11 @@ do_host() {
 }
 
 do_qemu() {
+	RUN=$1; shift
+	exec > >(tee qemu-log-$NOW-run-$RUN.txt) 2>&1
 	tmux-panel-title "qemu $@"
-	QEMU_TMUX=no qemu-zcu102 $1
+	echo "RUN=$RUN"
+	QEMU_TMUX=no qemu-zcu102 "$@"
 }
 
 main() {
