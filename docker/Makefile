@@ -6,16 +6,16 @@ all: demo-lite/marker demo/marker
 
 demo/marker: demo-lite/marker demo/user-dev-extra.tar.gz \
 	demo/Dockerfile demo/login_message demo/Makefile
-	cp split-user-dev.sh demo
+	cp install-helper.sh demo
 	cd demo; docker build -t openamp/demo .
-	rm demo/split-user-dev.sh
+	rm demo/install-helper.sh
 	touch $@
 
 demo-lite/marker: demo-base/marker demo-lite/user-dev-base.tar.gz \
 	demo-lite/Dockerfile demo-lite/login_message
-	cp split-user-dev.sh demo-lite
+	cp install-helper.sh demo-lite
 	cd demo-lite; docker build -t openamp/demo-lite .
-	rm demo-lite/split-user-dev.sh
+	rm demo-lite/install-helper.sh
 	touch $@
 
 demo-base/marker: demo-base/Dockerfile demo-base/login_message
@@ -24,10 +24,10 @@ demo-base/marker: demo-base/Dockerfile demo-base/login_message
 
 demo-lite/user-dev-base.tar.gz demo/user-dev-extra.tar.gz &: \
 	user-dev-marker qemu-zcu102-marker demos-marker \
-	split-user-dev.sh
-	./split-user-dev.sh git_archives
+	install-helper.sh
+	./install-helper.sh git_archives
 	docker run --rm -v${PWD}/..:/prj openamp/demo-base \
-		/prj/docker/split-user-dev.sh inside_container
+		/prj/docker/install-helper.sh inside_container
 
 split: demo-lite/user-dev-base.tar.gz
 
