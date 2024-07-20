@@ -1,0 +1,685 @@
+]2;qemu demo1-2-3\RUN=1
+ sourcing /home/bill/w/proj/openamp/openamp-demo/demos/demo-r5-combo/make-targets-helper
+new-cpio generated/hacked.cpio.gz ../test-sw/openamp-ci-arm64/openamp-initramfs-minimal-genericarm64.cpio.gz cb:hack-base cb:trim-modules cb:my-tty
+Extracting ../test-sw/openamp-ci-arm64/openamp-initramfs-minimal-genericarm64.cpio.gz
+166975 blocks
+Calling hack-base
+Hacking
+Calling trim-modules
+Trim modules
+Calling my-tty
+Re-archiving to generated/hacked.cpio.gz
+146577 blocks
+new-cpio generated/default-firmware.cpio.gz generated/default-firmware
+Extracting generated/default-firmware
+Re-archiving to generated/default-firmware.cpio.gz
+4607 blocks
+new-cpio generated/my-extra-stuff.cpio.gz my-extra-stuff
+Extracting my-extra-stuff
+Re-archiving to generated/my-extra-stuff.cpio.gz
+16 blocks
+Starting qemu ...
+PMU Firmware 2022.1	Sep 15 2022   16:46:36
+PMU_ROM Version: xpbr-v8.1.0-0
+NOTICE:  BL31: v2.6(release):xlnx_rebase_v2.6_2022.1_update3
+NOTICE:  BL31: Built : 03:46:40, Mar 24 2022
+
+
+U-Boot 2022.01 (Aug 24 2022 - 11:07:30 +0000)
+
+CPU:   ZynqMP
+Silicon: v3
+Model: ZynqMP ZCU102 Rev1.0
+Board: Xilinx ZynqMP
+DRAM:  4 GiB
+PMUFW:	v1.1
+EL Level:	EL2
+Chip ID:	unknown
+NAND:  0 MiB
+MMC:   mmc@ff170000: 0
+Loading Environment from FAT... *** Error - No Valid Environment Area found
+*** Warning - bad env area, using default environment
+
+In:    serial
+Out:   serial
+Err:   serial
+Bootmode: SD_MODE1
+Reset reason:	
+Net:   
+ZYNQ GEM: ff0e0000, mdio bus ff0e0000, phyaddr 12, interface rgmii-id
+zynq_gem ethernet@ff0e0000: Failed to read eth PHY id, err: -2
+
+Warning: ethernet@ff0e0000 (eth0) using random MAC address - a2:39:ab:cd:a6:41
+eth0: ethernet@ff0e0000
+scanning bus for devices...
+SATA link 0 timeout.
+SATA link 1 timeout.
+AHCI 0001.0000 32 slots 2 ports 1.5 Gbps 0x3 impl SATA mode
+flags: 64bit ncq only 
+Hit any key to stop autoboot:  2  1  0 
+switch to partitions #0, OK
+mmc0 is current device
+Scanning mmc 0:1...
+Found U-Boot script /boot.scr
+2568 bytes read in 27 ms (92.8 KiB/s)
+## Executing script at 20000000
+Boot file specified by DHCP or defaults
+BOOTP broadcast 1
+DHCP client bound to address 10.0.2.15 (2 ms)
+ipaddr   = 10.0.2.15
+serverip = 10.0.2.2
+bootfile = zcu102/uEnv.txt
+PARSE zcu102/uEnv.txt
+prefix=zcu102/
+filename=uEnv.txt
+ext=.txt
+Using ethernet@ff0e0000 device
+TFTP from server 10.0.2.2; our IP address is 10.0.2.15
+Filename 'zcu102/uEnv.txt'.
+Load address: 0x200000
+Loading: *#
+	 1.4 MiB/s
+done
+Bytes transferred = 1454 (5ae hex)
+Importing environment from zcu102/uEnv.txt...
+Running uenvcmd ...
+[?25l[2J[1;1H[1;1H[2K[2;1H  *** U-Boot Boot Menu ***[0K[3;1H[2K[9;1H[2K[10;1H  Press UP/DOWN to move, ENTER to select, ESC/CTRL+C to quit[0K[11;1H[2K[4;1H     [7mR5 lockstep w/ Zephyr[0m[5;1H     R5 split mode[6;1H     R5 lockstep bare-metal demos[7;1H     U-Boot console[9;1H  Hit any key to stop autoboot:  5  4  3  2  1  0 [9;1H[2K[?25h[2J[1;1HUsing ethernet@ff0e0000 device
+TFTP from server 10.0.2.2; our IP address is 10.0.2.15
+Filename 'zcu102/openamp/Image'.
+Load address: 0x200000
+Loading: *#################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 ###
+	 66.9 MiB/s
+done
+Bytes transferred = 41804288 (27de200 hex)
+Using ethernet@ff0e0000 device
+TFTP from server 10.0.2.2; our IP address is 10.0.2.15
+Filename 'zcu102/dtb/zcu102-openamp-lockstep.dtb'.
+Load address: 0x100000
+Loading: *####
+done
+Bytes transferred = 47503 (b98f hex)
+Using ethernet@ff0e0000 device
+TFTP from server 10.0.2.2; our IP address is 10.0.2.15
+Filename 'zcu102/initrd.cpio.gz'.
+Load address: 0x4000000
+Loading: *#################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 #################################################################
+	 ###############################################
+	 67.3 MiB/s
+done
+Bytes transferred = 22008607 (14fd31f hex)
+## Flattened Device Tree blob at 00100000
+   Booting using the fdt blob at 0x100000
+   Loading Ramdisk to 7a6fb000, end 7bbf831f ... OK
+   Loading Device Tree to 000000007a6ec000, end 000000007a6fa98e ... OK
+
+Starting kernel ...
+
+[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd034]
+[    0.000000] Linux version 6.6.33-yocto-standard-openamp-g8b5f1aa34881 (oe-user@oe-host) (aarch64-poky-linux-gcc (GCC) 13.2.0, GNU ld (GNU Binutils) 2.42.0.20240216) #1 SMP PREEMPT Wed Oct 25 17:51:56 UTC 2023
+[    0.000000] KASLR disabled due to lack of seed
+[    0.000000] Machine model: ZynqMP ZCU102 Rev1.0
+[    0.000000] efi: UEFI not found.
+[    0.000000] OF: reserved mem: 0x000000003ed00000..0x000000003ed3ffff (256 KiB) nomap non-reusable memory@3ed00000
+[    0.000000] OF: reserved mem: 0x000000003ed40000..0x000000003ed43fff (16 KiB) nomap non-reusable vdev0vring0@3ed40000
+[    0.000000] OF: reserved mem: 0x000000003ed44000..0x000000003ed47fff (16 KiB) nomap non-reusable vdev0vring1@3ed44000
+[    0.000000] Reserved memory: created DMA memory pool at 0x000000003ed48000, size 1 MiB
+[    0.000000] OF: reserved mem: initialized node vdev0buffer@3ed48000, compatible id shared-dma-pool
+[    0.000000] OF: reserved mem: 0x000000003ed48000..0x000000003ee47fff (1024 KiB) nomap non-reusable vdev0buffer@3ed48000
+[    0.000000] OF: reserved mem: 0x000000003ef00000..0x000000003ef3ffff (256 KiB) nomap non-reusable memory@3ef00000
+[    0.000000] OF: reserved mem: 0x000000003ef40000..0x000000003ef43fff (16 KiB) nomap non-reusable vdev0vring0@3ef40000
+[    0.000000] OF: reserved mem: 0x000000003ef44000..0x000000003ef47fff (16 KiB) nomap non-reusable vdev0vring1@3ef44000
+[    0.000000] Reserved memory: created DMA memory pool at 0x000000003ef48000, size 1 MiB
+[    0.000000] OF: reserved mem: initialized node vdev0buffer@3ef48000, compatible id shared-dma-pool
+[    0.000000] OF: reserved mem: 0x000000003ef48000..0x000000003f047fff (1024 KiB) nomap non-reusable vdev0buffer@3ef48000
+[    0.000000] earlycon: cdns0 at MMIO 0x00000000ff000000 (options '115200n8')
+[    0.000000] printk: bootconsole [cdns0] enabled
+[    0.000000] NUMA: No NUMA configuration found
+[    0.000000] NUMA: Faking a node at [mem 0x0000000000000000-0x000000087fffffff]
+[    0.000000] NUMA: NODE_DATA [mem 0x87f7be9c0-0x87f7c0fff]
+[    0.000000] Zone ranges:
+[    0.000000]   DMA      [mem 0x0000000000000000-0x00000000ffffffff]
+[    0.000000]   DMA32    empty
+[    0.000000]   Normal   [mem 0x0000000100000000-0x000000087fffffff]
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000000000000-0x000000003ecfffff]
+[    0.000000]   node   0: [mem 0x000000003ed00000-0x000000003ee47fff]
+[    0.000000]   node   0: [mem 0x000000003ee48000-0x000000003eefffff]
+[    0.000000]   node   0: [mem 0x000000003ef00000-0x000000003f047fff]
+[    0.000000]   node   0: [mem 0x000000003f048000-0x000000007fffffff]
+[    0.000000]   node   0: [mem 0x0000000800000000-0x000000087fffffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000000000000-0x000000087fffffff]
+[    0.000000] cma: Reserved 32 MiB at 0x000000007e000000 on node -1
+[    0.000000] psci: probing for conduit method from DT.
+[    0.000000] psci: PSCIv1.1 detected in firmware.
+[    0.000000] psci: Using standard PSCI v0.2 function IDs
+[    0.000000] psci: MIGRATE_INFO_TYPE not supported.
+[    0.000000] psci: SMC Calling Convention v1.2
+[    0.000000] percpu: Embedded 22 pages/cpu s50792 r8192 d31128 u90112
+[    0.000000] pcpu-alloc: s50792 r8192 d31128 u90112 alloc=22*4096
+[    0.000000] pcpu-alloc: [0] 0 [0] 1 [0] 2 [0] 3 
+[    0.000000] Detected VIPT I-cache on CPU0
+[    0.000000] CPU features: detected: ARM erratum 843419
+[    0.000000] CPU features: detected: ARM erratum 845719
+[    0.000000] alternatives: applying boot alternatives
+[    0.000000] Kernel command line: earlycon clk_ignore_unused root=/dev/mmcblk0p2 ro rootwait earlyprintk debug uio_pdrv_genirq.of_id=generic-uio
+[    0.000000] Unknown kernel command line parameters "earlyprintk", will be passed to user space.
+[    0.000000] Dentry cache hash table entries: 524288 (order: 10, 4194304 bytes, linear)
+[    0.000000] Inode-cache hash table entries: 262144 (order: 9, 2097152 bytes, linear)
+[    0.000000] Fallback order for Node 0: 0 
+[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 1032192
+[    0.000000] Policy zone: Normal
+[    0.000000] mem auto-init: stack:all(zero), heap alloc:off, heap free:off
+[    0.000000] software IO TLB: area num 4.
+[    0.000000] software IO TLB: mapped [mem 0x00000000766ec000-0x000000007a6ec000] (64MB)
+[    0.000000] Memory: 3949092K/4194304K available (16640K kernel code, 4280K rwdata, 10572K rodata, 9152K init, 605K bss, 212444K reserved, 32768K cma-reserved)
+[    0.000000] SLUB: HWalign=32, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+[    0.000000] rcu: Preemptible hierarchical RCU implementation.
+[    0.000000] rcu: 	RCU event tracing is enabled.
+[    0.000000] rcu: 	RCU restricting CPUs from NR_CPUS=256 to nr_cpu_ids=4.
+[    0.000000] 	Trampoline variant of Tasks RCU enabled.
+[    0.000000] 	Tracing variant of Tasks RCU enabled.
+[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+[    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+[    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+[    0.000000] GIC: Adjusting CPU interface base to 0x00000000f902f000
+[    0.000000] Root IRQ handler: gic_handle_irq
+[    0.000000] GIC: Using split EOI/Deactivate mode
+[    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+[    0.000000] arch_timer: cp15 timer(s) running at 65.00MHz (phys).
+[    0.000000] clocksource: arch_sys_counter: mask: 0x1ffffffffffffff max_cycles: 0xefdb196da, max_idle_ns: 440795204367 ns
+[    0.000075] sched_clock: 57 bits at 65MHz, resolution 15ns, wraps every 2199023255550ns
+[    0.013106] Console: colour dummy device 80x25
+[    0.013650] printk: console [tty0] enabled
+[    0.014227] printk: bootconsole [cdns0] disabled
+[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd034]
+[    0.000000] Linux version 6.6.33-yocto-standard-openamp-g8b5f1aa34881 (oe-user@oe-host) (aarch64-poky-linux-gcc (GCC) 13.2.0, GNU ld (GNU Binutils) 2.42.0.20240216) #1 SMP PREEMPT Wed Oct 25 17:51:56 UTC 2023
+[    0.000000] KASLR disabled due to lack of seed
+[    0.000000] Machine model: ZynqMP ZCU102 Rev1.0
+[    0.000000] efi: UEFI not found.
+[    0.000000] OF: reserved mem: 0x000000003ed00000..0x000000003ed3ffff (256 KiB) nomap non-reusable memory@3ed00000
+[    0.000000] OF: reserved mem: 0x000000003ed40000..0x000000003ed43fff (16 KiB) nomap non-reusable vdev0vring0@3ed40000
+[    0.000000] OF: reserved mem: 0x000000003ed44000..0x000000003ed47fff (16 KiB) nomap non-reusable vdev0vring1@3ed44000
+[    0.000000] Reserved memory: created DMA memory pool at 0x000000003ed48000, size 1 MiB
+[    0.000000] OF: reserved mem: initialized node vdev0buffer@3ed48000, compatible id shared-dma-pool
+[    0.000000] OF: reserved mem: 0x000000003ed48000..0x000000003ee47fff (1024 KiB) nomap non-reusable vdev0buffer@3ed48000
+[    0.000000] OF: reserved mem: 0x000000003ef00000..0x000000003ef3ffff (256 KiB) nomap non-reusable memory@3ef00000
+[    0.000000] OF: reserved mem: 0x000000003ef40000..0x000000003ef43fff (16 KiB) nomap non-reusable vdev0vring0@3ef40000
+[    0.000000] OF: reserved mem: 0x000000003ef44000..0x000000003ef47fff (16 KiB) nomap non-reusable vdev0vring1@3ef44000
+[    0.000000] Reserved memory: created DMA memory pool at 0x000000003ef48000, size 1 MiB
+[    0.000000] OF: reserved mem: initialized node vdev0buffer@3ef48000, compatible id shared-dma-pool
+[    0.000000] OF: reserved mem: 0x000000003ef48000..0x000000003f047fff (1024 KiB) nomap non-reusable vdev0buffer@3ef48000
+[    0.000000] earlycon: cdns0 at MMIO 0x00000000ff000000 (options '115200n8')
+[    0.000000] printk: bootconsole [cdns0] enabled
+[    0.000000] NUMA: No NUMA configuration found
+[    0.000000] NUMA: Faking a node at [mem 0x0000000000000000-0x000000087fffffff]
+[    0.000000] NUMA: NODE_DATA [mem 0x87f7be9c0-0x87f7c0fff]
+[    0.000000] Zone ranges:
+[    0.000000]   DMA      [mem 0x0000000000000000-0x00000000ffffffff]
+[    0.000000]   DMA32    empty
+[    0.000000]   Normal   [mem 0x0000000100000000-0x000000087fffffff]
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000000000000-0x000000003ecfffff]
+[    0.000000]   node   0: [mem 0x000000003ed00000-0x000000003ee47fff]
+[    0.000000]   node   0: [mem 0x000000003ee48000-0x000000003eefffff]
+[    0.000000]   node   0: [mem 0x000000003ef00000-0x000000003f047fff]
+[    0.000000]   node   0: [mem 0x000000003f048000-0x000000007fffffff]
+[    0.000000]   node   0: [mem 0x0000000800000000-0x000000087fffffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000000000000-0x000000087fffffff]
+[    0.000000] cma: Reserved 32 MiB at 0x000000007e000000 on node -1
+[    0.000000] psci: probing for conduit method from DT.
+[    0.000000] psci: PSCIv1.1 detected in firmware.
+[    0.000000] psci: Using standard PSCI v0.2 function IDs
+[    0.000000] psci: MIGRATE_INFO_TYPE not supported.
+[    0.000000] psci: SMC Calling Convention v1.2
+[    0.000000] percpu: Embedded 22 pages/cpu s50792 r8192 d31128 u90112
+[    0.000000] pcpu-alloc: s50792 r8192 d31128 u90112 alloc=22*4096
+[    0.000000] pcpu-alloc: [0] 0 [0] 1 [0] 2 [0] 3 
+[    0.000000] Detected VIPT I-cache on CPU0
+[    0.000000] CPU features: detected: ARM erratum 843419
+[    0.000000] CPU features: detected: ARM erratum 845719
+[    0.000000] alternatives: applying boot alternatives
+[    0.000000] Kernel command line: earlycon clk_ignore_unused root=/dev/mmcblk0p2 ro rootwait earlyprintk debug uio_pdrv_genirq.of_id=generic-uio
+[    0.000000] Unknown kernel command line parameters "earlyprintk", will be passed to user space.
+[    0.000000] Dentry cache hash table entries: 524288 (order: 10, 4194304 bytes, linear)
+[    0.000000] Inode-cache hash table entries: 262144 (order: 9, 2097152 bytes, linear)
+[    0.000000] Fallback order for Node 0: 0 
+[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 1032192
+[    0.000000] Policy zone: Normal
+[    0.000000] mem auto-init: stack:all(zero), heap alloc:off, heap free:off
+[    0.000000] software IO TLB: area num 4.
+[    0.000000] software IO TLB: mapped [mem 0x00000000766ec000-0x000000007a6ec000] (64MB)
+[    0.000000] Memory: 3949092K/4194304K available (16640K kernel code, 4280K rwdata, 10572K rodata, 9152K init, 605K bss, 212444K reserved, 32768K cma-reserved)
+[    0.000000] SLUB: HWalign=32, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+[    0.000000] rcu: Preemptible hierarchical RCU implementation.
+[    0.000000] rcu: 	RCU event tracing is enabled.
+[    0.000000] rcu: 	RCU restricting CPUs from NR_CPUS=256 to nr_cpu_ids=4.
+[    0.000000] 	Trampoline variant of Tasks RCU enabled.
+[    0.000000] 	Tracing variant of Tasks RCU enabled.
+[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+[    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+[    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+[    0.000000] GIC: Adjusting CPU interface base to 0x00000000f902f000
+[    0.000000] Root IRQ handler: gic_handle_irq
+[    0.000000] GIC: Using split EOI/Deactivate mode
+[    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+[    0.000000] arch_timer: cp15 timer(s) running at 65.00MHz (phys).
+[    0.000000] clocksource: arch_sys_counter: mask: 0x1ffffffffffffff max_cycles: 0xefdb196da, max_idle_ns: 440795204367 ns
+[    0.000075] sched_clock: 57 bits at 65MHz, resolution 15ns, wraps every 2199023255550ns
+[    0.013106] Console: colour dummy device 80x25
+[    0.013650] printk: console [tty0] enabled
+[    0.014227] printk: bootconsole [cdns0] disabled
+[    0.017953] Calibrating delay loop (skipped), value calculated using timer frequency.. 130.00 BogoMIPS (lpj=260000)
+[    0.018165] pid_max: default: 32768 minimum: 301
+[    0.019804] LSM: initializing lsm=capability,integrity
+[    0.023191] Mount-cache hash table entries: 8192 (order: 4, 65536 bytes, linear)
+[    0.023326] Mountpoint-cache hash table entries: 8192 (order: 4, 65536 bytes, linear)
+[    0.068392] RCU Tasks: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1.
+[    0.069401] RCU Tasks Trace: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1.
+[    0.071242] rcu: Hierarchical SRCU implementation.
+[    0.071308] rcu: 	Max phase no-delay instances is 1000.
+[    0.081314] EFI services will not be available.
+[    0.083005] smp: Bringing up secondary CPUs ...
+[    0.090489] Detected VIPT I-cache on CPU1
+[    0.091598] CPU1: Booted secondary processor 0x0000000001 [0x410fd034]
+[    0.098560] Detected VIPT I-cache on CPU2
+[    0.098985] CPU2: Booted secondary processor 0x0000000002 [0x410fd034]
+[    0.102311] Detected VIPT I-cache on CPU3
+[    0.102869] CPU3: Booted secondary processor 0x0000000003 [0x410fd034]
+[    0.103563] smp: Brought up 1 node, 4 CPUs
+[    0.103742] SMP: Total of 4 processors activated.
+[    0.103935] CPU features: detected: 32-bit EL0 Support
+[    0.103977] CPU features: detected: 32-bit EL1 Support
+[    0.104056] CPU features: detected: CRC32 instructions
+[    0.106138] CPU: All CPU(s) started at EL2
+[    0.106459] alternatives: applying system-wide alternatives
+[    0.133421] devtmpfs: initialized
+[    0.166364] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
+[    0.166573] futex hash table entries: 1024 (order: 4, 65536 bytes, linear)
+[    0.171355] pinctrl core: initialized pinctrl subsystem
+[    0.181387] DMI not present or invalid.
+[    0.192727] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+[    0.204539] DMA: preallocated 512 KiB GFP_KERNEL pool for atomic allocations
+[    0.205456] DMA: preallocated 512 KiB GFP_KERNEL|GFP_DMA pool for atomic allocations
+[    0.206220] DMA: preallocated 512 KiB GFP_KERNEL|GFP_DMA32 pool for atomic allocations
+[    0.206554] audit: initializing netlink subsys (disabled)
+[    0.209515] audit: type=2000 audit(0.192:1): state=initialized audit_enabled=0 res=1
+[    0.215674] thermal_sys: Registered thermal governor 'step_wise'
+[    0.215715] thermal_sys: Registered thermal governor 'power_allocator'
+[    0.216291] cpuidle: using governor menu
+[    0.217623] hw-breakpoint: found 6 breakpoint and 4 watchpoint registers.
+[    0.218774] ASID allocator initialised with 65536 entries
+[    0.228307] Serial: AMBA PL011 UART driver
+[    0.288207] Modules: 22400 pages in range for non-PLT usage
+[    0.288251] Modules: 513920 pages in range for PLT usage
+[    0.293305] HugeTLB: registered 1.00 GiB page size, pre-allocated 0 pages
+[    0.293376] HugeTLB: 0 KiB vmemmap can be freed for a 1.00 GiB page
+[    0.293427] HugeTLB: registered 32.0 MiB page size, pre-allocated 0 pages
+[    0.293453] HugeTLB: 0 KiB vmemmap can be freed for a 32.0 MiB page
+[    0.293480] HugeTLB: registered 2.00 MiB page size, pre-allocated 0 pages
+[    0.293503] HugeTLB: 0 KiB vmemmap can be freed for a 2.00 MiB page
+[    0.293531] HugeTLB: registered 64.0 KiB page size, pre-allocated 0 pages
+[    0.293554] HugeTLB: 0 KiB vmemmap can be freed for a 64.0 KiB page
+[    0.304640] ACPI: Interpreter disabled.
+[    0.313295] iommu: Default domain type: Translated
+[    0.313358] iommu: DMA domain TLB invalidation policy: strict mode
+[    0.314866] SCSI subsystem initialized
+[    0.315980] libata version 3.00 loaded.
+[    0.318056] usbcore: registered new interface driver usbfs
+[    0.318385] usbcore: registered new interface driver hub
+[    0.318554] usbcore: registered new device driver usb
+[    0.321051] pps_core: LinuxPPS API ver. 1 registered
+[    0.321092] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+[    0.321386] PTP clock support registered
+[    0.321977] EDAC MC: Ver: 3.0.0
+[    0.324614] scmi_core: SCMI protocol bus registered
+[    0.327279] zynqmp-ipi-mbox mailbox@ff990080: Registered ZynqMP IPI mbox with TX/RX channels.
+[    0.327693] zynqmp-ipi-mbox mailbox@ff990040: Registered ZynqMP IPI mbox with TX/RX channels.
+[    0.327989] zynqmp-ipi-mbox mailbox@ff9905c0: Registered ZynqMP IPI mbox with TX/RX channels.
+[    0.332243] FPGA manager framework
+[    0.333173] Advanced Linux Sound Architecture Driver Initialized.
+[    0.350211] vgaarb: loaded
+[    0.352237] clocksource: Switched to clocksource arch_sys_counter
+[    0.353807] VFS: Disk quotas dquot_6.6.0
+[    0.354114] VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+[    0.356885] pnp: PnP ACPI: disabled
+[    0.385755] NET: Registered PF_INET protocol family
+[    0.387846] IP idents hash table entries: 65536 (order: 7, 524288 bytes, linear)
+[    0.395572] tcp_listen_portaddr_hash hash table entries: 2048 (order: 3, 32768 bytes, linear)
+[    0.395716] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+[    0.395810] TCP established hash table entries: 32768 (order: 6, 262144 bytes, linear)
+[    0.396519] TCP bind hash table entries: 32768 (order: 8, 1048576 bytes, linear)
+[    0.398826] TCP: Hash tables configured (established 32768 bind 32768)
+[    0.400326] UDP hash table entries: 2048 (order: 4, 65536 bytes, linear)
+[    0.400689] UDP-Lite hash table entries: 2048 (order: 4, 65536 bytes, linear)
+[    0.403362] NET: Registered PF_UNIX/PF_LOCAL protocol family
+[    0.407653] RPC: Registered named UNIX socket transport module.
+[    0.407722] RPC: Registered udp transport module.
+[    0.407750] RPC: Registered tcp transport module.
+[    0.407778] RPC: Registered tcp-with-tls transport module.
+[    0.407805] RPC: Registered tcp NFSv4.1 backchannel transport module.
+[    0.407926] PCI: CLS 0 bytes, default 64
+[    0.413004] Unpacking initramfs...
+[    0.413467] kvm [1]: IPA Size Limit: 40 bits
+[    0.421949] kvm [1]: vgic interrupt IRQ9
+[    0.422955] kvm [1]: Hyp mode initialized successfully
+[    0.429035] Initialise system trusted keyrings
+[    0.431196] workingset: timestamp_bits=42 max_order=20 bucket_order=0
+[    0.433379] squashfs: version 4.0 (2009/01/31) Phillip Lougher
+[    0.435465] NFS: Registering the id_resolver key type
+[    0.435887] Key type id_resolver registered
+[    0.435939] Key type id_legacy registered
+[    0.436519] nfs4filelayout_init: NFSv4 File Layout Driver Registering...
+[    0.436622] nfs4flexfilelayout_init: NFSv4 Flexfile Layout Driver Registering...
+[    0.437472] 9p: Installing v9fs 9p2000 file system support
+[    0.478814] Key type asymmetric registered
+[    0.478982] Asymmetric key parser 'x509' registered
+[    0.479316] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 244)
+[    0.479562] io scheduler mq-deadline registered
+[    0.479636] io scheduler kyber registered
+[    0.480153] io scheduler bfq registered
+[    0.525945] EINJ: ACPI disabled.
+[    0.605587] Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+[    0.618198] SuperH (H)SCI(F) driver initialized
+[    0.619643] msm_serial: driver initialized
+[    0.621930] STM32 USART driver initialized
+[    0.650877] loop: module loaded
+[    0.654562] megasas: 07.725.01.00-rc1
+[    0.676353] tun: Universal TUN/TAP device driver, 1.6
+[    0.679831] thunder_xcv, ver 1.0
+[    0.680004] thunder_bgx, ver 1.0
+[    0.680457] nicpf, ver 1.0
+[    0.684341] hns3: Hisilicon Ethernet Network Driver for Hip08 Family - version
+[    0.684393] hns3: Copyright (c) 2017 Huawei Corporation.
+[    0.684751] hclge is initializing
+[    0.684974] e1000: Intel(R) PRO/1000 Network Driver
+[    0.685010] e1000: Copyright (c) 1999-2006 Intel Corporation.
+[    0.685132] e1000e: Intel(R) PRO/1000 Network Driver
+[    0.685164] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
+[    0.685291] igb: Intel(R) Gigabit Ethernet Network Driver
+[    0.685326] igb: Copyright (c) 2007-2014 Intel Corporation.
+[    0.685431] igbvf: Intel(R) Gigabit Virtual Function Network Driver
+[    0.685465] igbvf: Copyright (c) 2009 - 2012 Intel Corporation.
+[    0.686405] sky2: driver version 1.30
+[    0.690956] VFIO - User Level meta-driver version: 0.3
+[    0.701006] usbcore: registered new interface driver usb-storage
+[    0.710557] i2c_dev: i2c /dev entries driver
+[    0.741250] sdhci: Secure Digital Host Controller Interface driver
+[    0.741313] sdhci: Copyright(c) Pierre Ossman
+[    0.743907] Synopsys Designware Multimedia Card Interface Driver
+[    0.746877] sdhci-pltfm: SDHCI platform and OF driver helper
+[    0.758430] ledtrig-cpu: registered to indicate activity on CPUs
+[    0.763099] SMCCC: SOC_ID: ARCH_SOC_ID not implemented, skipping ....
+[    0.764746] zynqmp_firmware_probe Platform Management API v1.1
+[    0.765473] zynqmp_firmware_probe Trustzone version v1.0
+[    0.966926] usbcore: registered new interface driver usbhid
+[    0.967031] usbhid: USB HID core driver
+[    0.988916] hw perfevents: enabled with armv8_pmuv3 PMU driver, 7 counters available
+[    1.012159] NET: Registered PF_PACKET protocol family
+[    1.014115] 9pnet: Installing 9P2000 support
+[    1.014539] Key type dns_resolver registered
+[    1.046898] registered taskstats version 1
+[    1.048915] Loading compiled-in X.509 certificates
+[    1.111271] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 18 param 2 value 0
+[    1.121580] ff000000.serial: ttyPS0 at MMIO 0xff000000 (irq = 19, base_baud = 2170138) is a xuartps
+[    1.123866] printk: console [ttyPS0] enabled
+[    1.172900] nwl-pcie fd0e0000.pcie: host bridge /axi/pcie@fd0e0000 ranges:
+[    1.174026] nwl-pcie fd0e0000.pcie:      MEM 0x00e0000000..0x00efffffff -> 0x00e0000000
+[    1.174638] nwl-pcie fd0e0000.pcie:      MEM 0x0600000000..0x07ffffffff -> 0x0600000000
+[    1.178020] nwl-pcie fd0e0000.pcie: Link is UP
+[    1.186447] nwl-pcie fd0e0000.pcie: PCI host bridge to bus 0000:00
+[    1.187245] pci_bus 0000:00: root bus resource [bus 00-ff]
+[    1.187816] pci_bus 0000:00: root bus resource [mem 0xe0000000-0xefffffff]
+[    1.188295] pci_bus 0000:00: root bus resource [mem 0x600000000-0x7ffffffff pref]
+[    1.213095] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 70 param 2 value 0
+[    1.213520] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 71 param 2 value 0
+[    1.213840] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 72 param 2 value 0
+[    1.214155] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 73 param 2 value 0
+[    1.214477] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 74 param 2 value 0
+[    1.214792] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 75 param 2 value 0
+[    1.223680] macb ff0e0000.ethernet: GEM doesn't support hardware ptp.
+[    2.095708] Freeing initrd memory: 21492K
+[    2.222950] cpufreq: cpufreq_online: CPU0: Running at unlisted initial frequency: 277777 KHz, changing to: 299999 KHz
+[    2.254330] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 45 param 2 value 0
+[    2.257055] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 44 param 2 value 0
+[    2.264717] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 70 param 2 value 0
+[    2.265451] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 71 param 2 value 0
+[    2.265845] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 72 param 2 value 0
+[    2.266428] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 73 param 2 value 0
+[    2.266828] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 74 param 2 value 0
+[    2.267537] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 75 param 2 value 0
+[    2.273461] macb ff0e0000.ethernet: GEM doesn't support hardware ptp.
+[    2.318526] mmc0: SDHCI controller on ff170000.mmc [ff170000.mmc] using ADMA 64-bit
+[    2.342198] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 70 param 2 value 0
+[    2.342540] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 71 param 2 value 0
+[    2.342898] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 72 param 2 value 0
+[    2.343136] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 73 param 2 value 0
+[    2.343354] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 74 param 2 value 0
+[    2.343557] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 75 param 2 value 0
+[    2.356977] macb ff0e0000.ethernet: GEM doesn't support hardware ptp.
+[    2.357988] mmc0: new high speed SD card at address 4567
+[    2.363879] mmcblk0: mmc0:4567 QEMU! 64.0 MiB
+[    2.388500]  mmcblk0: p1
+[    2.414015] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 70 param 2 value 0
+[    2.414448] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 71 param 2 value 0
+[    2.414814] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 72 param 2 value 0
+[    2.415195] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 73 param 2 value 0
+[    2.415565] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 74 param 2 value 0
+[    2.416262] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 75 param 2 value 0
+[    2.421266] macb ff0e0000.ethernet: GEM doesn't support hardware ptp.
+[    2.465756] clk: Not disabling unused clocks
+[    2.491279] ALSA device list:
+[    2.491652]   No soundcards found.
+[    2.636895] Freeing unused kernel memory: 9152K
+[    2.639493] Run /init as init process
+[    2.639707]   with arguments:
+[    2.639841]     /init
+[    2.640160]     earlyprintk
+[    2.640295]   with environment:
+[    2.640441]     HOME=/
+[    2.640547]     TERM=linux
+INIT: version 3.04 booting
+Starting udev
+[    3.244269] udevd[123]: starting version 3.2.14
+[    4.620456] random: crng init done
+[    4.664359] udevd[124]: starting eudev-3.2.14
+[    4.894163] EDAC MC: ECC not enabled
+[    5.012974] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 70 param 2 value 0
+[    5.013277] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 71 param 2 value 0
+[    5.013461] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 72 param 2 value 0
+[    5.013642] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 73 param 2 value 0
+[    5.013793] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 74 param 2 value 0
+[    5.014005] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 75 param 2 value 0
+[    5.019831] CAN device driver interface
+[    5.024258] macb ff0e0000.ethernet: GEM doesn't support hardware ptp.
+[    5.055021] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 25 param 2 value 0
+[    5.080383] cdns-wdt fd4d0000.watchdog: Xilinx Watchdog Timer with timeout 60s
+[    5.116742] i2c i2c-0: using pinctrl states for GPIO recovery
+[    5.124410] spi-nor spi0.0: found n25q512a, expected m25p80
+[    5.127632] spi-nor spi0.0: n25q512a (65536 Kbytes)
+[    5.129573] i2c i2c-0: using generic GPIOs for recovery
+[    5.139275] xilinx-ams ffa50000.ams: error -ETIMEDOUT: failed to initialize AMS
+[    5.139619] xilinx-ams: probe of ffa50000.ams failed with error -110
+[    5.157397] input: gpio-keys as /devices/platform/gpio-keys/input/input1
+[    5.159519] rtc_zynqmp ffa60000.rtc: registered as rtc0
+[    5.162316] pca953x 0-0020: supply vcc not found, using dummy regulator
+[    5.161953] rtc_zynqmp ffa60000.rtc: setting system clock to 2024-07-20T02:00:00 UTC (1721440800)
+[    5.167847] zynqmp-aes firmware:zynqmp-firmware:zynqmp-aes: will run requests pump with realtime priority
+[    5.169501] xilinx-zynqmp-dpdma fd4c0000.dma-controller: Xilinx DPDMA engine is probed
+[    5.183656] pca953x 0-0020: using no AI
+[    5.208263] pca953x 0-0021: supply vcc not found, using dummy regulator
+[    5.208963] pca953x 0-0021: using no AI
+[    5.223850] pca954x 0-0075: supply vdd not found, using dummy regulator
+[    5.321065] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 70 param 2 value 0
+[    5.321367] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 71 param 2 value 0
+[    5.321655] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 72 param 2 value 0
+[    5.321942] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 73 param 2 value 0
+[    5.322259] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 74 param 2 value 0
+[    5.322495] zynqmp-pinctrl firmware:zynqmp-firmware:pinctrl: failed to set: pin 75 param 2 value 0
+[    5.335820] macb ff0e0000.ethernet: GEM doesn't support hardware ptp.
+[    5.357565] i2c i2c-0: Added multiplexed i2c bus 2
+[    5.445420] macb ff0e0000.ethernet eth0: Cadence GEM rev 0x40070106 at 0xff0e0000 irq 24 (a2:39:ab:cd:a6:41)
+[    5.457145] of-fpga-region fpga-full: FPGA Region probed
+[    5.463708] zynqmp_r5_remoteproc remoteproc: Only r5 core0 will be used
+[    5.469452] remoteproc remoteproc0: remoteproc:r5f-0 is available
+[    5.478420] i2c i2c-0: Added multiplexed i2c bus 3
+[    5.490298] i2c i2c-0: Added multiplexed i2c bus 4
+[    5.510579] i2c i2c-0: Added multiplexed i2c bus 5
+[    5.515754] pca954x 0-0075: registered 4 multiplexed busses for I2C mux pca9544
+[    5.517784] cdns-i2c ff020000.i2c: 400 kHz mmio ff020000 irq 39
+[    5.527300] i2c i2c-1: using pinctrl states for GPIO recovery
+[    5.531046] i2c i2c-1: using generic GPIOs for recovery
+[    5.546122] pca954x 1-0074: supply vdd not found, using dummy regulator
+[    5.565785] i2c i2c-1: Added multiplexed i2c bus 6
+[    5.593134] i2c i2c-1: Added multiplexed i2c bus 7
+[    5.617894] i2c i2c-1: Added multiplexed i2c bus 8
+[    5.621948] i2c i2c-1: Added multiplexed i2c bus 9
+[    5.643635] i2c i2c-1: Added multiplexed i2c bus 10
+[    5.646725] i2c i2c-1: Added multiplexed i2c bus 11
+[    5.671874] i2c i2c-1: Added multiplexed i2c bus 12
+[    5.683541] i2c i2c-1: Added multiplexed i2c bus 13
+[    5.684830] pca954x 1-0074: registered 8 multiplexed busses for I2C switch pca9548
+[    5.702112] pca954x 1-0075: supply vdd not found, using dummy regulator
+[    5.703905] i2c i2c-1: Added multiplexed i2c bus 14
+[    5.706239] i2c i2c-1: Added multiplexed i2c bus 15
+[    5.709118] i2c i2c-1: Added multiplexed i2c bus 16
+[    5.710427] i2c i2c-1: Added multiplexed i2c bus 17
+[    5.711073] i2c i2c-1: Added multiplexed i2c bus 18
+[    5.711831] i2c i2c-1: Added multiplexed i2c bus 19
+[    5.712738] i2c i2c-1: Added multiplexed i2c bus 20
+[    5.713395] i2c i2c-1: Added multiplexed i2c bus 21
+[    5.713577] pca954x 1-0075: registered 8 multiplexed busses for I2C switch pca9548
+[    5.713926] cdns-i2c ff030000.i2c: 400 kHz mmio ff030000 irq 43
+[    5.792254] ina2xx 2-0040: supply vs not found, using dummy regulator
+[    5.800156] ina2xx 2-0040: power monitor ina226 (Rshunt = 5000 uOhm)
+[    5.800876] ina2xx 2-0041: supply vs not found, using dummy regulator
+[    5.832848] ina2xx 2-0041: power monitor ina226 (Rshunt = 5000 uOhm)
+[    5.833797] ina2xx 2-0042: supply vs not found, using dummy regulator
+[    5.835149] ina2xx 2-0042: power monitor ina226 (Rshunt = 5000 uOhm)
+[    5.835875] ina2xx 2-0043: supply vs not found, using dummy regulator
+[    5.837080] ina2xx 2-0043: power monitor ina226 (Rshunt = 5000 uOhm)
+[    5.837554] ina2xx 2-0044: supply vs not found, using dummy regulator
+[    5.838337] ina2xx 2-0044: power monitor ina226 (Rshunt = 5000 uOhm)
+[    5.838865] ina2xx 2-0045: supply vs not found, using dummy regulator
+[    5.839641] ina2xx 2-0045: power monitor ina226 (Rshunt = 5000 uOhm)
+[    5.840395] ina2xx 2-0046: supply vs not found, using dummy regulator
+[    5.841294] ina2xx 2-0046: power monitor ina226 (Rshunt = 5000 uOhm)
+[    5.841827] ina2xx 2-0047: supply vs not found, using dummy regulator
+[    5.842678] ina2xx 2-0047: power monitor ina226 (Rshunt = 5000 uOhm)
+[    5.843124] ina2xx 2-004a: supply vs not found, using dummy regulator
+[    5.844181] ina2xx 2-004a: power monitor ina226 (Rshunt = 5000 uOhm)
+[    5.844698] ina2xx 2-004b: supply vs not found, using dummy regulator
+[    5.845530] ina2xx 2-004b: power monitor ina226 (Rshunt = 5000 uOhm)
+[    5.846098] ina2xx 3-0040: supply vs not found, using dummy regulator
+[    5.847005] ina2xx 3-0040: power monitor ina226 (Rshunt = 2000 uOhm)
+[    5.847587] ina2xx 3-0041: supply vs not found, using dummy regulator
+[    5.848648] ina2xx 3-0041: power monitor ina226 (Rshunt = 5000 uOhm)
+[    5.849232] ina2xx 3-0042: supply vs not found, using dummy regulator
+[    5.850234] ina2xx 3-0042: power monitor ina226 (Rshunt = 5000 uOhm)
+[    5.850712] ina2xx 3-0043: supply vs not found, using dummy regulator
+[    5.851880] ina2xx 3-0043: power monitor ina226 (Rshunt = 5000 uOhm)
+[    5.852637] ina2xx 3-0044: supply vs not found, using dummy regulator
+[    5.853554] ina2xx 3-0044: power monitor ina226 (Rshunt = 5000 uOhm)
+[    5.854228] ina2xx 3-0045: supply vs not found, using dummy regulator
+[    5.855068] ina2xx 3-0045: power monitor ina226 (Rshunt = 5000 uOhm)
+[    5.855503] ina2xx 3-0046: supply vs not found, using dummy regulator
+[    5.856457] ina2xx 3-0046: power monitor ina226 (Rshunt = 5000 uOhm)
+[    5.856886] ina2xx 3-0047: supply vs not found, using dummy regulator
+[    5.857661] ina2xx 3-0047: power monitor ina226 (Rshunt = 5000 uOhm)
+[    5.981084] at24 6-0054: supply vcc not found, using dummy regulator
+[    6.025882] at24 6-0054: 1024 byte 24c08 EEPROM, writable, 1 bytes/write
+INIT: Entering runlevel: 5
+Configuring network interfaces... [    7.304750] macb ff0e0000.ethernet eth0: PHY [ff0e0000.ethernet-ffffffff:0c] driver [TI DP83867] (irq=POLL)
+[    7.305499] macb ff0e0000.ethernet eth0: configuring for phy/rgmii-id link mode
+[    7.314559] macb ff0e0000.ethernet eth0: unable to generate target frequency: 125000000 Hz
+[    7.321942] macb ff0e0000.ethernet eth0: Link is Up - 1Gbps/Full - flow control tx
+udhcpc: started, v1.36.1
+udhcpc: broadcasting discover
+udhcpc: broadcasting select for 10.0.2.15, server 10.0.2.2
+udhcpc: lease of 10.0.2.15 obtained from 10.0.2.2, lease time 86400
+/etc/udhcpc.d/50default: Adding DNS 10.0.2.3
+Error: argument "/en*" is wrong: "dev" not a valid ifname
+Starting Dropbear SSH server: Generating 2048 bit rsa key, this may take a while...
+Public key portion is:
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCfJZKezsmWIxnfTkucx4fhhuP6HW83PQUQiyG7n3ZtqnSrfPhzoWum6aTgxuQk7RxaUHfL0lNlS3ZeLQQKUqgz4rfUnq5F+7+dE7W1PheckLiqmbAWF65NL0bFU3fOjMr/QIK4gRIQ8Uxvrd2zScZvIynstsTvw7M1w85OljttuYRWSTJpvq1EJmK1/N7P1Kl4lD+4SCnZYg8442dCtpGMRBG+t5fVrxKdX5fA+E10gej1ZWZWdL13GF2OjzBt5HOUhEnAPgZ9Fe5nXdVkoKF3/tjrE4PR49DOliiBAyexgJvAuNvL0ESOMG5AawY5sB5EUKMNotmj49+NxJkC26Y5 root@genericarm64
+Fingerprint: SHA256:ghDjUNnzSiN4SUgvRd9LPsk89uIlz5EoHkyMPWGtiH0
+[    9.101768] NET: Registered PF_INET6 protocol family
+[    9.119129] Segment Routing with IPv6
+[    9.119565] In-situ OAM (IOAM) with IPv6
+dropbear.
+Starting syslogd/klogd: done
+
+Poky (Yocto Project Reference Distro) 5.0.1 genericarm64 /dev/ttyPS0
+
+(Login as root with no password)
+genericarm64 login: [   16.127259] platform fd400000.phy: deferred probe pending
+[   16.127553] platform ff9d0000.usb: deferred probe pending
+[   16.127766] platform fd0c0000.ahci: deferred probe pending
