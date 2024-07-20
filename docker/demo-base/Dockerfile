@@ -8,10 +8,12 @@ RUN echo 'Etc/UTC' > /etc/timezone; ln -s /usr/share/zoneinfo/Etc/UTC /etc/local
 
 # Install prerequisites
 # zephyr install script requires cmake and file
+# Our build of Xilinx qemu needs libpixman libslirp etc
 RUN apt-get --quiet=2 update && apt-get install --quiet=2 --assume-yes \
     sudo nano wget python3 python3-pip python3-venv \
     openssh-client bash-completion \
-    tmux socat cpio git \
+    tmux socat cpio git git-lfs \
+    libpixman-1-0 libslirp0 \
     cmake file
 
 # setup a no password required sudo group

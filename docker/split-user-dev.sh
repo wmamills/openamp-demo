@@ -203,9 +203,9 @@ user_dev_inner() {
 
     echo "fixup the symlinks"
     cd opt
-    ln -sf ../../../../zephyr/zephyr-sdk-$ZEPHYR_SDK_VERSION/sysroots/${ARCH}-pokysdk-linux/usr/xilinx/bin/qemu-system-aarch64 \
+    ln -sf ../../../../qemu/qemu-xilinx-${XILINX_QEMU_VERSION}/bin/qemu-system-aarch64 \
         ./qemu-zcu102/sysroot/usr/bin/qemu-system-aarch64
-    ln -sf ../../../../zephyr/zephyr-sdk-$ZEPHYR_SDK_VERSION/sysroots/${ARCH}-pokysdk-linux/usr/xilinx/bin/qemu-system-microblazeel \
+    ln -sf ../../../../qemu/qemu-xilinx-${XILINX_QEMU_VERSION}/bin/qemu-system-microblazeel \
         ./qemu-zcu102/sysroot/usr/bin/qemu-system-microblazeel
 
     # trim zephyr sdk for our needs

@@ -13,7 +13,9 @@ demo/marker: demo-lite/marker demo/user-dev-extra.tar.gz \
 
 demo-lite/marker: demo-base/marker demo-lite/user-dev-base.tar.gz \
 	demo-lite/Dockerfile demo-lite/login_message
+	cp split-user-dev.sh demo-lite
 	cd demo-lite; docker build -t openamp/demo-lite .
+	rm demo-lite/split-user-dev.sh
 	touch $@
 
 demo-base/marker: demo-base/Dockerfile demo-base/login_message
