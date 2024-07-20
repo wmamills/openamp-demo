@@ -35,9 +35,9 @@ RUN if [ $(uname -m) = "x86_64" ]; then \
 RUN pip3 install west==1.2.0
 
 # add zephyr toolchains
-COPY split-user-dev.sh /home/dev
-RUN su dev /home/dev/split-user-dev.sh install_zephyr_toolchains common
-RUN rm /home/dev/split-user-dev.sh
+COPY install-helper.sh /home/dev
+RUN su dev /home/dev/install-helper.sh install_zephyr_toolchains common
+RUN rm /home/dev/install-helper.sh
 
 # add just the stuff we took out of the base
 ADD user-dev-extra.tar.gz /home/dev
