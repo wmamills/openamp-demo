@@ -2,7 +2,10 @@
 
 set -e
 
+XILINX_QEMU_VERSION=v2024.1
+
 ZEPHYR_SDK_VERSION=0.16.8
+
 ZEPHYR_TOOLCHAINS_COMMON=" \
     aarch64-zephyr-elf \
     arm-zephyr-eabi \
@@ -92,6 +95,56 @@ do_install_zephyr_toolchains() {
     for T in $TOOLCHAINS; do
         ./setup.sh -t $T
     done
+}
+
+lfs_expand_tar() {
+    # make sure we have the real file
+    ls -l $BASE_DIR/$SAVED_IMAGES/$SOURCE
+    (cd $BASE_DIR/$SAVED_IMAGES; git lfs pull --include $SOURCE)
+    ls -l $BASE_DIR/$SAVED_IMAGES/$SOURCE
+    if [ -e $DEST_DIR/$MARKER ]; then
+        rm -rf $DEST_DIR
+    fi
+    mkdir -p $(dirname $DEST_DIR)
+    tar xf $BASE_DIR/$SAVED_IMAGES/$SOURCE -C $(dirname $DEST_DIR)
+}
+
+do_install_saved_image() {
+    # todo: move this to openamp and rename to openamp-images
+    URL=https://github.com/wmamills/xen-rt-exp-images.git
+    ARCH=$(uname -m)
+    BASE_DIR=$HOME
+    SAVED_IMAGES=saved-images
+    OK=true
+
+    cd $BASE_DIR
+
+    # clone image repo without expanding the LFS files
+    GIT_LFS_SKIP_SMUDGE=1 git clone --depth=1 $URL saved-images
+
+    for i in "$@"; do
+        case $i in
+        xilinx-qemu)
+            DEST_DIR=~/opt/qemu/qemu-xilinx-${XILINX_QEMU_VERSION}
+            SOURCE=host/$ARCH/qemu-xilinx-${XILINX_QEMU_VERSION}.tar.gz
+            MARKER=bin/qemu-system-aarch64
+            lfs_expand_tar $DEST_DIR $SOURCE
+            ;;
+        *)
+            echo "Unknown saved image $i"
+            OK=false
+            ;;
+        esac
+    done
+
+    if [ -e $BASE_DIR/$SAVED_IMAGES/.gitattributes ]; then
+        echo "removing saved-images"
+        rm -rf $BASE_DIR/$SAVED_IMAGES
+    fi
+
+    if ! $OK; then
+        exit 2
+    fi
 }
 
 # tar archives of sub-dir w/o files considered ignored or untracked
@@ -232,11 +285,11 @@ ORIG=$PWD
 SOURCE=$PWD
 CMD=$1
 case $CMD in
-"user_dev"|"git_archives"|"inside_container"|"sudo_user_dev"|"install_zephyr_sdk")
+"user_dev"|"git_archives"|"inside_container"|"sudo_user_dev")
     shift
     do_$CMD "$@"
     ;;
-install_zephyr*)
+install_*)
     shift
     do_$CMD "$@"
     ;;
