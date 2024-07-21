@@ -1,0 +1,4 @@
+# OpenAMP combo but always boot menu 0
+
+uenvcmd=run bootcmd_lockstep_bm
+
