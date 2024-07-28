@@ -1,0 +1,4 @@
+TOTAL=100 FAIL=2
+LAST OK   100 demo1 2
+FAIL 98 demo1 0
+FAIL 97 demo1 0
