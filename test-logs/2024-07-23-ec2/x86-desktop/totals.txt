@@ -1,0 +1,5 @@
+TOTAL=500 FAIL=3
+LAST OK   500 demo1 2
+FAIL 295 demo1 0
+FAIL 174 demo1 0
+FAIL 162 demo1 0
