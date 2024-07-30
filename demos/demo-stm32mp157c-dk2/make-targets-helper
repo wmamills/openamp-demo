@@ -44,7 +44,7 @@ do_sdcard() {
     fi
 
     dd if=$D/boot.vfat of=$SD bs=512 seek=10274 conv=notrunc
-    xz -v $SD
+    xz -fv $SD
 }
 
 main() {
