@@ -5,14 +5,14 @@ mkdir $HOME/hide
 
 if [ ! -e /sys/class/remoteproc/remoteproc0 ]; then
     cat $HOME/login_message0
-    mv $HOME/demo* $HOME/hide
+    mv $HOME/demo* $HOME/hide >/dev/null 2>&1
 elif [ -e /sys/class/remoteproc/remoteproc1 ]; then
     cat $HOME/login_message2
-    mv $HOME/demo1* $HOME/demo3* $HOME/hide
+    mv $HOME/demo1* $HOME/demo3* $HOME/hide >/dev/null 2>&1
 elif [ -e /sys/firmware/devicetree/base/zynqmp_ipi1/mailbox@ff990600 ]; then
     cat $HOME/login_message3
-    mv $HOME/demo1* $HOME/demo2* $HOME/hide
+    mv $HOME/demo1* $HOME/demo2* $HOME/hide >/dev/null 2>&1
 else
     cat $HOME/login_message1
-    mv $HOME/demo2* $HOME/demo3* $HOME/hide
+    mv $HOME/demo2* $HOME/demo3* $HOME/hide >/dev/null 2>&1
 fi
